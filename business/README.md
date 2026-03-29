@@ -42,22 +42,29 @@ Business Model Canvas (14 módulos), entrevista de solución, experimento MVP.
 | 15 | [Entrevista de la Solución](02-solucion-validacion/15-entrevista-solucion.md) | Guión con escalera de compromiso y 3 opciones de precio |
 | 16 | [Experimento MVP](02-solucion-validacion/16-experimento-mvp.md) | 3 hipótesis + cronograma Gantt 12 semanas + criterios Go/No-Go |
 
-### 🚀 [03 — Ejecución y Aceleración](03-ejecucion-aceleracion/)
+### ⚙️ [03 — Ejecución](03-ejecucion/)
 
-Revenue, economía unitaria, financiero, marca, legal, go-to-market, producto, equipo, asesores, pitch deck.
+Revenue, economía unitaria, modelo financiero, marca e identidad, fundación legal.
 
 | # | Entregable | Descripción |
 |---|-----------|-------------|
-| 01 | [Modelo de Ingresos](03-ejecucion-aceleracion/01-modelo-de-ingresos.md) | Análisis de 8 competidores + modelo dual seleccionado + Steps to Revenue |
-| 02 | [Economía Unitaria](03-ejecucion-aceleracion/02-economia-unitaria.md) | LTV:CAC 16:1 propietarios, 4:1 inquilinos |
-| 03 | [Modelo Financiero](03-ejecucion-aceleracion/03-modelo-financiero.md) | Proyección 18 meses, break-even Mes 11, bootstrapping |
-| 04 | [Marca e Identidad](03-ejecucion-aceleracion/04-marca-e-identidad.md) | Nombre, dominio, redes, dirección de diseño |
-| 05 | [Fundación Legal](03-ejecucion-aceleracion/05-fundacion-legal.md) | SRL, Sfera Legal, IP, calendario legal 6 meses |
-| 06 | [Salida al Mercado](03-ejecucion-aceleracion/06-salida-al-mercado.md) | 3 mensajes marketing, email capture, metas semanales |
-| 07 | [Hoja de Ruta](03-ejecucion-aceleracion/07-hoja-de-ruta.md) | 16 features, Gantt Beta → v1.0 → v2.0 |
-| 08 | [Equipo y Contratación](03-ejecucion-aceleracion/08-equipo-y-contratacion.md) | Plan 18 meses, código de ética, Founder's Schedule |
-| 09 | [Junta Asesora](03-ejecucion-aceleracion/09-junta-asesora.md) | 3 categorías, FAST Agreement, proceso de selección |
-| 10 | [Pitch Deck](03-ejecucion-aceleracion/10-pitch-deck.md) | MARP 12 diapositivas listo para inversores |
+| 01 | [Modelo de Ingresos](03-ejecucion/01-modelo-de-ingresos.md) | Análisis de 8 competidores + modelo dual seleccionado + Steps to Revenue |
+| 02 | [Economía Unitaria](03-ejecucion/02-economia-unitaria.md) | LTV:CAC 16:1 propietarios, 4:1 inquilinos |
+| 03 | [Modelo Financiero](03-ejecucion/03-modelo-financiero.md) | Proyección 18 meses, break-even Mes 11, bootstrapping |
+| 04 | [Marca e Identidad](03-ejecucion/04-marca-e-identidad.md) | Nombre, dominio, redes, dirección de diseño |
+| 05 | [Fundación Legal](03-ejecucion/05-fundacion-legal.md) | SRL, Sfera Legal, IP, calendario legal 6 meses |
+
+### 🚀 [04 — Aceleración](04-aceleracion/)
+
+Go-to-market, hoja de ruta de producto, equipo, asesores, pitch deck.
+
+| # | Entregable | Descripción |
+|---|-----------|-------------|
+| 01 | [Salida al Mercado](04-aceleracion/01-salida-al-mercado.md) | 3 mensajes marketing, email capture, metas semanales |
+| 02 | [Hoja de Ruta](04-aceleracion/02-hoja-de-ruta.md) | 16 features, Gantt Beta → v1.0 → v2.0 |
+| 03 | [Equipo y Contratación](04-aceleracion/03-equipo-y-contratacion.md) | Plan 18 meses, código de ética, Founder's Schedule |
+| 04 | [Junta Asesora](04-aceleracion/04-junta-asesora.md) | 3 categorías, FAST Agreement, proceso de selección |
+| 05 | [Pitch Deck](04-aceleracion/05-pitch-deck.md) | MARP 12 diapositivas listo para inversores |
 
 ---
 
@@ -67,7 +74,8 @@ Revenue, economía unitaria, financiero, marca, legal, go-to-market, producto, e
 |---------|-------------|-------------|---------------------------------------|
 | 01 Problema | 5 | 5/5 ✅ | Aprobada — balance +8, problema real, mercado grande |
 | 02 Solución | 16 | 16/16 ✅ | Aprobada — BMC consistente, hipótesis definidas |
-| 03 Ejecución | 10 | 10/10 ✅ | Aprobada — unit economics viables, roadmap definido |
+| 03 Ejecución | 5 | 5/5 ✅ | Aprobada — base financiera y legal sólida |
+| 04 Aceleración | 5 | 5/5 ✅ | Aprobada — base operativa lista para inversores |
 
 **Total: 31 entregables completados**
 
@@ -87,4 +95,4 @@ Revenue, economía unitaria, financiero, marca, legal, go-to-market, producto, e
 
 ---
 
-> Generado con `/business-model-brainstorming` v3.1 — Plugin [business-model-toolkit](https://github.com/lapc506/business-model-toolkit)
+> Generado con `/business-model-brainstorming` v4.0 — Plugin [business-model-toolkit](https://github.com/lapc506/business-model-toolkit)
