@@ -1,0 +1,1319 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Customer Journey: Jose Penaranda — Listado de propiedad en HabitaNexus</title>
+  <style>
+    /* ── Reset & Base ──────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #1a1a2e;
+      color: #e0e0e0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      min-height: 100vh;
+      padding: 32px 24px 120px;
+    }
+
+    /* ── Wrapper ───────────────────────────────────────────────── */
+    .uxrt-map {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    /* ── Header ────────────────────────────────────────────────── */
+    .uxrt-header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+    .uxrt-header__eyebrow {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: #888;
+      margin-bottom: 8px;
+    }
+    .uxrt-header__title {
+      font-size: 28px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+    .uxrt-header__subtitle {
+      color: #999;
+      font-size: 14px;
+    }
+
+    /* ── Persona Card ──────────────────────────────────────────── */
+    .uxrt-persona-card {
+      background: #222244;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 28px;
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+    .uxrt-persona-card__avatar {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      flex-shrink: 0;
+    }
+    .uxrt-persona-card__body { flex: 1; }
+    .uxrt-persona-card__name {
+      font-weight: 700;
+      font-size: 16px;
+      color: #fff;
+    }
+    .uxrt-persona-card__meta {
+      font-size: 13px;
+      color: #aaa;
+      margin-top: 4px;
+    }
+    .uxrt-persona-card__pain {
+      font-size: 13px;
+      color: #ccc;
+      margin-top: 8px;
+      line-height: 1.5;
+    }
+    .uxrt-persona-card__pain strong {
+      color: #667eea;
+    }
+
+    /* ── Grid ──────────────────────────────────────────────────── */
+    .uxrt-grid {
+      display: grid;
+      grid-template-columns: 140px repeat(6, 1fr);
+      gap: 0;
+      margin-bottom: 0;
+    }
+
+    /* Responsive: horizontal scroll on narrow viewports */
+    @media (max-width: 768px) {
+      .uxrt-grid {
+        overflow-x: auto;
+        display: block;
+        white-space: nowrap;
+      }
+      .uxrt-grid > * {
+        display: inline-block;
+        vertical-align: top;
+      }
+    }
+
+    /* ── Grid — Row Label (first column) ───────────────────────── */
+    .uxrt-row-label {
+      padding: 16px 12px;
+      font-size: 12px;
+      color: #aaa;
+      display: flex;
+      align-items: center;
+      line-height: 1.4;
+    }
+    .uxrt-row-label--header {
+      background: #333355;
+      font-weight: 700;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      border-radius: 8px 0 0 0;
+    }
+    .uxrt-row-label--emotion  { background: #2a2a4a; }
+    .uxrt-row-label--actions  { background: #252545; }
+    .uxrt-row-label--thoughts { background: #2a2a4a; }
+    .uxrt-row-label--frustrations { background: #252545; }
+    .uxrt-row-label--touchpoints  { background: #2a2a4a; }
+    .uxrt-row-label--opportunities {
+      background: #1a3a2a;
+      color: #6bcb77;
+      border-radius: 0 0 0 8px;
+    }
+
+    /* ── Grid — Phase Header Cells ─────────────────────────────── */
+    .uxrt-phase-header {
+      padding: 12px;
+      text-align: center;
+      font-weight: 700;
+      font-size: 12px;
+    }
+    .uxrt-phase-header--color-0 { background: #4a3f6b; color: #e8d5ff; }
+    .uxrt-phase-header--color-1 { background: #3f5a6b; color: #d5f0ff; }
+    .uxrt-phase-header--color-2 { background: #3f6b5a; color: #d5ffe8; }
+    .uxrt-phase-header--color-3 { background: #6b5a3f; color: #ffe8d5; }
+    .uxrt-phase-header--color-4 { background: #5a3f6b; color: #e8d5ff; }
+    /* Last phase header gets a rounded top-right corner */
+    .uxrt-phase-header--last { border-radius: 0 8px 0 0; }
+
+    /* ── Grid — Emotion Cells ──────────────────────────────────── */
+    .uxrt-emotion-cell {
+      background: #2a2a4a;
+      padding: 12px;
+      text-align: center;
+    }
+    .uxrt-emotion-cell__emoji { font-size: 32px; }
+    .uxrt-emotion-cell__label {
+      font-size: 11px;
+      margin-top: 4px;
+      display: block;
+    }
+    .uxrt-emotion-cell__bar-track {
+      background: #333;
+      border-radius: 4px;
+      height: 6px;
+      margin-top: 6px;
+    }
+    .uxrt-emotion-cell__bar-fill {
+      height: 6px;
+      border-radius: 4px;
+    }
+
+    /* ── Grid — Action / Text Cells ────────────────────────────── */
+    .uxrt-cell {
+      padding: 12px;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+    .uxrt-cell--actions      { background: #252545; color: #ddd; }
+    .uxrt-cell--thoughts     { background: #2a2a4a; color: #ddd; font-style: italic; }
+    .uxrt-cell--frustrations { background: #252545; color: #ff8a8a; }
+    .uxrt-cell--touchpoints  { background: #2a2a4a; color: #88aaff; }
+    .uxrt-cell--opportunities {
+      background: #1a3a2a;
+      color: #a8e6a1;
+    }
+    /* Last column bottom-right corner rounding */
+    .uxrt-cell--last-col-opportunities { border-radius: 0 0 8px 0; }
+
+    /* ── Analysis Panels ───────────────────────────────────────── */
+    .uxrt-pain-points {
+      margin-top: 28px;
+      background: #3a1a1a;
+      border-radius: 12px;
+      padding: 20px;
+      border-left: 4px solid #ff6b6b;
+    }
+    .uxrt-pain-points__header {
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #ff6b6b;
+      margin-bottom: 12px;
+      font-weight: 700;
+    }
+    .uxrt-pain-points__grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    @media (max-width: 600px) {
+      .uxrt-pain-points__grid { grid-template-columns: 1fr; }
+    }
+    .uxrt-pain-points__item {
+      font-size: 13px;
+      color: #ddd;
+      line-height: 1.5;
+    }
+
+    .uxrt-moments {
+      margin-top: 16px;
+      background: #1a2a3a;
+      border-radius: 12px;
+      padding: 20px;
+      border-left: 4px solid #667eea;
+    }
+    .uxrt-moments__header {
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #667eea;
+      margin-bottom: 12px;
+      font-weight: 700;
+    }
+    .uxrt-moments__item {
+      font-size: 13px;
+      color: #ddd;
+      line-height: 1.8;
+      margin-bottom: 8px;
+    }
+    .uxrt-moments__item:last-child { margin-bottom: 0; }
+    .uxrt-moments__phase-ref {
+      color: #88aaff;
+      font-weight: 700;
+    }
+
+    /* ── Footer ────────────────────────────────────────────────── */
+    .uxrt-footer {
+      margin-top: 24px;
+      text-align: center;
+      font-size: 11px;
+      color: #666;
+      border-top: 1px solid #333;
+      padding-top: 16px;
+    }
+
+    /* ── Editor Controls (sticky bar) ──────────────────────────── */
+    .uxrt-editor-controls {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #111128;
+      border-top: 1px solid #333355;
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      z-index: 1000;
+    }
+    .uxrt-editor-controls__btn {
+      padding: 8px 18px;
+      border-radius: 6px;
+      border: none;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+    .uxrt-editor-controls__btn:hover { opacity: 0.85; }
+    .uxrt-editor-controls__btn--save {
+      background: #667eea;
+      color: #fff;
+    }
+    .uxrt-editor-controls__btn--refresh {
+      background: #2a2a4a;
+      color: #aac4ff;
+      border: 1px solid #445;
+    }
+    .uxrt-editor-controls__status {
+      font-size: 12px;
+      color: #6bcb77;
+      margin-left: 8px;
+      min-width: 180px;
+    }
+
+    /* ── Contenteditable Styling ────────────────────────────────── */
+    [contenteditable="true"] {
+      outline: none;
+      cursor: text;
+      border-radius: 3px;
+      transition: background 0.15s, box-shadow 0.15s;
+    }
+    [contenteditable="true"]:hover {
+      background: rgba(255,255,255,0.04);
+    }
+    [contenteditable="true"]:focus {
+      background: rgba(102, 126, 234, 0.12);
+      box-shadow: inset 0 0 0 1px rgba(102, 126, 234, 0.5);
+    }
+  </style>
+</head>
+<body>
+  <div class="uxrt-map">
+
+    <!-- Header -->
+    <div class="uxrt-header">
+      <div class="uxrt-header__eyebrow">Experience Map · journey-map</div>
+      <h1 class="uxrt-header__title" contenteditable="true" data-field="meta.title">Customer Journey: Jose Penaranda — Listado de propiedad en HabitaNexus</h1>
+    </div>
+
+    <!-- Components injected by renderer -->
+
+    <!-- ═══════════════════════════════════════════════════════════
+         COMPONENT: persona-card
+         ═══════════════════════════════════════════════════════════ -->
+    <div class="uxrt-persona-card">
+      <div class="uxrt-persona-card__avatar">
+        <span contenteditable="true" data-field="persona.avatar_emoji">👴</span>
+      </div>
+      <div class="uxrt-persona-card__body">
+        <div class="uxrt-persona-card__name"
+             contenteditable="true"
+             data-field="persona.name">Jose Penaranda</div>
+        <div class="uxrt-persona-card__meta">
+          <span contenteditable="true" data-field="persona.age">65</span> años
+          · <span contenteditable="true" data-field="persona.role">Propietario pensionado / Ebanista retirado de la CCSS</span>
+          · <span contenteditable="true" data-field="persona.location">San Rafael de Heredia, Costa Rica</span>
+        </div>
+        <div class="uxrt-persona-card__pain">
+          <strong>Dolor principal:</strong>
+          <span contenteditable="true" data-field="persona.primary_pain">Inquilinos le danan las propiedades y no tiene forma de probar el estado inicial porque nunca documento con fotos fechadas ni acta de entrega.</span>
+        </div>
+        <div class="uxrt-persona-card__context" style="font-size:13px;color:#999;margin-top:6px;line-height:1.5;">
+          <span contenteditable="true" data-field="persona.context">Pensionado de 65 anos usando HabitaNexus para listar su propiedad, negociar con una inquilina, y generar un acta de entrega inmutable antes de firmar contrato. Primera vez usando una app de alquileres.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         COMPONENT: phase-table + emotion-curve + action-rows + touchpoint-map
+         All share the same .uxrt-grid
+         ═══════════════════════════════════════════════════════════ -->
+    <div class="uxrt-grid">
+
+      <!-- ── Phase Header Row ───────────────────────────────────── -->
+      <div class="uxrt-row-label uxrt-row-label--header">Dimensión</div>
+
+      <!-- Phase 0: Descubrimiento (color-0) -->
+      <div class="uxrt-phase-header uxrt-phase-header--color-0"
+           data-phase="descubrimiento">
+        <span class="uxrt-phase-header__icon">🔍</span>
+        <span contenteditable="true"
+              data-field="label"
+              data-phase="descubrimiento">Descubrimiento</span>
+      </div>
+
+      <!-- Phase 1: Consideracion (color-1) -->
+      <div class="uxrt-phase-header uxrt-phase-header--color-1"
+           data-phase="consideracion">
+        <span class="uxrt-phase-header__icon">🤔</span>
+        <span contenteditable="true"
+              data-field="label"
+              data-phase="consideracion">Consideracion</span>
+      </div>
+
+      <!-- Phase 2: Registro (color-2) -->
+      <div class="uxrt-phase-header uxrt-phase-header--color-2"
+           data-phase="registro">
+        <span class="uxrt-phase-header__icon">📸</span>
+        <span contenteditable="true"
+              data-field="label"
+              data-phase="registro">Registro</span>
+      </div>
+
+      <!-- Phase 3: Listado (color-3) -->
+      <div class="uxrt-phase-header uxrt-phase-header--color-3"
+           data-phase="listado">
+        <span class="uxrt-phase-header__icon">📋</span>
+        <span contenteditable="true"
+              data-field="label"
+              data-phase="listado">Listado</span>
+      </div>
+
+      <!-- Phase 4: Negociacion (color-4) -->
+      <div class="uxrt-phase-header uxrt-phase-header--color-4"
+           data-phase="negociacion">
+        <span class="uxrt-phase-header__icon">🤝</span>
+        <span contenteditable="true"
+              data-field="label"
+              data-phase="negociacion">Negociacion</span>
+      </div>
+
+      <!-- Phase 5: Inspeccion Inicial (color-0, last) -->
+      <div class="uxrt-phase-header uxrt-phase-header--color-0 uxrt-phase-header--last"
+           data-phase="inspeccion-inicial">
+        <span class="uxrt-phase-header__icon">🏠</span>
+        <span contenteditable="true"
+              data-field="label"
+              data-phase="inspeccion-inicial">Inspeccion Inicial</span>
+      </div>
+
+      <!-- ── Emotion Row ────────────────────────────────────────── -->
+      <div class="uxrt-row-label uxrt-row-label--emotion">😊 Emociones</div>
+
+      <!-- Emotion: descubrimiento (level 2 → #ffa07a, 40%) -->
+      <div class="uxrt-emotion-cell" data-phase="descubrimiento">
+        <div class="uxrt-emotion-cell__emoji"
+             contenteditable="true"
+             data-field="emotion.emoji"
+             data-phase="descubrimiento">🤨</div>
+        <span class="uxrt-emotion-cell__label"
+              style="color: #ffa07a;"
+              contenteditable="true"
+              data-field="emotion.label"
+              data-phase="descubrimiento">Esceptico</span>
+        <div class="uxrt-emotion-cell__bar-track">
+          <div class="uxrt-emotion-cell__bar-fill"
+               style="background: #ffa07a; width: 40%;"
+               data-field="emotion.level"
+               data-phase="descubrimiento"
+               data-level="2"></div>
+        </div>
+      </div>
+
+      <!-- Emotion: consideracion (level 3 → #ffd93d, 60%) -->
+      <div class="uxrt-emotion-cell" data-phase="consideracion">
+        <div class="uxrt-emotion-cell__emoji"
+             contenteditable="true"
+             data-field="emotion.emoji"
+             data-phase="consideracion">🤔</div>
+        <span class="uxrt-emotion-cell__label"
+              style="color: #ffd93d;"
+              contenteditable="true"
+              data-field="emotion.label"
+              data-phase="consideracion">Explorando</span>
+        <div class="uxrt-emotion-cell__bar-track">
+          <div class="uxrt-emotion-cell__bar-fill"
+               style="background: #ffd93d; width: 60%;"
+               data-field="emotion.level"
+               data-phase="consideracion"
+               data-level="3"></div>
+        </div>
+      </div>
+
+      <!-- Emotion: registro (level 3 → #ffd93d, 60%) -->
+      <div class="uxrt-emotion-cell" data-phase="registro">
+        <div class="uxrt-emotion-cell__emoji"
+             contenteditable="true"
+             data-field="emotion.emoji"
+             data-phase="registro">📸</div>
+        <span class="uxrt-emotion-cell__label"
+              style="color: #ffd93d;"
+              contenteditable="true"
+              data-field="emotion.label"
+              data-phase="registro">Productivo</span>
+        <div class="uxrt-emotion-cell__bar-track">
+          <div class="uxrt-emotion-cell__bar-fill"
+               style="background: #ffd93d; width: 60%;"
+               data-field="emotion.level"
+               data-phase="registro"
+               data-level="3"></div>
+        </div>
+      </div>
+
+      <!-- Emotion: listado (level 4 → #90ee90, 80%) -->
+      <div class="uxrt-emotion-cell" data-phase="listado">
+        <div class="uxrt-emotion-cell__emoji"
+             contenteditable="true"
+             data-field="emotion.emoji"
+             data-phase="listado">😊</div>
+        <span class="uxrt-emotion-cell__label"
+              style="color: #90ee90;"
+              contenteditable="true"
+              data-field="emotion.label"
+              data-phase="listado">Orgulloso</span>
+        <div class="uxrt-emotion-cell__bar-track">
+          <div class="uxrt-emotion-cell__bar-fill"
+               style="background: #90ee90; width: 80%;"
+               data-field="emotion.level"
+               data-phase="listado"
+               data-level="4"></div>
+        </div>
+      </div>
+
+      <!-- Emotion: negociacion (level 4 → #90ee90, 80%) -->
+      <div class="uxrt-emotion-cell" data-phase="negociacion">
+        <div class="uxrt-emotion-cell__emoji"
+             contenteditable="true"
+             data-field="emotion.emoji"
+             data-phase="negociacion">😌</div>
+        <span class="uxrt-emotion-cell__label"
+              style="color: #90ee90;"
+              contenteditable="true"
+              data-field="emotion.label"
+              data-phase="negociacion">Confiado</span>
+        <div class="uxrt-emotion-cell__bar-track">
+          <div class="uxrt-emotion-cell__bar-fill"
+               style="background: #90ee90; width: 80%;"
+               data-field="emotion.level"
+               data-phase="negociacion"
+               data-level="4"></div>
+        </div>
+      </div>
+
+      <!-- Emotion: inspeccion-inicial (level 5 → #6bcb77, 100%) -->
+      <div class="uxrt-emotion-cell" data-phase="inspeccion-inicial">
+        <div class="uxrt-emotion-cell__emoji"
+             contenteditable="true"
+             data-field="emotion.emoji"
+             data-phase="inspeccion-inicial">😊</div>
+        <span class="uxrt-emotion-cell__label"
+              style="color: #6bcb77;"
+              contenteditable="true"
+              data-field="emotion.label"
+              data-phase="inspeccion-inicial">Satisfecho</span>
+        <div class="uxrt-emotion-cell__bar-track">
+          <div class="uxrt-emotion-cell__bar-fill"
+               style="background: #6bcb77; width: 100%;"
+               data-field="emotion.level"
+               data-phase="inspeccion-inicial"
+               data-level="5"></div>
+        </div>
+      </div>
+
+      <!-- ── Actions Row ────────────────────────────────────────── -->
+      <div class="uxrt-row-label uxrt-row-label--actions">🎯 Acciones</div>
+
+      <div class="uxrt-cell uxrt-cell--actions"
+           data-phase="descubrimiento"
+           contenteditable="true"
+           data-field="actions">Recibe audio de WhatsApp de su hermano recomendando una app para alquileres
+Su esposa busca 'aplicacion alquileres Costa Rica' en el Play Store
+Encuentra varias apps pero la mayoria son para inquilinos
+Su esposa encuentra HabitaNexus y lee 'negociacion digital de contratos, deposito protegido, inspeccion con fotos'</div>
+
+      <div class="uxrt-cell uxrt-cell--actions"
+           data-phase="consideracion"
+           contenteditable="true"
+           data-field="actions">Abre la app y ve tres opciones: Soy propietario / Soy arrendador-gestor / Busco alquiler
+Lee la explicacion visible debajo de cada opcion y toca 'Soy propietario'
+Ingresa numero de celular + codigo SMS — se crea su cuenta
+Explora el wizard stepper: ve 'Paso 1 de 6: Ubicacion y tipo de inmueble'
+Cada campo tiene explicacion visible '¿Por que solicitamos esto?'</div>
+
+      <div class="uxrt-cell uxrt-cell--actions"
+           data-phase="registro"
+           contenteditable="true"
+           data-field="actions">Va en la pickup a la propiedad con el celular de su esposa
+Completa los pasos del wizard: mide cuartos con cinta metrica, verifica tipo de medidor, sistema de agua caliente
+Toma fotos de cada espacio siguiendo el orden del wizard
+La app muestra recomendaciones antes de grabar: 'Grabe en horizontal, camine despacio, asegurese de buena iluminacion'
+Su esposa le graba el video tour — recorrido continuo
+Al fotografiar el bano, nota que la luz del plafon esta quemada — marca 'requiere reparacion'
+Completa los campos del catalogo: no modificaciones sin autorizacion, inspeccion mensual, restricciones de ruido</div>
+
+      <div class="uxrt-cell uxrt-cell--actions"
+           data-phase="listado"
+           contenteditable="true"
+           data-field="actions">Revisa todo lo subido con su esposa — wizard muestra todos los pasos en verde
+Ve el preview de como se va a ver la propiedad publicada
+Ve la incidencia del plafon del bano marcada como 'requiere reparacion'
+Toca 'Publicar' — la app confirma 30 dias gratis
+Comparte el link via WhatsApp a su hermano, vecinos, companero de la CCSS
+Su esposa publica el link en grupos de Facebook de Sabanilla y San Pedro (UCR)
+El hermano reenvía el link a su sobrino, que lo comparte en un grupo de WhatsApp de la UCR</div>
+
+      <div class="uxrt-cell uxrt-cell--actions"
+           data-phase="negociacion"
+           contenteditable="true"
+           data-field="actions">Recibe notificacion push: 'Mery envio una propuesta para tu propiedad'
+Revisa perfil verificado de Mery — calificaciones, historial
+Revisa propuesta termino por termino: C280,000/mes, 3 anos, gato solo interior, inspeccion mensual
+Nota que Mery no menciono el plafon del bano — contrapropone que el lo repare antes de que ella entre
+Escanea el codigo de barras en el reverso de su cedula con la camara del celular
+Su esposa le ayuda a comprar certificacion RNP en rnpdigital.com (~C1,500)
+Verificado como propietario, envia la contrapropuesta
+Mery acepta en 2 horas — confirma que Jose repare el plafon antes de entrar
+La app muestra: 'Acuerdo alcanzado — pendiente inspeccion inicial'</div>
+
+      <div class="uxrt-cell uxrt-cell--actions"
+           data-phase="inspeccion-inicial"
+           contenteditable="true"
+           data-field="actions">Jose repara el plafon del bano como acordo
+La app agenda la inspeccion inicial — Mery confirma horario
+Jose llega a la propiedad en la pickup, Mery llega puntual
+Recorren el inmueble espacio por espacio siguiendo el orden de la app
+La app muestra cada cuarto del wizard y les pide tomar fotos del estado actual
+Jose muestra el plafon nuevo del bano: 'Vea, quedo como nuevo'
+La app registra cada foto con fecha, hora, y geolocalizacion
+La app genera el acta de entrega digital con inventario completo
+Ambos revisan el acta en sus celulares
+Jose firma digitalmente, Mery firma digitalmente
+La app confirma: 'Acta de entrega registrada. Contrato listo para firma.'
+Jose ve el expediente digital: contrato original + acta de entrega como primer documento adjunto — cambios futuros se agregan como adendas, nunca se modifica el original</div>
+
+      <!-- ── Thoughts Row ───────────────────────────────────────── -->
+      <div class="uxrt-row-label uxrt-row-label--thoughts">💭 Pensamientos</div>
+
+      <div class="uxrt-cell uxrt-cell--thoughts"
+           data-phase="descubrimiento"
+           contenteditable="true"
+           data-field="thoughts">Eso no sera una estafa?
+Peor no puede estar
+Curiosidad mezclada con escepticismo
+Se pregunta si la app es para propietarios o solo para inquilinos como las demas</div>
+
+      <div class="uxrt-cell uxrt-cell--thoughts"
+           data-phase="consideracion"
+           contenteditable="true"
+           data-field="thoughts">Solo me pidio el numero, no me pidio correo ni contrasena
+Es como llenar un formulario del banco, pasito a pasito (su esposa)
+Algunos campos no los conoce — va a tener que ir a la propiedad a verificar</div>
+
+      <div class="uxrt-cell uxrt-cell--thoughts"
+           data-phase="registro"
+           contenteditable="true"
+           data-field="thoughts">Esto si tiene sentido — le estoy poniendo a la propiedad lo que nunca le puse antes
+Se siente productivo por primera vez con la tecnologia
+Le gusta que la app le va diciendo que fotografiar en cada paso
+Le preocupa que el video tour no le quede bien</div>
+
+      <div class="uxrt-cell uxrt-cell--thoughts"
+           data-phase="listado"
+           contenteditable="true"
+           data-field="thoughts">Nunca habia visto mi propiedad asi de organizada
+Se siente orgulloso de su propiedad presentada de manera profesional
+Los 30 dias gratis le quitan la presion de pagar sin saber si funciona
+Ahora a esperar a ver si llega alguien</div>
+
+      <div class="uxrt-cell uxrt-cell--thoughts"
+           data-phase="negociacion"
+           contenteditable="true"
+           data-field="thoughts">Esta muchacha tiene buenas calificaciones y trabaja en computacion
+Le da confianza ver el perfil verificado con historial
+Antes esto era puro WhatsApp y uno no sabia con quien estaba hablando
+Le sorprende que Mery acepto en 2 horas — con el letrero fisico a veces pasaban semanas</div>
+
+      <div class="uxrt-cell uxrt-cell--thoughts"
+           data-phase="inspeccion-inicial"
+           contenteditable="true"
+           data-field="thoughts">Si yo hubiera tenido esto hace dos anos, ese mae no me sale con que 'ya estaba asi'
+Le gusta que Mery tambien esta tranquila con las fotos — no es adversarial sino confianza mutua
+Piensa en su hermano y en todo lo que perdio sin documentar
+Esto es mejor que cualquier papel que me hiciera un conocido</div>
+
+      <!-- ── Frustrations Row ───────────────────────────────────── -->
+      <div class="uxrt-row-label uxrt-row-label--frustrations">😤 Frustraciones</div>
+
+      <div class="uxrt-cell uxrt-cell--frustrations"
+           data-phase="descubrimiento"
+           contenteditable="true"
+           data-field="frustrations">La letra del celular es muy pequena
+Las apps le piden crear cuenta con correo electronico que casi no usa
+La mayoria de apps son para inquilinos, no para propietarios — se siente ignorado por el mercado
+Depende de su esposa para navegar el Play Store</div>
+
+      <div class="uxrt-cell uxrt-cell--frustrations"
+           data-phase="consideracion"
+           contenteditable="true"
+           data-field="frustrations">Algunos campos no los conoce (ej: tipo de medidor — individual o compartido)
+Va a tener que ir a la propiedad a verificar datos antes de completar el wizard
+Le gustaria poder guardar el progreso y seguir despues</div>
+
+      <div class="uxrt-cell uxrt-cell--frustrations"
+           data-phase="registro"
+           contenteditable="true"
+           data-field="frustrations">Le cuesta sacar fotos rectas de los cuartos pequenos porque no cabe para atras
+No sabe si las fotos del bano quedaron bien iluminadas porque no tiene ventana
+No esta seguro de si el video tour quedo bien pero lo sube de todas formas</div>
+
+      <div class="uxrt-cell uxrt-cell--frustrations"
+           data-phase="listado"
+           contenteditable="true"
+           data-field="frustrations">No sabe cuanto tiempo va a tardar en llegarle una propuesta
+Le preocupa que nadie use la app todavia porque es nueva</div>
+
+      <div class="uxrt-cell uxrt-cell--frustrations"
+           data-phase="negociacion"
+           contenteditable="true"
+           data-field="frustrations">Necesito ayuda de su esposa para comprar la certificacion RNP — rnpdigital.com no es amigable para adultos mayores
+Los C1,500 parecen un gasto adicional pero su esposa le recuerda que es una sola vez y sirve para las dos propiedades</div>
+
+      <div class="uxrt-cell uxrt-cell--frustrations"
+           data-phase="inspeccion-inicial"
+           contenteditable="true"
+           data-field="frustrations">Le hubiera gustado tener esto desde el primer inquilino — habria ahorrado cientos de miles en reparaciones no comprobadas
+Siente tristeza por todo lo que su esposa sufrio de presion por culpa de inquilinos problematicos</div>
+
+      <!-- ── Touchpoints Row ────────────────────────────────────── -->
+      <div class="uxrt-row-label uxrt-row-label--touchpoints">📱 Touchpoints</div>
+
+      <!-- Touchpoints: descubrimiento -->
+      <div class="uxrt-cell uxrt-cell--touchpoints" data-phase="descubrimiento">
+        <span contenteditable="true"
+              data-field="touchpoints"
+              data-phase="descubrimiento"
+              title="Touchpoints (comma-separated)">WhatsApp (audio del hermano), Play Store (busqueda), Celular de su esposa (mejor pantalla), Listing de HabitaNexus en la tienda de apps</span>
+        <span class="uxrt-touchpoints__channels-sep"
+              style="display:block;margin-top:4px;font-size:11px;color:#6680bb;"
+              data-phase="descubrimiento">
+          <span contenteditable="true"
+                data-field="channels"
+                data-phase="descubrimiento"
+                title="Channels (comma-separated)">WhatsApp, Play Store, Celular de su esposa</span>
+        </span>
+      </div>
+
+      <!-- Touchpoints: consideracion -->
+      <div class="uxrt-cell uxrt-cell--touchpoints" data-phase="consideracion">
+        <span contenteditable="true"
+              data-field="touchpoints"
+              data-phase="consideracion"
+              title="Touchpoints (comma-separated)">App de HabitaNexus (pantalla de seleccion de rol, verificacion SMS, wizard stepper con explicaciones), Celular de su esposa</span>
+        <span class="uxrt-touchpoints__channels-sep"
+              style="display:block;margin-top:4px;font-size:11px;color:#6680bb;"
+              data-phase="consideracion">
+          <span contenteditable="true"
+                data-field="channels"
+                data-phase="consideracion"
+                title="Channels (comma-separated)">App movil, Visita presencial a la propiedad (para verificar datos)</span>
+        </span>
+      </div>
+
+      <!-- Touchpoints: registro -->
+      <div class="uxrt-cell uxrt-cell--touchpoints" data-phase="registro">
+        <span contenteditable="true"
+              data-field="touchpoints"
+              data-phase="registro"
+              title="Touchpoints (comma-separated)">App de HabitaNexus (wizard stepper, camara de fotos, grabacion de video tour, pantalla de recomendaciones de grabacion), Celular de su esposa, La propiedad fisica, Cinta metrica de ebanisteria, Pickup</span>
+        <span class="uxrt-touchpoints__channels-sep"
+              style="display:block;margin-top:4px;font-size:11px;color:#6680bb;"
+              data-phase="registro">
+          <span contenteditable="true"
+                data-field="channels"
+                data-phase="registro"
+                title="Channels (comma-separated)">App movil, Presencial en la propiedad</span>
+        </span>
+      </div>
+
+      <!-- Touchpoints: listado -->
+      <div class="uxrt-cell uxrt-cell--touchpoints" data-phase="listado">
+        <span contenteditable="true"
+              data-field="touchpoints"
+              data-phase="listado"
+              title="Touchpoints (comma-separated)">App de HabitaNexus (preview de publicacion, boton de compartir), WhatsApp (envio de links a contactos), Facebook (su esposa publica en grupos de Sabanilla/San Pedro), Version web publica del marketplace</span>
+        <span class="uxrt-touchpoints__channels-sep"
+              style="display:block;margin-top:4px;font-size:11px;color:#6680bb;"
+              data-phase="listado">
+          <span contenteditable="true"
+                data-field="channels"
+                data-phase="listado"
+                title="Channels (comma-separated)">App movil, WhatsApp, Facebook, Web publica del marketplace</span>
+        </span>
+      </div>
+
+      <!-- Touchpoints: negociacion -->
+      <div class="uxrt-cell uxrt-cell--touchpoints" data-phase="negociacion">
+        <span contenteditable="true"
+              data-field="touchpoints"
+              data-phase="negociacion"
+              title="Touchpoints (comma-separated)">App de HabitaNexus (notificacion push, perfil de Mery, propuesta termino por termino, contrapropuesta, escaneo de cedula), Camara del celular (escaneo de cedula), rnpdigital.com (certificacion RNP), Celular de su esposa</span>
+        <span class="uxrt-touchpoints__channels-sep"
+              style="display:block;margin-top:4px;font-size:11px;color:#6680bb;"
+              data-phase="negociacion">
+          <span contenteditable="true"
+                data-field="channels"
+                data-phase="negociacion"
+                title="Channels (comma-separated)">App movil, rnpdigital.com (navegador web), Camara del celular</span>
+        </span>
+      </div>
+
+      <!-- Touchpoints: inspeccion-inicial -->
+      <div class="uxrt-cell uxrt-cell--touchpoints" data-phase="inspeccion-inicial">
+        <span contenteditable="true"
+              data-field="touchpoints"
+              data-phase="inspeccion-inicial"
+              title="Touchpoints (comma-separated)">App de HabitaNexus (recorrido guiado, camara con geolocalizacion, acta de entrega digital, firma digital, expediente del contrato), Celular propio o de su esposa, La propiedad fisica, Mery (presencial)</span>
+        <span class="uxrt-touchpoints__channels-sep"
+              style="display:block;margin-top:4px;font-size:11px;color:#6680bb;"
+              data-phase="inspeccion-inicial">
+          <span contenteditable="true"
+                data-field="channels"
+                data-phase="inspeccion-inicial"
+                title="Channels (comma-separated)">App movil, Presencial en la propiedad, Correo electronico (envio automatico del acta firmada)</span>
+        </span>
+      </div>
+
+      <!-- ── Opportunities Row ──────────────────────────────────── -->
+      <div class="uxrt-row-label uxrt-row-label--opportunities">💡 Oportunidades</div>
+
+      <div class="uxrt-cell uxrt-cell--opportunities"
+           data-phase="descubrimiento"
+           contenteditable="true"
+           data-field="opportunities">Landing page de Play Store debe decir explicitamente 'para propietarios e inquilinos'
+Screenshots del Play Store deben mostrar el flujo del propietario primero
+Programa de referidos por WhatsApp: el hermano que refiere podria recibir un beneficio</div>
+
+      <div class="uxrt-cell uxrt-cell--opportunities"
+           data-phase="consideracion"
+           contenteditable="true"
+           data-field="opportunities">Cada campo del wizard con explicacion visible: '¿Por que solicitamos esto?' en texto claro debajo del campo, sin necesidad de tocar nada
+Permitir guardar borrador y continuar despues
+Indicador de progreso claro: 'Paso 2 de 6 — Distribucion del inmueble'
+Texto grande y botones amplios — usuario de 65 anos en celular</div>
+
+      <div class="uxrt-cell uxrt-cell--opportunities"
+           data-phase="registro"
+           contenteditable="true"
+           data-field="opportunities">Pantalla de recomendaciones de fotografia y video antes de cada captura — tips visibles, no expandibles
+Campo de estado por espacio: 'buen estado' / 'requiere reparacion' / 'no aplica'
+Futuro: medicion por realidad aumentada para eliminar la cinta metrica
+Permitir subir fotos y video en baja resolucion si la conexion es mala — comprimir y subir en background</div>
+
+      <div class="uxrt-cell uxrt-cell--opportunities"
+           data-phase="listado"
+           contenteditable="true"
+           data-field="opportunities">Link compartido con preview rico (Open Graph tags) — foto principal, precio, ubicacion en la tarjeta de WhatsApp/Facebook
+UTM tags por canal: utm_source=whatsapp/facebook, utm_medium=referral/social
+Analytics stack: PostHog (product analytics + funnels) + Google Analytics (traffic) + Looker Studio dashboard interno para embudo AAARRR
+Tracker de compartidos para Jose: puede ver cuantas personas abrieron su link y desde que canal
+Notificacion push: '5 personas vieron tu propiedad hoy desde Facebook' — con desglose por canal
+Version web publica debe cargar rapido en celulares viejos</div>
+
+      <div class="uxrt-cell uxrt-cell--opportunities"
+           data-phase="negociacion"
+           contenteditable="true"
+           data-field="opportunities">Guia paso a paso para comprar la certificacion RNP — o link directo desde la app a rnpdigital.com con campos prellenados
+Notificacion clara de que la certificacion es una sola vez y sirve para todas las propiedades del mismo inmueble
+Escaneo de cedula con soporte dual: codigo de barras PDF417 (cedulas viejas) + MRZ con OCR (cedulas nuevas) — deteccion automatica del formato
+Sistema de comparacion de propuestas si llegan multiples inquilinos — tabla lado a lado
+Indicador de tiempo de respuesta del inquilino: 'Mery respondio en 2 horas'
+KYC/AML como capa backend separada (Persona, Auth0, Ondato) — no visible para Jose</div>
+
+      <div class="uxrt-cell uxrt-cell--opportunities uxrt-cell--last-col-opportunities"
+           data-phase="inspeccion-inicial"
+           contenteditable="true"
+           data-field="opportunities">Modelo de expediente digital: contrato original inmutable + adendas como control de cambios (documentar en SOP y OpenSpec)
+Comparacion visual automatica: en inspecciones futuras, la app muestra la foto original al lado de la nueva del mismo espacio
+Checklist de inspeccion pre-poblado con los espacios del wizard — Jose no se salta ningun cuarto
+Referido a Fixii si durante la inspeccion se detectan reparaciones que Jose no puede hacer solo
+Envio automatico del acta firmada por correo electronico a ambas partes como respaldo legal vinculante + opcion de descargar PDF</div>
+
+    </div><!-- /.uxrt-grid -->
+
+    <!-- ═══════════════════════════════════════════════════════════
+         COMPONENT: pain-points-summary
+         ═══════════════════════════════════════════════════════════ -->
+    <div class="uxrt-pain-points">
+      <div class="uxrt-pain-points__header">🔥 Pain Points Principales</div>
+      <div class="uxrt-pain-points__grid">
+        <div class="uxrt-pain-points__item"
+             contenteditable="true"
+             data-field="analysis.pain_points[0]">Dependencia de su esposa para tareas digitales — desde buscar en Play Store hasta comprar la certificacion RNP y publicar en Facebook</div>
+        <div class="uxrt-pain-points__item"
+             contenteditable="true"
+             data-field="analysis.pain_points[1]">rnpdigital.com no es amigable para adultos mayores — la certificacion RNP es un tramite externo que genera friccion</div>
+        <div class="uxrt-pain-points__item"
+             contenteditable="true"
+             data-field="analysis.pain_points[2]">Incertidumbre durante la espera de propuestas — entre publicar y recibir la primera propuesta, Jose no sabe si la app funciona</div>
+        <div class="uxrt-pain-points__item"
+             contenteditable="true"
+             data-field="analysis.pain_points[3]">Fotos y video tour sin guia de calidad — Jose no sabe si sus fotos y video estan suficientemente bien para atraer inquilinos</div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         COMPONENT: moments-of-truth
+         ═══════════════════════════════════════════════════════════ -->
+    <div class="uxrt-moments">
+      <div class="uxrt-moments__header">⚡ Momentos de Verdad</div>
+      <div class="uxrt-moments__item">
+        <strong class="uxrt-moments__phase-ref"
+                contenteditable="true"
+                data-field="analysis.moments_of_truth[0].phase">inspeccion-inicial</strong>
+        —
+        <span contenteditable="true"
+              data-field="analysis.moments_of_truth[0].description">Cuando Jose y Mery terminan el recorrido, la app genera el acta de entrega con fotos inmutables y ambos firman digitalmente. Jose ve el expediente digital con el contrato + acta y piensa: 'Si yo hubiera tenido esto hace dos anos, ese mae no me sale con que ya estaba asi.' La promesa de HabitaNexus se materializa en evidencia concreta.</span>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="uxrt-footer">
+      Generado por <strong>ux-research-toolkit</strong> · Experience Map (journey-map) · Basado en metodología NN/g · <span contenteditable="true" data-field="meta.created">2026-04-13</span>
+    </div>
+
+  </div>
+
+  <!-- Editor Controls injected by renderer -->
+  <div class="uxrt-editor-controls" id="uxrt-editor-controls">
+    <button class="uxrt-editor-controls__btn uxrt-editor-controls__btn--save"
+            onclick="uxrtSaveJson()">💾 Save JSON</button>
+    <button class="uxrt-editor-controls__btn uxrt-editor-controls__btn--refresh"
+            onclick="uxrtRefreshJson()">🔄 Refresh from JSON</button>
+    <span class="uxrt-editor-controls__status" id="uxrt-status" aria-live="polite"></span>
+    <!-- Hidden file input for fallback load -->
+    <input type="file" id="uxrt-file-input" accept=".json,application/json"
+           style="display:none;" onchange="uxrtHandleFileInput(this)">
+  </div>
+
+  <script>
+/* ──────────────────────────────────────────────────────────────────
+   UX Research Toolkit — Editor Controls
+   Implements bidirectional sync between contenteditable DOM and JSON.
+────────────────────────────────────────────────────────────────── */
+
+// ── Helpers ──────────────────────────────────────────────────────
+
+/** Set a deeply-nested value using dot-notation path, including array indices. */
+function uxrtSetDeep(obj, path, value) {
+  const parts = path.replace(/\[(\d+)\]/g, '.$1').split('.');
+  let cur = obj;
+  for (let i = 0; i < parts.length - 1; i++) {
+    const part = parts[i];
+    const nextIsIndex = /^\d+$/.test(parts[i + 1]);
+    if (cur[part] === undefined || cur[part] === null) {
+      cur[part] = nextIsIndex ? [] : {};
+    }
+    cur = cur[part];
+  }
+  const last = parts[parts.length - 1];
+  cur[last] = value;
+}
+
+/** Get a deeply-nested value using dot-notation path. */
+function uxrtGetDeep(obj, path) {
+  const parts = path.replace(/\[(\d+)\]/g, '.$1').split('.');
+  let cur = obj;
+  for (const part of parts) {
+    if (cur === undefined || cur === null) return undefined;
+    cur = cur[part];
+  }
+  return cur;
+}
+
+/** Display a status message that auto-clears after 3 s. */
+function uxrtStatus(msg, isError) {
+  const el = document.getElementById('uxrt-status');
+  if (!el) return;
+  el.textContent = msg;
+  el.style.color = isError ? '#ff8a8a' : '#6bcb77';
+  clearTimeout(uxrtStatus._timer);
+  uxrtStatus._timer = setTimeout(() => { el.textContent = ''; }, 3000);
+}
+
+// ── Build JSON from DOM ──────────────────────────────────────────
+
+function uxrtBuildJson() {
+  const meta = Object.assign(
+    { type: '', profile: '', title: '', created: '', updated: '', version: 1 },
+    window.__UXRT_META__ || {}
+  );
+  meta.updated = new Date().toISOString().split('T')[0];
+
+  const persona = {};
+  const phasesMap = {};
+  const analysis = { pain_points: [], moments_of_truth: [] };
+
+  document.querySelectorAll('[contenteditable]').forEach(el => {
+    const field = el.dataset.field;
+    const phase = el.dataset.phase;
+    if (!field) return;
+
+    const text = el.innerText.trim();
+
+    if (phase) {
+      if (!phasesMap[phase]) phasesMap[phase] = { id: phase };
+      const p = phasesMap[phase];
+
+      if (field === 'label') {
+        p.label = text;
+      } else if (field === 'emotion.emoji') {
+        if (!p.emotion) p.emotion = {};
+        p.emotion.emoji = text;
+      } else if (field === 'emotion.label') {
+        if (!p.emotion) p.emotion = {};
+        p.emotion.label = text;
+      } else if (field === 'emotion.level') {
+        if (!p.emotion) p.emotion = {};
+        p.emotion.level = parseInt(el.dataset.level, 10) || 3;
+      } else if (field === 'actions') {
+        p.actions = text;
+      } else if (field === 'thoughts') {
+        p.thoughts = text;
+      } else if (field === 'frustrations') {
+        p.frustrations = text;
+      } else if (field === 'opportunities') {
+        p.opportunities = text;
+      } else if (field === 'touchpoints') {
+        p.touchpoints = text.split(',').map(s => s.trim()).filter(Boolean);
+      } else if (field === 'channels') {
+        p.channels = text.split(',').map(s => s.trim()).filter(Boolean);
+      }
+    } else if (field.startsWith('persona.')) {
+      const key = field.slice('persona.'.length);
+      if (key === 'age') {
+        persona[key] = parseInt(text, 10) || 0;
+      } else {
+        persona[key] = text;
+      }
+    } else if (field === 'meta.title') {
+      meta.title = text;
+    } else if (field === 'meta.created') {
+      meta.created = text;
+    } else if (field.startsWith('analysis.pain_points[')) {
+      const idx = parseInt(field.match(/\[(\d+)\]/)[1], 10);
+      analysis.pain_points[idx] = text;
+    } else if (field.startsWith('analysis.moments_of_truth[')) {
+      const match = field.match(/\[(\d+)\]\.(\w+)/);
+      if (match) {
+        const idx = parseInt(match[1], 10);
+        const key = match[2];
+        if (!analysis.moments_of_truth[idx]) analysis.moments_of_truth[idx] = {};
+        analysis.moments_of_truth[idx][key] = text;
+      }
+    }
+  });
+
+  document.querySelectorAll('[data-field="emotion.level"]').forEach(el => {
+    const phase = el.dataset.phase;
+    if (phase && phasesMap[phase]) {
+      if (!phasesMap[phase].emotion) phasesMap[phase].emotion = {};
+      phasesMap[phase].emotion.level = parseInt(el.dataset.level, 10) || 3;
+    }
+  });
+
+  const phaseOrder = [];
+  document.querySelectorAll('[data-phase]').forEach(el => {
+    const pid = el.dataset.phase;
+    if (pid && !phaseOrder.includes(pid)) phaseOrder.push(pid);
+  });
+
+  const phaseIconMap = {};
+  (window.__UXRT_PHASES__ || []).forEach(p => {
+    if (p.id && p.icon) phaseIconMap[p.id] = p.icon;
+  });
+
+  const phases = phaseOrder.map(pid => {
+    const p = phasesMap[pid] || { id: pid };
+    if (!p.icon && phaseIconMap[pid]) p.icon = phaseIconMap[pid];
+    return p;
+  });
+
+  analysis.pain_points = analysis.pain_points.filter(Boolean);
+  analysis.moments_of_truth = analysis.moments_of_truth.filter(Boolean);
+
+  return { meta, persona, phases, analysis };
+}
+
+// ── Save to JSON ─────────────────────────────────────────────────
+
+async function uxrtSaveJson() {
+  const json = uxrtBuildJson();
+  const blob = new Blob([JSON.stringify(json, null, 2)], { type: 'application/json' });
+  const suggestedName = (json.meta.title || 'map').replace(/[^\w\s-]/g, '').trim().replace(/\s+/g, '-').toLowerCase() + '.json';
+
+  if (window.showSaveFilePicker) {
+    try {
+      const handle = await window.showSaveFilePicker({
+        suggestedName,
+        types: [{ description: 'JSON file', accept: { 'application/json': ['.json'] } }]
+      });
+      const writable = await handle.createWritable();
+      await writable.write(blob);
+      await writable.close();
+      uxrtStatus('Saved successfully ✓');
+    } catch (err) {
+      if (err.name !== 'AbortError') {
+        uxrtStatus('Save failed: ' + err.message, true);
+      }
+    }
+  } else {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = suggestedName;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 10000);
+    uxrtStatus('Downloaded as ' + suggestedName + ' ✓');
+  }
+}
+
+// ── Refresh from JSON ────────────────────────────────────────────
+
+async function uxrtRefreshJson() {
+  if (window.showOpenFilePicker) {
+    try {
+      const [handle] = await window.showOpenFilePicker({
+        types: [{ description: 'JSON file', accept: { 'application/json': ['.json'] } }],
+        multiple: false
+      });
+      const file = await handle.getFile();
+      const text = await file.text();
+      uxrtApplyJson(JSON.parse(text));
+    } catch (err) {
+      if (err.name !== 'AbortError') {
+        uxrtStatus('Load failed: ' + err.message, true);
+      }
+    }
+  } else {
+    document.getElementById('uxrt-file-input').click();
+  }
+}
+
+function uxrtHandleFileInput(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      uxrtApplyJson(JSON.parse(e.target.result));
+    } catch (err) {
+      uxrtStatus('Invalid JSON: ' + err.message, true);
+    }
+  };
+  reader.readAsText(file);
+  input.value = '';
+}
+
+// ── Apply JSON to DOM ────────────────────────────────────────────
+
+function uxrtApplyJson(data) {
+  if (!data || typeof data !== 'object') {
+    uxrtStatus('Invalid data structure', true);
+    return;
+  }
+
+  function set(field, phase, value) {
+    if (value === undefined || value === null) return;
+    const selector = phase
+      ? `[contenteditable][data-field="${CSS.escape(field)}"][data-phase="${CSS.escape(phase)}"]`
+      : `[contenteditable][data-field="${CSS.escape(field)}"]`;
+    document.querySelectorAll(selector).forEach(el => {
+      el.innerText = String(value);
+    });
+  }
+
+  if (data.meta) {
+    set('meta.title', null, data.meta.title);
+    set('meta.created', null, data.meta.created);
+    window.__UXRT_META__ = Object.assign(window.__UXRT_META__ || {}, data.meta);
+  }
+
+  if (data.persona) {
+    ['name', 'age', 'role', 'location', 'avatar_emoji', 'primary_pain', 'context'].forEach(key => {
+      set('persona.' + key, null, data.persona[key]);
+    });
+  }
+
+  if (Array.isArray(data.phases)) {
+    data.phases.forEach(phase => {
+      const pid = phase.id;
+      if (!pid) return;
+
+      set('label', pid, phase.label);
+
+      if (phase.emotion) {
+        set('emotion.emoji', pid, phase.emotion.emoji);
+        set('emotion.label', pid, phase.emotion.label);
+
+        if (phase.emotion.level) {
+          const lvl = phase.emotion.level;
+          const colors = { 1: '#ff6b6b', 2: '#ffa07a', 3: '#ffd93d', 4: '#90ee90', 5: '#6bcb77' };
+          const color = colors[lvl] || '#ffd93d';
+          const width = (lvl / 5 * 100) + '%';
+          document.querySelectorAll(`[data-field="emotion.level"][data-phase="${CSS.escape(pid)}"]`).forEach(el => {
+            el.dataset.level = lvl;
+            el.style.width = width;
+            el.style.background = color;
+            const labelEl = el.closest('.uxrt-emotion-cell')?.querySelector('[data-field="emotion.label"]');
+            if (labelEl) labelEl.style.color = color;
+          });
+        }
+      }
+
+      set('actions', pid, phase.actions);
+      set('thoughts', pid, phase.thoughts);
+      set('frustrations', pid, phase.frustrations);
+      set('opportunities', pid, phase.opportunities);
+
+      if (Array.isArray(phase.touchpoints)) {
+        set('touchpoints', pid, phase.touchpoints.join(', '));
+      }
+      if (Array.isArray(phase.channels)) {
+        set('channels', pid, phase.channels.join(', '));
+      }
+    });
+  }
+
+  if (data.analysis) {
+    if (Array.isArray(data.analysis.pain_points)) {
+      data.analysis.pain_points.forEach((pp, i) => {
+        set('analysis.pain_points[' + i + ']', null, pp);
+      });
+    }
+
+    if (Array.isArray(data.analysis.moments_of_truth)) {
+      data.analysis.moments_of_truth.forEach((mot, i) => {
+        set('analysis.moments_of_truth[' + i + '].phase', null, mot.phase);
+        set('analysis.moments_of_truth[' + i + '].description', null, mot.description);
+      });
+    }
+  }
+
+  uxrtStatus('Loaded from file ✓');
+}
+  </script>
+
+  <script>
+// ── Runtime data injected by renderer ───────────────────────────
+window.__UXRT_META__ = {
+  "type": "journey-map",
+  "profile": "journey-map",
+  "title": "Customer Journey: Jose Penaranda — Listado de propiedad en HabitaNexus",
+  "created": "2026-04-13",
+  "updated": "2026-04-13",
+  "version": 1
+};
+
+window.__UXRT_PHASES__ = [
+  {
+    "id": "descubrimiento",
+    "label": "Descubrimiento",
+    "icon": "🔍",
+    "duration": "1 dia (domingo tarde)",
+    "actions": ["Recibe audio de WhatsApp de su hermano recomendando una app para alquileres","Su esposa busca 'aplicacion alquileres Costa Rica' en el Play Store","Encuentra varias apps pero la mayoria son para inquilinos","Su esposa encuentra HabitaNexus y lee 'negociacion digital de contratos, deposito protegido, inspeccion con fotos'"],
+    "thoughts": ["Eso no sera una estafa?","Peor no puede estar","Curiosidad mezclada con escepticismo","Se pregunta si la app es para propietarios o solo para inquilinos como las demas"],
+    "frustrations": ["La letra del celular es muy pequena","Las apps le piden crear cuenta con correo electronico que casi no usa","La mayoria de apps son para inquilinos, no para propietarios — se siente ignorado por el mercado","Depende de su esposa para navegar el Play Store"],
+    "emotion": {"level": 2, "emoji": "🤨", "label": "Esceptico"},
+    "touchpoints": ["WhatsApp (audio del hermano)","Play Store (busqueda)","Celular de su esposa (mejor pantalla)","Listing de HabitaNexus en la tienda de apps"],
+    "channels": ["WhatsApp","Play Store","Celular de su esposa"],
+    "opportunities": ["Landing page de Play Store debe decir explicitamente 'para propietarios e inquilinos'","Screenshots del Play Store deben mostrar el flujo del propietario primero","Programa de referidos por WhatsApp: el hermano que refiere podria recibir un beneficio"]
+  },
+  {
+    "id": "consideracion",
+    "label": "Consideracion",
+    "icon": "🤔",
+    "duration": "1 dia (domingo tarde - lunes)",
+    "actions": ["Abre la app y ve tres opciones: Soy propietario / Soy arrendador-gestor / Busco alquiler","Lee la explicacion visible debajo de cada opcion y toca 'Soy propietario'","Ingresa numero de celular + codigo SMS — se crea su cuenta","Explora el wizard stepper: ve 'Paso 1 de 6: Ubicacion y tipo de inmueble'","Cada campo tiene explicacion visible '¿Por que solicitamos esto?'"],
+    "thoughts": ["Solo me pidio el numero, no me pidio correo ni contrasena","Es como llenar un formulario del banco, pasito a pasito (su esposa)","Algunos campos no los conoce — va a tener que ir a la propiedad a verificar"],
+    "frustrations": ["Algunos campos no los conoce (ej: tipo de medidor — individual o compartido)","Va a tener que ir a la propiedad a verificar datos antes de completar el wizard","Le gustaria poder guardar el progreso y seguir despues"],
+    "emotion": {"level": 3, "emoji": "🤔", "label": "Explorando"},
+    "touchpoints": ["App de HabitaNexus (pantalla de seleccion de rol, verificacion SMS, wizard stepper con explicaciones)","Celular de su esposa"],
+    "channels": ["App movil","Visita presencial a la propiedad (para verificar datos)"],
+    "opportunities": ["Cada campo del wizard con explicacion visible: '¿Por que solicitamos esto?' en texto claro debajo del campo, sin necesidad de tocar nada","Permitir guardar borrador y continuar despues","Indicador de progreso claro: 'Paso 2 de 6 — Distribucion del inmueble'","Texto grande y botones amplios — usuario de 65 anos en celular"]
+  },
+  {
+    "id": "registro",
+    "label": "Registro",
+    "icon": "📸",
+    "duration": "1 dia (lunes manana)",
+    "actions": ["Va en la pickup a la propiedad con el celular de su esposa","Completa los pasos del wizard: mide cuartos con cinta metrica, verifica tipo de medidor, sistema de agua caliente","Toma fotos de cada espacio siguiendo el orden del wizard","La app muestra recomendaciones antes de grabar: 'Grabe en horizontal, camine despacio, asegurese de buena iluminacion'","Su esposa le graba el video tour — recorrido continuo","Al fotografiar el bano, nota que la luz del plafon esta quemada — marca 'requiere reparacion'","Completa los campos del catalogo: no modificaciones sin autorizacion, inspeccion mensual, restricciones de ruido"],
+    "thoughts": ["Esto si tiene sentido — le estoy poniendo a la propiedad lo que nunca le puse antes","Se siente productivo por primera vez con la tecnologia","Le gusta que la app le va diciendo que fotografiar en cada paso","Le preocupa que el video tour no le quede bien"],
+    "frustrations": ["Le cuesta sacar fotos rectas de los cuartos pequenos porque no cabe para atras","No sabe si las fotos del bano quedaron bien iluminadas porque no tiene ventana","No esta seguro de si el video tour quedo bien pero lo sube de todas formas"],
+    "emotion": {"level": 3, "emoji": "📸", "label": "Productivo"},
+    "touchpoints": ["App de HabitaNexus (wizard stepper, camara de fotos, grabacion de video tour, pantalla de recomendaciones de grabacion)","Celular de su esposa","La propiedad fisica","Cinta metrica de ebanisteria","Pickup"],
+    "channels": ["App movil","Presencial en la propiedad"],
+    "opportunities": ["Pantalla de recomendaciones de fotografia y video antes de cada captura — tips visibles, no expandibles","Campo de estado por espacio: 'buen estado' / 'requiere reparacion' / 'no aplica'","Futuro: medicion por realidad aumentada para eliminar la cinta metrica","Permitir subir fotos y video en baja resolucion si la conexion es mala — comprimir y subir en background"]
+  },
+  {
+    "id": "listado",
+    "label": "Listado",
+    "icon": "📋",
+    "duration": "1 dia (lunes tarde, de regreso en su casa)",
+    "actions": ["Revisa todo lo subido con su esposa — wizard muestra todos los pasos en verde","Ve el preview de como se va a ver la propiedad publicada","Ve la incidencia del plafon del bano marcada como 'requiere reparacion'","Toca 'Publicar' — la app confirma 30 dias gratis","Comparte el link via WhatsApp a su hermano, vecinos, companero de la CCSS","Su esposa publica el link en grupos de Facebook de Sabanilla y San Pedro (UCR)","El hermano reenvía el link a su sobrino, que lo comparte en un grupo de WhatsApp de la UCR"],
+    "thoughts": ["Nunca habia visto mi propiedad asi de organizada","Se siente orgulloso de su propiedad presentada de manera profesional","Los 30 dias gratis le quitan la presion de pagar sin saber si funciona","Ahora a esperar a ver si llega alguien"],
+    "frustrations": ["No sabe cuanto tiempo va a tardar en llegarle una propuesta","Le preocupa que nadie use la app todavia porque es nueva"],
+    "emotion": {"level": 4, "emoji": "😊", "label": "Orgulloso"},
+    "touchpoints": ["App de HabitaNexus (preview de publicacion, boton de compartir)","WhatsApp (envio de links a contactos)","Facebook (su esposa publica en grupos de Sabanilla/San Pedro)","Version web publica del marketplace"],
+    "channels": ["App movil","WhatsApp","Facebook","Web publica del marketplace"],
+    "opportunities": ["Link compartido con preview rico (Open Graph tags) — foto principal, precio, ubicacion en la tarjeta de WhatsApp/Facebook","UTM tags por canal: utm_source=whatsapp/facebook, utm_medium=referral/social","Analytics stack: PostHog (product analytics + funnels) + Google Analytics (traffic) + Looker Studio dashboard interno para embudo AAARRR","Tracker de compartidos para Jose: puede ver cuantas personas abrieron su link y desde que canal","Notificacion push: '5 personas vieron tu propiedad hoy desde Facebook' — con desglose por canal","Version web publica debe cargar rapido en celulares viejos"]
+  },
+  {
+    "id": "negociacion",
+    "label": "Negociacion",
+    "icon": "🤝",
+    "duration": "1 semana despues de publicar",
+    "actions": ["Recibe notificacion push: 'Mery envio una propuesta para tu propiedad'","Revisa perfil verificado de Mery — calificaciones, historial","Revisa propuesta termino por termino: C280,000/mes, 3 anos, gato solo interior, inspeccion mensual","Nota que Mery no menciono el plafon del bano — contrapropone que el lo repare antes de que ella entre","Escanea el codigo de barras en el reverso de su cedula con la camara del celular","Su esposa le ayuda a comprar certificacion RNP en rnpdigital.com (~C1,500)","Verificado como propietario, envia la contrapropuesta","Mery acepta en 2 horas — confirma que Jose repare el plafon antes de entrar","La app muestra: 'Acuerdo alcanzado — pendiente inspeccion inicial'"],
+    "thoughts": ["Esta muchacha tiene buenas calificaciones y trabaja en computacion","Le da confianza ver el perfil verificado con historial","Antes esto era puro WhatsApp y uno no sabia con quien estaba hablando","Le sorprende que Mery acepto en 2 horas — con el letrero fisico a veces pasaban semanas"],
+    "frustrations": ["Necesito ayuda de su esposa para comprar la certificacion RNP — rnpdigital.com no es amigable para adultos mayores","Los C1,500 parecen un gasto adicional pero su esposa le recuerda que es una sola vez y sirve para las dos propiedades"],
+    "emotion": {"level": 4, "emoji": "😌", "label": "Confiado"},
+    "touchpoints": ["App de HabitaNexus (notificacion push, perfil de Mery, propuesta termino por termino, contrapropuesta, escaneo de cedula)","Camara del celular (escaneo de cedula)","rnpdigital.com (certificacion RNP)","Celular de su esposa"],
+    "channels": ["App movil","rnpdigital.com (navegador web)","Camara del celular"],
+    "opportunities": ["Guia paso a paso para comprar la certificacion RNP — o link directo desde la app a rnpdigital.com con campos prellenados","Notificacion clara de que la certificacion es una sola vez y sirve para todas las propiedades del mismo inmueble","Escaneo de cedula con soporte dual: codigo de barras PDF417 (cedulas viejas) + MRZ con OCR (cedulas nuevas) — deteccion automatica del formato","Sistema de comparacion de propuestas si llegan multiples inquilinos — tabla lado a lado","Indicador de tiempo de respuesta del inquilino: 'Mery respondio en 2 horas'","KYC/AML como capa backend separada (Persona, Auth0, Ondato) — no visible para Jose"]
+  },
+  {
+    "id": "inspeccion-inicial",
+    "label": "Inspeccion Inicial",
+    "icon": "🏠",
+    "duration": "1 dia (sabado manana, ~2 semanas despues del acuerdo)",
+    "actions": ["Jose repara el plafon del bano como acordo","La app agenda la inspeccion inicial — Mery confirma horario","Jose llega a la propiedad en la pickup, Mery llega puntual","Recorren el inmueble espacio por espacio siguiendo el orden de la app","La app muestra cada cuarto del wizard y les pide tomar fotos del estado actual","Jose muestra el plafon nuevo del bano: 'Vea, quedo como nuevo'","La app registra cada foto con fecha, hora, y geolocalizacion","La app genera el acta de entrega digital con inventario completo","Ambos revisan el acta en sus celulares","Jose firma digitalmente, Mery firma digitalmente","La app confirma: 'Acta de entrega registrada. Contrato listo para firma.'","Jose ve el expediente digital: contrato original + acta de entrega como primer documento adjunto — cambios futuros se agregan como adendas, nunca se modifica el original"],
+    "thoughts": ["Si yo hubiera tenido esto hace dos anos, ese mae no me sale con que 'ya estaba asi'","Le gusta que Mery tambien esta tranquila con las fotos — no es adversarial sino confianza mutua","Piensa en su hermano y en todo lo que perdio sin documentar","Esto es mejor que cualquier papel que me hiciera un conocido"],
+    "frustrations": ["Le hubiera gustado tener esto desde el primer inquilino — habria ahorrado cientos de miles en reparaciones no comprobadas","Siente tristeza por todo lo que su esposa sufrio de presion por culpa de inquilinos problematicos"],
+    "emotion": {"level": 5, "emoji": "😊", "label": "Satisfecho"},
+    "touchpoints": ["App de HabitaNexus (recorrido guiado, camara con geolocalizacion, acta de entrega digital, firma digital, expediente del contrato)","Celular propio o de su esposa","La propiedad fisica","Mery (presencial)"],
+    "channels": ["App movil","Presencial en la propiedad","Correo electronico (envio automatico del acta firmada)"],
+    "opportunities": ["Modelo de expediente digital: contrato original inmutable + adendas como control de cambios (documentar en SOP y OpenSpec)","Comparacion visual automatica: en inspecciones futuras, la app muestra la foto original al lado de la nueva del mismo espacio","Checklist de inspeccion pre-poblado con los espacios del wizard — Jose no se salta ningun cuarto","Referido a Fixii si durante la inspeccion se detectan reparaciones que Jose no puede hacer solo","Envio automatico del acta firmada por correo electronico a ambas partes como respaldo legal vinculante + opcion de descargar PDF"]
+  }
+];
+  </script>
+
+</body>
+</html>
