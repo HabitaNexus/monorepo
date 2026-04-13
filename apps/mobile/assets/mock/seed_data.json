@@ -1,0 +1,997 @@
+{
+  "meta": {
+    "version": "1.0",
+    "generado": "2026-04-12",
+    "descripcion": "Datos semilla basados en 2 contratos reales de arrendamiento de Costa Rica y perfiles de usuario entrevistados",
+    "fuentes": [
+      "Contrato 1 — Casa en Heredia, La Aurora (Maria del Carmen Villegas → Guillermo Varela Da Silva, 30 mayo 2023)",
+      "Contrato 2 — Apartamento No. 3, Las Palmas, Alajuela, Turr\u00facares (Eida Teresa Morales → Guillermo Varela Da Silva, 9 enero 2024)",
+      "Entrevista Jose Penaranda (propietario, 65 anos)",
+      "Entrevista Mery (inquilina, ~30 anos)"
+    ]
+  },
+
+  "propietarios": [
+    {
+      "id": "prop-001",
+      "nombre": "Jose Penaranda",
+      "cedula": "1-0456-0789",
+      "edad": 65,
+      "ocupacion": "Pensionado / Ebanista retirado de la CCSS",
+      "estado_civil": "Casado, sin hijos",
+      "ubicacion": "San Rafael de Heredia, Costa Rica",
+      "telefono": "+506 8888-1234",
+      "vehiculo": "Pickup",
+      "canal_actual": "Letrero fisico + referidos por WhatsApp",
+      "usa_redes_sociales": false,
+      "tipo_contrato_actual": "Informal — papel que le hizo un conocido",
+      "habilidades_reparacion": ["Ebanisteria", "Muebles", "Puertas"],
+      "requiere_terceros_para": ["Fontaneria", "Electricidad", "Albanileria"],
+      "dolor_principal": "Inquilinos danan propiedades y no puede probar estado inicial porque nunca documento con fotos fechadas",
+      "contexto_familiar": "Esposa con hipertension y diabetes — estres de inquilinos problematicos le afecta la salud",
+      "propiedades_ids": ["inmueble-SR1", "inmueble-SR2"],
+      "plan_suscripcion": "Basico",
+      "cuenta_bancaria_iban": "CR21015108410026012345",
+      "verificado": true,
+      "notas": "Tiene hermanos con propiedades en alquiler que enfrentan los mismos problemas. Potencial referido para expansion."
+    },
+    {
+      "id": "prop-002",
+      "nombre": "Maria del Carmen Villegas Villegas",
+      "cedula": "4-0198-0345",
+      "edad": null,
+      "ocupacion": null,
+      "estado_civil": null,
+      "ubicacion": "Heredia, La Aurora",
+      "telefono": "+506 8765-4321",
+      "canal_actual": null,
+      "tipo_contrato_actual": "Informal — contrato de 8 clausulas sin referencia a Ley 7527",
+      "dolor_principal": null,
+      "propiedades_ids": ["inmueble-001"],
+      "plan_suscripcion": "Basico",
+      "cuenta_bancaria_iban": "CR21015108410026054321",
+      "verificado": true,
+      "notas": "Arrendadora del Contrato 1. Contrato informal con 4 irregularidades detectadas (severidad maxima: Alta). Plazo de 1 ano que legalmente opera como 3."
+    },
+    {
+      "id": "prop-003",
+      "nombre": "Eida Teresa Morales Arguedas",
+      "cedula": "2-0387-0612",
+      "edad": null,
+      "ocupacion": null,
+      "estado_civil": null,
+      "ubicacion": "Alajuela, Turr\u00facares",
+      "telefono": "+506 8234-5678",
+      "canal_actual": null,
+      "tipo_contrato_actual": "Semi-profesional — contrato de 19 clausulas que cita Ley 7527 en encabezado",
+      "dolor_principal": null,
+      "propiedades_ids": ["inmueble-002"],
+      "plan_suscripcion": "Basico",
+      "cuenta_bancaria_iban": "CR21015108410026098765",
+      "verificado": true,
+      "notas": "Arrendante del Contrato 2. Contrato con 2 irregularidades detectadas (severidad maxima: Media). Mejor estructurado que Contrato 1 pero con prorroga de 30 dias en vez de los 3 meses legales."
+    }
+  ],
+
+  "inquilinos": [
+    {
+      "id": "inq-001",
+      "nombre": "Mery",
+      "apellidos": null,
+      "cedula": "1-1789-0456",
+      "edad": 30,
+      "ocupacion": "Analista de Ciberseguridad / Freelancer",
+      "fuente_ingresos": "Transnacional + stablecoins (freelance)",
+      "tiene_orden_patronal": false,
+      "estado_civil": "Soltera",
+      "clase_social": "Media baja",
+      "ubicacion_actual": "San Rafael de Heredia, Costa Rica",
+      "telefono": "+506 7123-4567",
+      "experiencia_alquilando_anos": 11,
+      "canal_busqueda_actual": "25+ grupos de Facebook foto por foto",
+      "tiempo_busqueda_promedio": "2 meses",
+      "presupuesto_min_colones": 125000,
+      "presupuesto_max_colones": 350000,
+      "dolor_principal": "Propietario traslada costos de mantenimiento al inquilino y se niega a devolver deposito de garantia",
+      "fricciones": [
+        "Propietario traslada costos de reparacion (goteras, electricidad)",
+        "Discriminacion por ser freelancer/soltera",
+        "No se permite alojar familiar en emergencia sin acusacion de sub-arrendamiento",
+        "Propietarios no aceptan mascotas",
+        "Deposito nunca devuelto"
+      ],
+      "resultado_esperado": [
+        "Encontrar alquiler filtrado por rango de presupuesto exacto en dias, no semanas",
+        "Contrato digital claro con condiciones de mantenimiento, deposito y convivencia",
+        "Deposito en custodia (escrow) con tercero neutral",
+        "Calendarizador de citas para visitar inmuebles",
+        "Sistema de calificacion de propietarios",
+        "Aceptacion de comprobantes de ingresos no tradicionales (facturas freelance, stablecoins)"
+      ],
+      "verificada": true,
+      "notas": "Perfil extraido de entrevista de validacion de problema. Caso tipico de inquilina que no califica con metodos tradicionales de verificacion de ingresos."
+    },
+    {
+      "id": "inq-002",
+      "nombre": "Guillermo Varela Da Silva",
+      "apellidos": "Varela Da Silva",
+      "cedula": "1-1234-0567",
+      "edad": null,
+      "ocupacion": null,
+      "fuente_ingresos": null,
+      "tiene_orden_patronal": null,
+      "estado_civil": null,
+      "clase_social": null,
+      "ubicacion_actual": "Alajuela, Turr\u00facares",
+      "telefono": "+506 8456-7890",
+      "experiencia_alquilando_anos": null,
+      "canal_busqueda_actual": null,
+      "presupuesto_min_colones": 250000,
+      "presupuesto_max_colones": 400000,
+      "dolor_principal": null,
+      "fricciones": [],
+      "resultado_esperado": [],
+      "verificado": true,
+      "notas": "Arrendatario real de ambos contratos analizados. Firmo Contrato 1 con Maria del Carmen Villegas (30 mayo 2023) y Contrato 2 con Eida Teresa Morales (9 enero 2024). Su experiencia con ambos contratos informales evidencia los problemas que HabitaNexus busca resolver."
+    }
+  ],
+
+  "inmuebles": [
+    {
+      "id": "inmueble-001",
+      "propietario_id": "prop-002",
+      "fuente": "Contrato 1 — 30 de mayo de 2023",
+
+      "catalogo_27_campos": {
+        "tipo_de_inmueble": "Casa independiente",
+        "tipo_de_piso": "Cerámica",
+        "tipo_de_cielo_raso": "Gypsum",
+        "estado_de_pintura": "Buen estado",
+        "tipo_de_cocina": "Sin amueblar",
+        "proveedor_de_agua": "AyA",
+        "tipo_de_medidor_agua": "Individual",
+        "tipo_de_medidor_electricidad": "Individual",
+        "metodo_de_division_de_medidor_compartido": null,
+        "tipo_de_conexion_a_internet_disponible": "No verificado",
+        "proveedor_de_internet_preinstalado": "Ninguno (inquilino contrata)",
+        "velocidad_de_internet_preinstalado": "No aplica",
+        "pago_de_servicio_internet": "Por cuenta del inquilino",
+        "pago_de_servicio_cable": "Por cuenta del inquilino",
+        "pago_de_servicio_telefono": "Por cuenta del inquilino",
+        "pago_de_servicio_gas": "No aplica",
+        "pago_de_servicio_basura": "Por cuenta del inquilino",
+        "paquete_combinado_preinstalado": "Propietario cancela el paquete (inquilino contrata aparte)",
+        "sistema_de_agua_caliente": "Agua fría solamente",
+        "tipo_de_estacionamiento": "Descubierto exclusivo",
+        "seguridad_del_inmueble": ["Verjas en ventanas", "Portón con candado"],
+        "mascotas_perros": "No permitidos",
+        "mascotas_gatos": "No permitidos",
+        "mascotas_otras": "No permitidas",
+        "huespedes_temporales": "No permitidos",
+        "restricciones_de_ruido": "Solo límites legales del Ministerio de Salud (día 65 dB, noche 40 dB)",
+        "modificaciones_al_inmueble": "No permitidas",
+        "actividad_comercial_menor": "No permitida",
+        "subarriendo_de_cochera": "No permitido",
+        "subarriendo_parcial_de_habitaciones": "No permitido",
+        "cesion_total_del_contrato": "No permitida"
+      },
+
+      "ubicacion": {
+        "provincia": "Heredia",
+        "canton": "Heredia",
+        "distrito": "La Aurora",
+        "direccion_exacta": "Del supermercado El Palí 75m oeste",
+        "coordenadas": null
+      },
+
+      "distribucion": {
+        "dormitorios": {
+          "cantidad": 2,
+          "detalle": [
+            {
+              "nombre": "Dormitorio 1 (principal)",
+              "dimensiones": "3.5m x 4m (14 m²)",
+              "capacidad_real": "Cama matrimonial + clóset"
+            },
+            {
+              "nombre": "Dormitorio 2",
+              "dimensiones": "3m x 3m (9 m²)",
+              "capacidad_real": "Cama individual + escritorio"
+            }
+          ]
+        },
+        "banos": {
+          "cantidad": 1,
+          "detalle": [
+            {
+              "tipo": "Completo (inodoro, lavamanos, ducha)",
+              "tipo_de_ducha": "Agua fría",
+              "sistema_agua_caliente": null,
+              "tina_o_jacuzzi": false,
+              "dimensiones": "2m x 2.5m (5 m²)"
+            }
+          ]
+        },
+        "sala": {
+          "presente": true,
+          "dimensiones": "4m x 3.5m (14 m²)"
+        },
+        "comedor": {
+          "presente": true,
+          "dimensiones": "3m x 3m (9 m²)"
+        },
+        "cocina": {
+          "presente": true,
+          "dimensiones": "3m x 2.5m (7.5 m²)"
+        },
+        "cuarto_de_pilas_lavanderia": {
+          "presente": true,
+          "dimensiones": "2m x 1.5m (3 m²)"
+        },
+        "patio": {
+          "presente": true,
+          "dimensiones": "5m x 4m (20 m²)"
+        },
+        "jardin": {
+          "presente": false,
+          "dimensiones": null
+        },
+        "terraza_balcon": {
+          "presente": false,
+          "dimensiones": null
+        },
+        "cochera": {
+          "presente": true,
+          "vehiculos": 1,
+          "tipo": "Descubierto"
+        },
+        "bodega_almacenamiento": {
+          "presente": false,
+          "dimensiones": null
+        },
+        "area_total_m2": 85,
+        "areas_comunes_compartidas": null
+      },
+
+      "estado_del_inmueble": "Perfecto estado para el uso que se destina",
+      "uso_permitido": "Vivienda exclusiva del arrendatario y su núcleo familiar",
+      "actividad_comercial_menor_en_el_inmueble": false,
+      "cohabitantes_maximos": null,
+      "bebes_0_2": null,
+      "ninos_3_12": null,
+      "adolescentes_13_17": null,
+
+      "servicios": {
+        "agua": {
+          "tipo_medidor": "Individual",
+          "pago": "Por cuenta del inquilino",
+          "proveedor": "AyA"
+        },
+        "electricidad": {
+          "tipo_medidor": "Individual",
+          "pago": "Por cuenta del inquilino",
+          "proveedor": "CNFL"
+        },
+        "internet": {
+          "tipo_conexion": "No verificado",
+          "proveedor_preinstalado": "Ninguno",
+          "velocidad_mbps": null,
+          "pago": "Por cuenta del inquilino"
+        },
+        "cable_tv": {
+          "pago": "Por cuenta del inquilino"
+        },
+        "telefono_fijo": {
+          "pago": "Por cuenta del inquilino"
+        },
+        "gas": {
+          "pago": "No aplica"
+        },
+        "recoleccion_basura": {
+          "pago": "Por cuenta del inquilino"
+        },
+        "paquete_combinado": null
+      },
+
+      "fotos": [
+        "assets/mock/fotos/inmueble-001/fachada.jpg",
+        "assets/mock/fotos/inmueble-001/sala.jpg",
+        "assets/mock/fotos/inmueble-001/cocina.jpg",
+        "assets/mock/fotos/inmueble-001/dormitorio1.jpg",
+        "assets/mock/fotos/inmueble-001/dormitorio2.jpg",
+        "assets/mock/fotos/inmueble-001/bano.jpg",
+        "assets/mock/fotos/inmueble-001/patio.jpg"
+      ],
+
+      "video_tour": "assets/mock/videos/inmueble-001/tour.mp4",
+
+      "irregularidades_detectadas_contrato_original": [
+        {
+          "hallazgo": "Plazo de 1 año (legalmente son 3 años segun Art. 70)",
+          "severidad": "Alta",
+          "articulo_violado": "Art. 70 Ley 7527"
+        },
+        {
+          "hallazgo": "Deposito sin custodia neutral — queda en manos del propietario",
+          "severidad": "Alta",
+          "articulo_violado": "Practica (sin regulacion especifica)"
+        },
+        {
+          "hallazgo": "Sin acta de estado inicial del inmueble — no hay inventario, fotos, ni lista de accesorios",
+          "severidad": "Alta",
+          "articulo_violado": "Buena practica / Art. 51"
+        },
+        {
+          "hallazgo": "Terminacion anticipada con penalidad unilateral ambigua — deposito no reembolsable aunque la casa este perfecta",
+          "severidad": "Media",
+          "articulo_violado": "Art. 100-101 Ley 7527"
+        }
+      ]
+    },
+    {
+      "id": "inmueble-002",
+      "propietario_id": "prop-003",
+      "fuente": "Contrato 2 — 9 de enero de 2024",
+
+      "catalogo_27_campos": {
+        "tipo_de_inmueble": "Apartamento en edificio",
+        "tipo_de_piso": "Cerámica",
+        "tipo_de_cielo_raso": "Gypsum",
+        "estado_de_pintura": "Pintura reciente",
+        "tipo_de_cocina": "Con muebles de cocina",
+        "proveedor_de_agua": "AyA",
+        "tipo_de_medidor_agua": "Individual",
+        "tipo_de_medidor_electricidad": "Individual",
+        "metodo_de_division_de_medidor_compartido": null,
+        "tipo_de_conexion_a_internet_disponible": "No verificado",
+        "proveedor_de_internet_preinstalado": "Ninguno (inquilino contrata)",
+        "velocidad_de_internet_preinstalado": "No aplica",
+        "pago_de_servicio_internet": "Por cuenta del inquilino",
+        "pago_de_servicio_cable": "Por cuenta del inquilino",
+        "pago_de_servicio_telefono": "Por cuenta del inquilino",
+        "pago_de_servicio_gas": "No aplica",
+        "pago_de_servicio_basura": "Incluido en renta",
+        "paquete_combinado_preinstalado": "Propietario cancela el paquete (inquilino contrata aparte)",
+        "sistema_de_agua_caliente": "Termo ducha",
+        "tipo_de_estacionamiento": "Techado exclusivo",
+        "seguridad_del_inmueble": ["Verjas en ventanas", "Portón eléctrico"],
+        "mascotas_perros": "Sí, razas pequeñas (hasta 10 kg)",
+        "mascotas_gatos": "Sí, solo interior",
+        "mascotas_otras": "No permitidas",
+        "huespedes_temporales": "Permitidos con aviso previo",
+        "restricciones_de_ruido": "Solo límites legales del Ministerio de Salud (día 65 dB, noche 40 dB)",
+        "modificaciones_al_inmueble": "Solo leves con aviso previo",
+        "actividad_comercial_menor": "No permitida",
+        "subarriendo_de_cochera": "No permitido",
+        "subarriendo_parcial_de_habitaciones": "No permitido",
+        "cesion_total_del_contrato": "No permitida"
+      },
+
+      "ubicacion": {
+        "provincia": "Alajuela",
+        "canton": "Alajuela",
+        "distrito": "Turrúcares",
+        "direccion_exacta": "Apartamentos Las Palmas, Apartamento No. 3. Del Banco Nacional 800m Este y 400m Sur",
+        "coordenadas": null
+      },
+
+      "distribucion": {
+        "dormitorios": {
+          "cantidad": 3,
+          "detalle": [
+            {
+              "nombre": "Dormitorio 1 (principal)",
+              "dimensiones": "3.5m x 4m (14 m²)",
+              "capacidad_real": "Cama matrimonial + clóset"
+            },
+            {
+              "nombre": "Dormitorio 2",
+              "dimensiones": "3m x 3m (9 m²)",
+              "capacidad_real": "Cama individual + escritorio"
+            },
+            {
+              "nombre": "Dormitorio 3",
+              "dimensiones": "2.5m x 3m (7.5 m²)",
+              "capacidad_real": "Solo cama individual"
+            }
+          ]
+        },
+        "banos": {
+          "cantidad": 1,
+          "detalle": [
+            {
+              "tipo": "Completo (inodoro, lavamanos, ducha)",
+              "tipo_de_ducha": "Agua caliente",
+              "sistema_agua_caliente": "Termo ducha",
+              "tina_o_jacuzzi": false,
+              "dimensiones": "2.5m x 2m (5 m²)"
+            }
+          ]
+        },
+        "sala": {
+          "presente": true,
+          "dimensiones": "4m x 4m (16 m²)",
+          "notas": "Sala-comedor integrado"
+        },
+        "comedor": {
+          "presente": true,
+          "dimensiones": "Integrado con sala",
+          "notas": "Sala-comedor integrado"
+        },
+        "cocina": {
+          "presente": true,
+          "dimensiones": "3m x 2.5m (7.5 m²)",
+          "incluye": ["Fregadero", "Mueble de cocina"]
+        },
+        "cuarto_de_pilas_lavanderia": {
+          "presente": true,
+          "dimensiones": "2m x 1.5m (3 m²)",
+          "incluye": ["Pila"]
+        },
+        "patio": {
+          "presente": false,
+          "dimensiones": null
+        },
+        "jardin": {
+          "presente": false,
+          "dimensiones": null
+        },
+        "terraza_balcon": {
+          "presente": false,
+          "dimensiones": null
+        },
+        "cochera": {
+          "presente": true,
+          "vehiculos": 2,
+          "tipo": "Bajo techo"
+        },
+        "bodega_almacenamiento": {
+          "presente": false,
+          "dimensiones": null
+        },
+        "area_total_m2": 75,
+        "areas_comunes_compartidas": "Portón de hierro compartido con otros apartamentos"
+      },
+
+      "estado_del_inmueble": "Buen estado de pintura, pisos, vidrios, mueble de cocina, banco de madera, pila, fregadero, instalaciones eléctricas, loza sanitaria, lavatorio, termo ducha y demás construcciones inherentes al mismo",
+      "uso_permitido": "Vivienda única y exclusiva",
+      "actividad_comercial_menor_en_el_inmueble": false,
+      "cohabitantes_maximos": null,
+      "bebes_0_2": null,
+      "ninos_3_12": null,
+      "adolescentes_13_17": null,
+
+      "servicios": {
+        "agua": {
+          "tipo_medidor": "Individual",
+          "pago": "Por cuenta del inquilino",
+          "proveedor": "AyA"
+        },
+        "electricidad": {
+          "tipo_medidor": "Individual",
+          "pago": "Por cuenta del inquilino",
+          "proveedor": "CNFL"
+        },
+        "internet": {
+          "tipo_conexion": "No verificado",
+          "proveedor_preinstalado": "Ninguno",
+          "velocidad_mbps": null,
+          "pago": "Por cuenta del inquilino"
+        },
+        "cable_tv": {
+          "pago": "Por cuenta del inquilino"
+        },
+        "telefono_fijo": {
+          "pago": "Por cuenta del inquilino"
+        },
+        "gas": {
+          "pago": "No aplica"
+        },
+        "recoleccion_basura": {
+          "pago": "Por cuenta del propietario (Cláusula DÉCIMA)"
+        },
+        "paquete_combinado": null
+      },
+
+      "fotos": [
+        "assets/mock/fotos/inmueble-002/fachada.jpg",
+        "assets/mock/fotos/inmueble-002/sala-comedor.jpg",
+        "assets/mock/fotos/inmueble-002/cocina.jpg",
+        "assets/mock/fotos/inmueble-002/dormitorio1.jpg",
+        "assets/mock/fotos/inmueble-002/dormitorio2.jpg",
+        "assets/mock/fotos/inmueble-002/dormitorio3.jpg",
+        "assets/mock/fotos/inmueble-002/bano.jpg",
+        "assets/mock/fotos/inmueble-002/cochera.jpg"
+      ],
+
+      "video_tour": "assets/mock/videos/inmueble-002/tour.mp4",
+
+      "irregularidades_detectadas_contrato_original": [
+        {
+          "hallazgo": "Prorroga con 30 dias de aviso en vez de los 3 meses legales (Art. 71)",
+          "severidad": "Media",
+          "articulo_violado": "Art. 71 Ley 7527"
+        },
+        {
+          "hallazgo": "Deposito sin custodia neutral — queda en manos del propietario",
+          "severidad": "Alta",
+          "articulo_violado": "Practica (sin regulacion especifica)"
+        },
+        {
+          "hallazgo": "Reajuste de renta vago — dice 'de acuerdo a lo indicado en la ley' sin especificar IPC del INEC ni nulidad de reajuste superior",
+          "severidad": "Media",
+          "articulo_violado": "Art. 67-68 Ley 7527"
+        },
+        {
+          "hallazgo": "Inspeccion sin protocolo completo — falta derecho a fotografiar, llevar tecnicos, y regla de 2 negativas = causal de resolucion",
+          "severidad": "Baja",
+          "articulo_violado": "Art. 51 Ley 7527"
+        }
+      ]
+    }
+  ],
+
+  "listados": [
+    {
+      "id": "listado-001",
+      "inmueble_id": "inmueble-001",
+      "propietario_id": "prop-002",
+      "estado": "activo",
+      "fecha_publicacion": "2023-05-15",
+
+      "precio_publicado_colones": 350000,
+      "rango_negociacion": {
+        "precio_min_colones": 320000,
+        "precio_max_colones": 350000
+      },
+      "deposito_garantia_colones": 300000,
+      "duracion_propuesta_anos": 1,
+      "duracion_propuesta_nota_legal": "Art. 70 Ley 7527: plazo inferior a 3 años se entiende legalmente como 3 años",
+      "dia_de_pago": 30,
+
+      "condiciones_no_negociables": [
+        "No mascotas",
+        "No subarriendo",
+        "No modificaciones al inmueble",
+        "No alojar huéspedes sin permiso escrito",
+        "No consignar, ceder ni realquilar (Cláusula CUARTA)",
+        "No almacenar sustancias inflamables, explosivas o peligrosas (Cláusula SEXTA)"
+      ],
+
+      "incremento_anual": {
+        "metodo": "IPC anual del INEC (Art. 67 Ley 7527)",
+        "maximo_legal": "Indice de Precios al Consumidor del INEC",
+        "nulidad": "Art. 68: nulo de pleno derecho cualquier reajuste superior al IPC"
+      },
+
+      "contrato_original": {
+        "clausulas_totales": 8,
+        "cita_ley_7527": false,
+        "irregularidades_detectadas": 4,
+        "severidad_maxima": "Alta (clausula nula de pleno derecho)"
+      }
+    },
+    {
+      "id": "listado-002",
+      "inmueble_id": "inmueble-002",
+      "propietario_id": "prop-003",
+      "estado": "activo",
+      "fecha_publicacion": "2024-01-05",
+
+      "precio_publicado_colones": 280000,
+      "rango_negociacion": {
+        "precio_min_colones": 260000,
+        "precio_max_colones": 290000
+      },
+      "deposito_garantia_colones": 280000,
+      "duracion_propuesta_anos": 3,
+      "duracion_propuesta_nota_legal": null,
+      "dia_de_pago": 15,
+
+      "condiciones_no_negociables": [
+        "Uso exclusivo como vivienda",
+        "No traspasar ni ceder el contrato en forma alguna (Cláusula QUINTA)",
+        "Contrato personalísimo",
+        "Inspección mensual los primeros 5 días del mes (Cláusula NOVENA)",
+        "Correcciones en 30 días tras inspección no satisfactoria"
+      ],
+
+      "incremento_anual": {
+        "metodo": "De acuerdo a lo indicado en la ley (Cláusula TERCERA)",
+        "maximo_legal": "Indice de Precios al Consumidor del INEC (Art. 67)",
+        "nulidad": "Art. 68: nulo de pleno derecho cualquier reajuste superior al IPC",
+        "nota": "Contrato original es vago — no especifica IPC ni nulidad explicitamente"
+      },
+
+      "prorroga": {
+        "periodo_contrato": "1 año (segun contrato)",
+        "periodo_legal": "3 años (Art. 71 Ley 7527)",
+        "aviso_no_renovacion_contrato": "30 días (segun contrato)",
+        "aviso_no_renovacion_legal": "3 meses (Art. 71 Ley 7527)",
+        "nota": "Discrepancia: contrato dice 30 dias pero ley exige 3 meses. HabitaNexus usa el plazo legal."
+      },
+
+      "contrato_original": {
+        "clausulas_totales": 19,
+        "cita_ley_7527": true,
+        "irregularidades_detectadas": 2,
+        "severidad_maxima": "Media (omisiones)"
+      }
+    }
+  ],
+
+  "contratos": [
+    {
+      "id": "contrato-001",
+      "listado_id": "listado-001",
+      "inmueble_id": "inmueble-001",
+      "propietario_id": "prop-002",
+      "inquilino_id": "inq-002",
+      "estado": "vigente",
+      "fecha_firma": "2023-05-30",
+      "fecha_inicio": "2023-05-30",
+      "fecha_fin_pactada": "2024-05-30",
+      "fecha_fin_legal": "2026-05-30",
+      "precio_mensual_colones": 350000,
+      "deposito_garantia_colones": 300000,
+      "deposito_custodia": "escrow_habitanexus",
+      "dia_de_pago": 30,
+      "duracion_pactada": "1 año",
+      "duracion_legal": "3 años (Art. 70 Ley 7527)",
+      "aviso_legal_mostrado": true,
+      "aviso_legal_texto": "Art. 70 y 71, Ley 7527: La Ley General de Arrendamientos establece un plazo mínimo de 3 años. Los contratos con plazo inferior se entienden legalmente como contratos de 3 años. Si el propietario no notifica su voluntad de no renovar con al menos 3 meses de anticipación, el contrato se renueva automáticamente por 3 años más.",
+      "clausulas_aplicadas": [
+        "Objeto del contrato",
+        "Precio de alquiler",
+        "Depósito de garantía (escrow)",
+        "Duración del contrato",
+        "Uso del inmueble",
+        "Conservación",
+        "Terminación anticipada",
+        "Pago de servicios"
+      ],
+      "firma_digital": {
+        "inquilino_firmo": "2023-05-30T10:00:00-06:00",
+        "propietario_firmo": "2023-05-30T14:30:00-06:00",
+        "hash_sha256": "a1b2c3d4e5f6789012345678901234567890abcdef1234567890abcdef123456"
+      },
+      "comision_habitanexus_colones": 17500,
+      "notas": "Contrato migrado desde formato informal de 8 clausulas. HabitaNexus corrigio las 4 irregularidades detectadas: plazo legal de 3 anos, deposito en escrow, acta de estado inicial con fotos, terminacion anticipada con reglas claras."
+    },
+    {
+      "id": "contrato-002",
+      "listado_id": "listado-002",
+      "inmueble_id": "inmueble-002",
+      "propietario_id": "prop-003",
+      "inquilino_id": "inq-002",
+      "estado": "vigente",
+      "fecha_firma": "2024-01-09",
+      "fecha_inicio": "2024-01-09",
+      "fecha_fin_pactada": "2027-01-09",
+      "fecha_fin_legal": "2027-01-09",
+      "precio_mensual_colones": 280000,
+      "deposito_garantia_colones": 280000,
+      "deposito_custodia": "escrow_habitanexus",
+      "dia_de_pago": 15,
+      "duracion_pactada": "3 años",
+      "duracion_legal": "3 años (Art. 70 Ley 7527)",
+      "aviso_legal_mostrado": false,
+      "aviso_legal_texto": null,
+      "clausulas_aplicadas": [
+        "Objeto del contrato",
+        "Descripción del inmueble",
+        "Precio de alquiler",
+        "Depósito de garantía (escrow)",
+        "Duración del contrato",
+        "Uso del inmueble",
+        "Conservación",
+        "Riesgos y daños",
+        "Cambios y mejoras",
+        "Inspección",
+        "Pago de impuestos",
+        "Pago de servicios",
+        "Deberes del inquilino",
+        "Deberes del propietario",
+        "Terminación anticipada",
+        "Incremento de renta",
+        "Notificaciones",
+        "Cláusula penal",
+        "Responsabilidad civil"
+      ],
+      "inspeccion": {
+        "frecuencia": "Mensual — primeros 5 días del mes (Cláusula NOVENA)",
+        "plazo_correccion_dias": 30,
+        "derecho_a_fotografiar": true,
+        "derecho_a_llevar_tecnicos": true,
+        "negativas_para_resolucion": 2
+      },
+      "firma_digital": {
+        "inquilino_firmo": "2024-01-09T09:00:00-06:00",
+        "propietario_firmo": "2024-01-09T11:00:00-06:00",
+        "hash_sha256": "f6e5d4c3b2a19876543210fedcba987654321098765432109876543210fedcba"
+      },
+      "comision_habitanexus_colones": 14000,
+      "notas": "Contrato migrado desde formato semi-profesional de 19 clausulas. HabitaNexus corrigio las irregularidades: prorroga con plazo legal de 3 meses (no 30 dias), deposito en escrow, reajuste explicito con IPC del INEC, protocolo de inspeccion completo con Art. 51."
+    }
+  ],
+
+  "negociaciones": [
+    {
+      "id": "negociacion-001",
+      "listado_id": "listado-001",
+      "inquilino_id": "inq-002",
+      "propietario_id": "prop-002",
+      "estado": "ACUERDO_ALCANZADO",
+      "rondas": [
+        {
+          "ronda": 1,
+          "tipo": "PROPUESTA_ENVIADA",
+          "autor": "inq-002",
+          "fecha": "2023-05-25T08:00:00-06:00",
+          "terminos": {
+            "precio_mensual_colones": 320000,
+            "deposito_garantia_colones": 300000,
+            "duracion": "3 años",
+            "mascotas": "No aplica",
+            "dia_de_pago": 30
+          }
+        },
+        {
+          "ronda": 2,
+          "tipo": "CONTRAPROPUESTA",
+          "autor": "prop-002",
+          "fecha": "2023-05-26T14:00:00-06:00",
+          "terminos": {
+            "precio_mensual_colones": 350000,
+            "deposito_garantia_colones": 300000,
+            "duracion": "1 año",
+            "mascotas": "No permitidos",
+            "dia_de_pago": 30,
+            "condicion_especial": "No alojar huéspedes sin permiso escrito"
+          }
+        },
+        {
+          "ronda": 3,
+          "tipo": "PROPUESTA_ENVIADA",
+          "autor": "inq-002",
+          "fecha": "2023-05-27T09:30:00-06:00",
+          "terminos": {
+            "precio_mensual_colones": 350000,
+            "deposito_garantia_colones": 300000,
+            "duracion": "1 año",
+            "mascotas": "No permitidos",
+            "dia_de_pago": 30,
+            "nota": "Acepto todos los terminos"
+          }
+        }
+      ],
+      "acuerdo_fecha": "2023-05-27T09:30:00-06:00",
+      "costo_total_estimado": {
+        "renta_anual_colones": 4200000,
+        "deposito_colones": 300000,
+        "comision_habitanexus_colones": 17500,
+        "total_primer_mes_colones": 667500
+      }
+    },
+    {
+      "id": "negociacion-002",
+      "listado_id": "listado-002",
+      "inquilino_id": "inq-002",
+      "propietario_id": "prop-003",
+      "estado": "ACUERDO_ALCANZADO",
+      "rondas": [
+        {
+          "ronda": 1,
+          "tipo": "PROPUESTA_ENVIADA",
+          "autor": "inq-002",
+          "fecha": "2024-01-05T10:00:00-06:00",
+          "terminos": {
+            "precio_mensual_colones": 260000,
+            "deposito_garantia_colones": 260000,
+            "duracion": "3 años",
+            "mascotas": "Perro pequeno (5 kg)",
+            "dia_de_pago": 15
+          }
+        },
+        {
+          "ronda": 2,
+          "tipo": "CONTRAPROPUESTA",
+          "autor": "prop-003",
+          "fecha": "2024-01-06T16:00:00-06:00",
+          "terminos": {
+            "precio_mensual_colones": 280000,
+            "deposito_garantia_colones": 280000,
+            "duracion": "3 años",
+            "mascotas": "Solo con responsabilidad en zonas comunes",
+            "dia_de_pago": 15,
+            "condicion_especial": "Inspección mensual los primeros 5 días del mes"
+          }
+        },
+        {
+          "ronda": 3,
+          "tipo": "PROPUESTA_ENVIADA",
+          "autor": "inq-002",
+          "fecha": "2024-01-07T08:00:00-06:00",
+          "terminos": {
+            "precio_mensual_colones": 280000,
+            "deposito_garantia_colones": 280000,
+            "duracion": "3 años",
+            "mascotas": "Solo con responsabilidad en zonas comunes",
+            "dia_de_pago": 15,
+            "nota": "Acepto todos los terminos"
+          }
+        }
+      ],
+      "acuerdo_fecha": "2024-01-07T08:00:00-06:00",
+      "costo_total_estimado": {
+        "renta_anual_colones": 3360000,
+        "deposito_colones": 280000,
+        "comision_habitanexus_colones": 14000,
+        "total_primer_mes_colones": 574000
+      }
+    }
+  ],
+
+  "actas_entrega": [
+    {
+      "id": "acta-001",
+      "contrato_id": "contrato-001",
+      "inmueble_id": "inmueble-001",
+      "tipo": "entrega_inicial",
+      "fecha": "2023-05-30T16:00:00-06:00",
+      "estado_general": "Perfecto estado para el uso que se destina",
+      "inventario": [
+        { "espacio": "Sala", "estado": "Buen estado", "observaciones": null },
+        { "espacio": "Comedor", "estado": "Buen estado", "observaciones": null },
+        { "espacio": "Cocina", "estado": "Buen estado", "observaciones": "Sin amueblar" },
+        { "espacio": "Dormitorio 1", "estado": "Buen estado", "observaciones": null },
+        { "espacio": "Dormitorio 2", "estado": "Buen estado", "observaciones": null },
+        { "espacio": "Baño", "estado": "Buen estado", "observaciones": "Agua fría solamente" },
+        { "espacio": "Patio", "estado": "Buen estado", "observaciones": null },
+        { "espacio": "Lavandería", "estado": "Buen estado", "observaciones": null }
+      ],
+      "fotos_registradas": 24,
+      "firma_inquilino": true,
+      "firma_propietario": true,
+      "hash_sha256": "1234abcd5678ef901234abcd5678ef901234abcd5678ef901234abcd5678ef90"
+    },
+    {
+      "id": "acta-002",
+      "contrato_id": "contrato-002",
+      "inmueble_id": "inmueble-002",
+      "tipo": "entrega_inicial",
+      "fecha": "2024-01-09T15:00:00-06:00",
+      "estado_general": "Muy buen estado de pintura, pisos, vidrios, mueble de cocina, banco de madera, pila, fregadero, instalaciones eléctricas, loza sanitaria, lavatorio, termo ducha",
+      "inventario": [
+        { "espacio": "Sala-comedor", "estado": "Muy buen estado", "observaciones": "Integrado" },
+        { "espacio": "Cocina", "estado": "Muy buen estado", "observaciones": "Con mueble de cocina, banco de madera, fregadero" },
+        { "espacio": "Dormitorio 1", "estado": "Muy buen estado", "observaciones": null },
+        { "espacio": "Dormitorio 2", "estado": "Muy buen estado", "observaciones": null },
+        { "espacio": "Dormitorio 3", "estado": "Muy buen estado", "observaciones": null },
+        { "espacio": "Baño", "estado": "Muy buen estado", "observaciones": "Loza sanitaria, lavatorio, termo ducha" },
+        { "espacio": "Lavandería", "estado": "Muy buen estado", "observaciones": "Pila incluida" },
+        { "espacio": "Cochera", "estado": "Buen estado", "observaciones": "2 espacios bajo techo, portón eléctrico" },
+        { "espacio": "Instalaciones eléctricas", "estado": "Muy buen estado", "observaciones": null },
+        { "espacio": "Vidrios", "estado": "Muy buen estado", "observaciones": null },
+        { "espacio": "Pisos", "estado": "Muy buen estado", "observaciones": "Cerámica" }
+      ],
+      "fotos_registradas": 35,
+      "firma_inquilino": true,
+      "firma_propietario": true,
+      "hash_sha256": "abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890"
+    }
+  ],
+
+  "inspecciones": [
+    {
+      "id": "inspeccion-001",
+      "contrato_id": "contrato-002",
+      "inmueble_id": "inmueble-002",
+      "fecha": "2024-02-03T10:00:00-06:00",
+      "resultado": "Satisfactoria",
+      "hallazgos": [],
+      "fotos_registradas": 12,
+      "tecnico_presente": false,
+      "inquilino_presente": true,
+      "nota": "Primera inspección mensual. Todo en orden."
+    },
+    {
+      "id": "inspeccion-002",
+      "contrato_id": "contrato-002",
+      "inmueble_id": "inmueble-002",
+      "fecha": "2024-03-04T10:00:00-06:00",
+      "resultado": "Satisfactoria",
+      "hallazgos": [
+        {
+          "espacio": "Baño",
+          "descripcion": "Desgaste menor en sello de silicona de la ducha",
+          "severidad": "Baja",
+          "requiere_correccion": false
+        }
+      ],
+      "fotos_registradas": 15,
+      "tecnico_presente": false,
+      "inquilino_presente": true,
+      "nota": "Desgaste normal por uso. No requiere acción inmediata."
+    }
+  ],
+
+  "reclamos": [
+    {
+      "id": "reclamo-001",
+      "contrato_id": "contrato-001",
+      "tipo": "inquilino_a_propietario",
+      "autor_id": "inq-002",
+      "destinatario_id": "prop-002",
+      "estado": "CREADO",
+      "fecha_creacion": "2024-03-15T09:00:00-06:00",
+      "categoria": "Fuga de agua / reventadura en tuberías",
+      "descripcion": "Fuga en la tubería del baño debajo del lavamanos. El agua se filtra al piso.",
+      "fotos": [
+        "assets/mock/reclamos/reclamo-001/fuga1.jpg",
+        "assets/mock/reclamos/reclamo-001/fuga2.jpg"
+      ],
+      "plazo_respuesta_dias": 5,
+      "notas": "Caso tipico del dolor reportado por Jose Penaranda: inquilino reporta daño en tuberia, propietario necesita contratar fontanero."
+    }
+  ],
+
+  "pagos": [
+    {
+      "id": "pago-001",
+      "contrato_id": "contrato-002",
+      "tipo": "renta_mensual",
+      "monto_colones": 280000,
+      "fecha_pago": "2024-02-15",
+      "dia_pactado": 15,
+      "estado": "completado",
+      "metodo": "SINPE Interbancaria via Kindo",
+      "comprobante": "SINPE-2024-02-15-001"
+    },
+    {
+      "id": "pago-002",
+      "contrato_id": "contrato-002",
+      "tipo": "renta_mensual",
+      "monto_colones": 280000,
+      "fecha_pago": "2024-03-15",
+      "dia_pactado": 15,
+      "estado": "completado",
+      "metodo": "SINPE Interbancaria via Kindo",
+      "comprobante": "SINPE-2024-03-15-001"
+    }
+  ],
+
+  "catalogos_referencia": {
+    "descripcion": "Valores predefinidos del SOP Fase 4 — Catalogo de opciones de la plataforma (27 campos)",
+    "campos": [
+      "tipo_de_inmueble",
+      "tipo_de_piso",
+      "tipo_de_cielo_raso",
+      "estado_de_pintura",
+      "tipo_de_cocina",
+      "proveedor_de_agua",
+      "tipo_de_medidor_agua",
+      "tipo_de_medidor_electricidad",
+      "metodo_de_division_de_medidor_compartido",
+      "tipo_de_conexion_a_internet_disponible",
+      "proveedor_de_internet_preinstalado",
+      "velocidad_de_internet_preinstalado",
+      "pago_de_servicio",
+      "paquete_combinado_preinstalado",
+      "sistema_de_agua_caliente",
+      "tipo_de_estacionamiento",
+      "seguridad_del_inmueble",
+      "mascotas_perros",
+      "mascotas_gatos",
+      "mascotas_otras",
+      "huespedes_temporales",
+      "restricciones_de_ruido",
+      "modificaciones_al_inmueble",
+      "actividad_comercial_menor",
+      "subarriendo_de_cochera",
+      "subarriendo_parcial_de_habitaciones",
+      "cesion_total_del_contrato"
+    ],
+    "total_campos": 27
+  }
+}
