@@ -1,0 +1,302 @@
+{
+  "meta": {
+    "type": "journey-map",
+    "profile": "journey-map",
+    "title": "Customer Journey: Jose Penaranda — Listado de propiedad en HabitaNexus",
+    "created": "2026-04-13",
+    "updated": "2026-04-13",
+    "version": 1
+  },
+  "persona": {
+    "name": "Jose Penaranda",
+    "age": 65,
+    "role": "Propietario pensionado / Ebanista retirado de la CCSS",
+    "location": "San Rafael de Heredia, Costa Rica",
+    "avatar_emoji": "👴",
+    "primary_pain": "Inquilinos le danan las propiedades y no tiene forma de probar el estado inicial porque nunca documento con fotos fechadas ni acta de entrega.",
+    "context": "Pensionado de 65 anos usando HabitaNexus para listar su propiedad, negociar con una inquilina, y generar un acta de entrega inmutable antes de firmar contrato. Primera vez usando una app de alquileres."
+  },
+  "phases": [
+    {
+      "id": "descubrimiento",
+      "label": "Descubrimiento",
+      "icon": "🔍",
+      "duration": "1 dia (domingo tarde)",
+      "actions": [
+        "Recibe audio de WhatsApp de su hermano recomendando una app para alquileres",
+        "Su esposa busca 'aplicacion alquileres Costa Rica' en el Play Store",
+        "Encuentra varias apps pero la mayoria son para inquilinos",
+        "Su esposa encuentra HabitaNexus y lee 'negociacion digital de contratos, deposito protegido, inspeccion con fotos'"
+      ],
+      "thoughts": [
+        "Eso no sera una estafa?",
+        "Peor no puede estar",
+        "Curiosidad mezclada con escepticismo",
+        "Se pregunta si la app es para propietarios o solo para inquilinos como las demas"
+      ],
+      "frustrations": [
+        "La letra del celular es muy pequena",
+        "Las apps le piden crear cuenta con correo electronico que casi no usa",
+        "La mayoria de apps son para inquilinos, no para propietarios — se siente ignorado por el mercado",
+        "Depende de su esposa para navegar el Play Store"
+      ],
+      "emotion": {
+        "level": 2,
+        "emoji": "🤨",
+        "label": "Esceptico"
+      },
+      "touchpoints": [
+        "WhatsApp (audio del hermano)",
+        "Play Store (busqueda)",
+        "Celular de su esposa (mejor pantalla)",
+        "Listing de HabitaNexus en la tienda de apps"
+      ],
+      "channels": ["WhatsApp", "Play Store", "Celular de su esposa"],
+      "opportunities": [
+        "Landing page de Play Store debe decir explicitamente 'para propietarios e inquilinos'",
+        "Screenshots del Play Store deben mostrar el flujo del propietario primero",
+        "Programa de referidos por WhatsApp: el hermano que refiere podria recibir un beneficio"
+      ]
+    },
+    {
+      "id": "consideracion",
+      "label": "Consideracion",
+      "icon": "🤔",
+      "duration": "1 dia (domingo tarde - lunes)",
+      "actions": [
+        "Abre la app y ve tres opciones: Soy propietario / Soy arrendador-gestor / Busco alquiler",
+        "Lee la explicacion visible debajo de cada opcion y toca 'Soy propietario'",
+        "Ingresa numero de celular + codigo SMS — se crea su cuenta",
+        "Explora el wizard stepper: ve 'Paso 1 de 6: Ubicacion y tipo de inmueble'",
+        "Cada campo tiene explicacion visible '¿Por que solicitamos esto?'"
+      ],
+      "thoughts": [
+        "Solo me pidio el numero, no me pidio correo ni contrasena",
+        "Es como llenar un formulario del banco, pasito a pasito (su esposa)",
+        "Algunos campos no los conoce — va a tener que ir a la propiedad a verificar"
+      ],
+      "frustrations": [
+        "Algunos campos no los conoce (ej: tipo de medidor — individual o compartido)",
+        "Va a tener que ir a la propiedad a verificar datos antes de completar el wizard",
+        "Le gustaria poder guardar el progreso y seguir despues"
+      ],
+      "emotion": {
+        "level": 3,
+        "emoji": "🤔",
+        "label": "Explorando"
+      },
+      "touchpoints": [
+        "App de HabitaNexus (pantalla de seleccion de rol, verificacion SMS, wizard stepper con explicaciones)",
+        "Celular de su esposa"
+      ],
+      "channels": ["App movil", "Visita presencial a la propiedad (para verificar datos)"],
+      "opportunities": [
+        "Cada campo del wizard con explicacion visible: '¿Por que solicitamos esto?' en texto claro debajo del campo, sin necesidad de tocar nada",
+        "Permitir guardar borrador y continuar despues",
+        "Indicador de progreso claro: 'Paso 2 de 6 — Distribucion del inmueble'",
+        "Texto grande y botones amplios — usuario de 65 anos en celular"
+      ]
+    },
+    {
+      "id": "registro",
+      "label": "Registro",
+      "icon": "📸",
+      "duration": "1 dia (lunes manana)",
+      "actions": [
+        "Va en la pickup a la propiedad con el celular de su esposa",
+        "Completa los pasos del wizard: mide cuartos con cinta metrica, verifica tipo de medidor, sistema de agua caliente",
+        "Toma fotos de cada espacio siguiendo el orden del wizard",
+        "La app muestra recomendaciones antes de grabar: 'Grabe en horizontal, camine despacio, asegurese de buena iluminacion'",
+        "Su esposa le graba el video tour — recorrido continuo",
+        "Al fotografiar el bano, nota que la luz del plafon esta quemada — marca 'requiere reparacion'",
+        "Completa los campos del catalogo: no modificaciones sin autorizacion, inspeccion mensual, restricciones de ruido"
+      ],
+      "thoughts": [
+        "Esto si tiene sentido — le estoy poniendo a la propiedad lo que nunca le puse antes",
+        "Se siente productivo por primera vez con la tecnologia",
+        "Le gusta que la app le va diciendo que fotografiar en cada paso",
+        "Le preocupa que el video tour no le quede bien"
+      ],
+      "frustrations": [
+        "Le cuesta sacar fotos rectas de los cuartos pequenos porque no cabe para atras",
+        "No sabe si las fotos del bano quedaron bien iluminadas porque no tiene ventana",
+        "No esta seguro de si el video tour quedo bien pero lo sube de todas formas"
+      ],
+      "emotion": {
+        "level": 3,
+        "emoji": "📸",
+        "label": "Productivo"
+      },
+      "touchpoints": [
+        "App de HabitaNexus (wizard stepper, camara de fotos, grabacion de video tour, pantalla de recomendaciones de grabacion)",
+        "Celular de su esposa",
+        "La propiedad fisica",
+        "Cinta metrica de ebanisteria",
+        "Pickup"
+      ],
+      "channels": ["App movil", "Presencial en la propiedad"],
+      "opportunities": [
+        "Pantalla de recomendaciones de fotografia y video antes de cada captura — tips visibles, no expandibles",
+        "Campo de estado por espacio: 'buen estado' / 'requiere reparacion' / 'no aplica'",
+        "Futuro: medicion por realidad aumentada para eliminar la cinta metrica",
+        "Permitir subir fotos y video en baja resolucion si la conexion es mala — comprimir y subir en background"
+      ]
+    },
+    {
+      "id": "listado",
+      "label": "Listado",
+      "icon": "📋",
+      "duration": "1 dia (lunes tarde, de regreso en su casa)",
+      "actions": [
+        "Revisa todo lo subido con su esposa — wizard muestra todos los pasos en verde",
+        "Ve el preview de como se va a ver la propiedad publicada",
+        "Ve la incidencia del plafon del bano marcada como 'requiere reparacion'",
+        "Toca 'Publicar' — la app confirma 30 dias gratis",
+        "Comparte el link via WhatsApp a su hermano, vecinos, companero de la CCSS",
+        "Su esposa publica el link en grupos de Facebook de Sabanilla y San Pedro (UCR)",
+        "El hermano reenvía el link a su sobrino, que lo comparte en un grupo de WhatsApp de la UCR"
+      ],
+      "thoughts": [
+        "Nunca habia visto mi propiedad asi de organizada",
+        "Se siente orgulloso de su propiedad presentada de manera profesional",
+        "Los 30 dias gratis le quitan la presion de pagar sin saber si funciona",
+        "Ahora a esperar a ver si llega alguien"
+      ],
+      "frustrations": [
+        "No sabe cuanto tiempo va a tardar en llegarle una propuesta",
+        "Le preocupa que nadie use la app todavia porque es nueva"
+      ],
+      "emotion": {
+        "level": 4,
+        "emoji": "😊",
+        "label": "Orgulloso"
+      },
+      "touchpoints": [
+        "App de HabitaNexus (preview de publicacion, boton de compartir)",
+        "WhatsApp (envio de links a contactos)",
+        "Facebook (su esposa publica en grupos de Sabanilla/San Pedro)",
+        "Version web publica del marketplace"
+      ],
+      "channels": ["App movil", "WhatsApp", "Facebook", "Web publica del marketplace"],
+      "opportunities": [
+        "Link compartido con preview rico (Open Graph tags) — foto principal, precio, ubicacion en la tarjeta de WhatsApp/Facebook",
+        "UTM tags por canal: utm_source=whatsapp/facebook, utm_medium=referral/social",
+        "Analytics stack: PostHog (product analytics + funnels) + Google Analytics (traffic) + Looker Studio dashboard interno para embudo AAARRR",
+        "Tracker de compartidos para Jose: puede ver cuantas personas abrieron su link y desde que canal",
+        "Notificacion push: '5 personas vieron tu propiedad hoy desde Facebook' — con desglose por canal",
+        "Version web publica debe cargar rapido en celulares viejos"
+      ]
+    },
+    {
+      "id": "negociacion",
+      "label": "Negociacion",
+      "icon": "🤝",
+      "duration": "1 semana despues de publicar",
+      "actions": [
+        "Recibe notificacion push: 'Mery envio una propuesta para tu propiedad'",
+        "Revisa perfil verificado de Mery — calificaciones, historial",
+        "Revisa propuesta termino por termino: C280,000/mes, 3 anos, gato solo interior, inspeccion mensual",
+        "Nota que Mery no menciono el plafon del bano — contrapropone que el lo repare antes de que ella entre",
+        "Escanea el codigo de barras en el reverso de su cedula con la camara del celular",
+        "Su esposa le ayuda a comprar certificacion RNP en rnpdigital.com (~C1,500)",
+        "Verificado como propietario, envia la contrapropuesta",
+        "Mery acepta en 2 horas — confirma que Jose repare el plafon antes de entrar",
+        "La app muestra: 'Acuerdo alcanzado — pendiente inspeccion inicial'"
+      ],
+      "thoughts": [
+        "Esta muchacha tiene buenas calificaciones y trabaja en computacion",
+        "Le da confianza ver el perfil verificado con historial",
+        "Antes esto era puro WhatsApp y uno no sabia con quien estaba hablando",
+        "Le sorprende que Mery acepto en 2 horas — con el letrero fisico a veces pasaban semanas"
+      ],
+      "frustrations": [
+        "Necesito ayuda de su esposa para comprar la certificacion RNP — rnpdigital.com no es amigable para adultos mayores",
+        "Los C1,500 parecen un gasto adicional pero su esposa le recuerda que es una sola vez y sirve para las dos propiedades"
+      ],
+      "emotion": {
+        "level": 4,
+        "emoji": "😌",
+        "label": "Confiado"
+      },
+      "touchpoints": [
+        "App de HabitaNexus (notificacion push, perfil de Mery, propuesta termino por termino, contrapropuesta, escaneo de cedula)",
+        "Camara del celular (escaneo de cedula)",
+        "rnpdigital.com (certificacion RNP)",
+        "Celular de su esposa"
+      ],
+      "channels": ["App movil", "rnpdigital.com (navegador web)", "Camara del celular"],
+      "opportunities": [
+        "Guia paso a paso para comprar la certificacion RNP — o link directo desde la app a rnpdigital.com con campos prellenados",
+        "Notificacion clara de que la certificacion es una sola vez y sirve para todas las propiedades del mismo inmueble",
+        "Escaneo de cedula con soporte dual: codigo de barras PDF417 (cedulas viejas) + MRZ con OCR (cedulas nuevas) — deteccion automatica del formato",
+        "Sistema de comparacion de propuestas si llegan multiples inquilinos — tabla lado a lado",
+        "Indicador de tiempo de respuesta del inquilino: 'Mery respondio en 2 horas'",
+        "KYC/AML como capa backend separada (Persona, Auth0, Ondato) — no visible para Jose"
+      ]
+    },
+    {
+      "id": "inspeccion-inicial",
+      "label": "Inspeccion Inicial",
+      "icon": "🏠",
+      "duration": "1 dia (sabado manana, ~2 semanas despues del acuerdo)",
+      "actions": [
+        "Jose repara el plafon del bano como acordo",
+        "La app agenda la inspeccion inicial — Mery confirma horario",
+        "Jose llega a la propiedad en la pickup, Mery llega puntual",
+        "Recorren el inmueble espacio por espacio siguiendo el orden de la app",
+        "La app muestra cada cuarto del wizard y les pide tomar fotos del estado actual",
+        "Jose muestra el plafon nuevo del bano: 'Vea, quedo como nuevo'",
+        "La app registra cada foto con fecha, hora, y geolocalizacion",
+        "La app genera el acta de entrega digital con inventario completo",
+        "Ambos revisan el acta en sus celulares",
+        "Jose firma digitalmente, Mery firma digitalmente",
+        "La app confirma: 'Acta de entrega registrada. Contrato listo para firma.'",
+        "Jose ve el expediente digital: contrato original + acta de entrega como primer documento adjunto — cambios futuros se agregan como adendas, nunca se modifica el original"
+      ],
+      "thoughts": [
+        "Si yo hubiera tenido esto hace dos anos, ese mae no me sale con que 'ya estaba asi'",
+        "Le gusta que Mery tambien esta tranquila con las fotos — no es adversarial sino confianza mutua",
+        "Piensa en su hermano y en todo lo que perdio sin documentar",
+        "Esto es mejor que cualquier papel que me hiciera un conocido"
+      ],
+      "frustrations": [
+        "Le hubiera gustado tener esto desde el primer inquilino — habria ahorrado cientos de miles en reparaciones no comprobadas",
+        "Siente tristeza por todo lo que su esposa sufrio de presion por culpa de inquilinos problematicos"
+      ],
+      "emotion": {
+        "level": 5,
+        "emoji": "😊",
+        "label": "Satisfecho"
+      },
+      "touchpoints": [
+        "App de HabitaNexus (recorrido guiado, camara con geolocalizacion, acta de entrega digital, firma digital, expediente del contrato)",
+        "Celular propio o de su esposa",
+        "La propiedad fisica",
+        "Mery (presencial)"
+      ],
+      "channels": ["App movil", "Presencial en la propiedad", "Correo electronico (envio automatico del acta firmada)"],
+      "opportunities": [
+        "Modelo de expediente digital: contrato original inmutable + adendas como control de cambios (documentar en SOP y OpenSpec)",
+        "Comparacion visual automatica: en inspecciones futuras, la app muestra la foto original al lado de la nueva del mismo espacio",
+        "Checklist de inspeccion pre-poblado con los espacios del wizard — Jose no se salta ningun cuarto",
+        "Referido a Fixii si durante la inspeccion se detectan reparaciones que Jose no puede hacer solo",
+        "Envio automatico del acta firmada por correo electronico a ambas partes como respaldo legal vinculante + opcion de descargar PDF"
+      ]
+    }
+  ],
+  "analysis": {
+    "pain_points": [
+      "Dependencia de su esposa para tareas digitales — desde buscar en Play Store hasta comprar la certificacion RNP y publicar en Facebook",
+      "rnpdigital.com no es amigable para adultos mayores — la certificacion RNP es un tramite externo que genera friccion",
+      "Incertidumbre durante la espera de propuestas — entre publicar y recibir la primera propuesta, Jose no sabe si la app funciona",
+      "Fotos y video tour sin guia de calidad — Jose no sabe si sus fotos y video estan suficientemente bien para atraer inquilinos"
+    ],
+    "moments_of_truth": [
+      {
+        "phase": "inspeccion-inicial",
+        "description": "Cuando Jose y Mery terminan el recorrido, la app genera el acta de entrega con fotos inmutables y ambos firman digitalmente. Jose ve el expediente digital con el contrato + acta y piensa: 'Si yo hubiera tenido esto hace dos anos, ese mae no me sale con que ya estaba asi.' La promesa de HabitaNexus se materializa en evidencia concreta."
+      }
+    ],
+    "recommended_next_map": "service-blueprint"
+  }
+}
