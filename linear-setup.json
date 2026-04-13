@@ -1,0 +1,53 @@
+{
+  "team": {
+    "key": "HAB",
+    "url": "https://linear.app/habitanexus",
+    "id": "f543b32e-fa61-4f0d-9f84-0f811b71ef8e"
+  },
+  "git": {
+    "baseBranch": "main",
+    "branchPattern": "{type}/{issueId}-{description}"
+  },
+  "github": {
+    "org": "HabitaNexus"
+  },
+  "defaults": {
+    "greptileReview": true,
+    "squashMerge": true,
+    "slackNotify": false
+  },
+  "projects": {
+    "backend": {
+      "name": "Backend API",
+      "id": "178fdb75-e0e4-4c3d-a024-1a03ccaa9ffe"
+    },
+    "mobile": {
+      "name": "Mobile App",
+      "id": "b3fadb9c-0b1c-4932-9383-74852bb40628"
+    },
+    "web-b2g": {
+      "name": "Web -- B2G",
+      "id": "23391c01-179a-4651-82bb-190104a5b2fb"
+    },
+    "web-admin": {
+      "name": "Web -- Admin",
+      "id": "78cc4344-b728-469d-a658-d84071475ccf"
+    },
+    "infra": {
+      "name": "Infrastructure & DevOps",
+      "id": "213b7069-4fd6-43df-90c0-9cdf2c2d762c"
+    },
+    "design": {
+      "name": "Diseno y Control de Calidad",
+      "id": "1930b573-6d59-4ee7-bea7-93ef1eb2d5e5"
+    },
+    "ops": {
+      "name": "Operaciones",
+      "id": "1ede4a21-0040-4276-9502-125219e5299e"
+    }
+  },
+  "openspec": {
+    "specsPath": "openspec/specs",
+    "changesPath": "openspec/changes"
+  }
+}

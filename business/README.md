@@ -79,6 +79,18 @@ Go-to-market, hoja de ruta de producto, equipo, asesores, pitch deck.
 
 **Total: 31 entregables completados**
 
+### 🔬 [Spikes de Investigación](spikes/)
+
+Anexos de investigación de mercado, análisis competitivo y viabilidad técnica.
+
+| # | Spike | Descripción |
+|---|-------|-------------|
+| 01 | [Post-Mortem Kleberty](spikes/01-postmortem-kleberty.md) | Análisis de fracaso de proptech CR "Precios Inteligentes" — 10 causas, lecciones para HabitaNexus |
+| 02 | [Oportunidad B2G Municipalidades](spikes/02-oportunidad-b2g-municipalidades.md) | Brecha fiscal de ~300,000 alquileres no declarados, integración TRIBU-CR, producto Compliance |
+| 03 | [Inventario ArcGIS Municipalidades](spikes/03-inventario-arcgis-municipalidades.md) | 20+ municipalidades con portales GIS, APIs REST consumibles, interoperabilidad |
+| 04 | [Cruce de Datos AltruPets](spikes/04-cruce-datos-altrupets.md) | Sinergias para detección de maltrato animal via datos de arrendamiento |
+| 05 | [Pitch Plan Regulador](spikes/05-plan-regulador-pitch.md) | Propuesta de valor B2G: datos vivos para planificación urbana municipal |
+
 ---
 
 ## Números Clave
