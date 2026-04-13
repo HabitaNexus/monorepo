@@ -1,0 +1,5 @@
+# Structured Logger Dependencies
+# No external dependencies required - uses only standard library
+
+# Log Archiver Dependencies
+boto3>=1.28.0

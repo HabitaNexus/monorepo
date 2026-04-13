@@ -22,7 +22,7 @@ backgroundImage: url('https://marp.app/assets/hero-background.svg')
 
 ---
 
-## � User Psersona
+## � User Persona
 
 Esta sección captura el perfil completo del cliente como persona, incluyendo sus características demográficas y su propósito de vida basado en el Ikigai.
 

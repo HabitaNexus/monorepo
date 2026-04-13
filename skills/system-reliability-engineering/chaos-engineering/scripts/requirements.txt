@@ -1,0 +1,4 @@
+# Chaos Engineering Scripts Dependencies
+
+# Chaos Monkey & Experiments
+kubernetes>=28.1.0
