@@ -1,0 +1,21 @@
+name: trustless_work_flutter_storage
+description: Persistent on-device signer for Trustless Work built on flutter_secure_storage. Companion to trustless_work_dart.
+version: 0.1.0-dev.1
+repository: https://github.com/DojoCodingLabs/trustless-work-dart
+
+environment:
+  sdk: ^3.2.5
+  flutter: '>=3.19.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_secure_storage: ^9.2.2
+  stellar_flutter_sdk: ^1.9.0
+  trustless_work_dart:
+    path: ../trustless_work_dart
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  lints: ^4.0.0
