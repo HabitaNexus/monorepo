@@ -23,6 +23,12 @@ class HttpClient {
   }) =>
       _send<T>('POST', path, body: body);
 
+  Future<T> putJson<T>(
+    String path, {
+    required Map<String, Object?> body,
+  }) =>
+      _send<T>('PUT', path, body: body);
+
   Future<T> getJson<T>(
     String path, {
     Map<String, String>? queryParameters,
