@@ -4,6 +4,7 @@ import 'package:trustless_work_dart/src/models/payloads/release_funds_payload.da
 import 'package:trustless_work_dart/src/models/payloads/single_release_contract.dart';
 import 'package:trustless_work_dart/src/models/payloads/approve_milestone_payload.dart';
 import 'package:trustless_work_dart/src/models/payloads/change_milestone_status_payload.dart';
+import 'package:trustless_work_dart/src/models/payloads/resolve_dispute_payload.dart';
 import 'package:trustless_work_dart/src/models/payloads/start_dispute_payload.dart';
 import 'package:trustless_work_dart/src/models/payloads/update_escrow_payload.dart';
 
@@ -126,6 +127,38 @@ void main() {
       'signer': 'GAPPROVER',
     });
     expect(StartDisputePayload.fromJson(payload.toJson()), payload);
+  });
+
+  test('ResolveDisputePayload round-trips with int distributions', () {
+    const payload = ResolveDisputePayload(
+      contractId: 'CAAA',
+      disputeResolver: 'GRESOLVER',
+      distributions: [
+        DisputeDistribution(address: 'GAPPROVER', amount: 300),
+        DisputeDistribution(address: 'GRECEIVER', amount: 700),
+      ],
+    );
+    final json = payload.toJson();
+    expect(json['contractId'], 'CAAA');
+    expect(json['disputeResolver'], 'GRESOLVER');
+    final dist = json['distributions'] as List<Object?>;
+    expect(dist, hasLength(2));
+    expect(dist[0], {'address': 'GAPPROVER', 'amount': 300});
+    expect(ResolveDisputePayload.fromJson(json), payload);
+  });
+
+  test('ResolveDisputePayload accepts double amounts', () {
+    const payload = ResolveDisputePayload(
+      contractId: 'CAAA',
+      disputeResolver: 'GRESOLVER',
+      distributions: [
+        DisputeDistribution(address: 'GAPPROVER', amount: 123.45),
+      ],
+    );
+    final json = payload.toJson();
+    final dist = (json['distributions'] as List<Object?>)[0]
+        as Map<String, Object?>;
+    expect(dist['amount'], 123.45);
   });
 
   test('UpdateEscrowPayload omits isActive when null', () {
