@@ -3,6 +3,8 @@ import 'package:meta/meta.dart';
 
 import '../endpoints/deployer.dart';
 import '../endpoints/helpers.dart';
+import '../endpoints/multi_release_deployer.dart';
+import '../endpoints/multi_release_operations.dart';
 import '../endpoints/queries.dart';
 import '../endpoints/single_release_operations.dart';
 import '../events/escrow_event.dart';
@@ -10,9 +12,14 @@ import '../events/hybrid_event_stream.dart';
 import '../events/stellar_event_sources.dart';
 import '../http/http_client.dart';
 import '../models/escrow.dart';
+import '../models/multi_release_escrow.dart';
 import '../models/payloads/approve_milestone_payload.dart';
 import '../models/payloads/change_milestone_status_payload.dart';
 import '../models/payloads/fund_escrow_payload.dart';
+import '../models/payloads/multi_release_contract.dart';
+import '../models/payloads/multi_release_release_funds_payload.dart';
+import '../models/payloads/multi_release_resolve_dispute_payload.dart';
+import '../models/payloads/multi_release_start_dispute_payload.dart';
 import '../models/payloads/release_funds_payload.dart';
 import '../models/payloads/resolve_dispute_payload.dart';
 import '../models/payloads/single_release_contract.dart';
@@ -41,6 +48,8 @@ class TrustlessWorkClient {
       signer: signer,
       deployer: SingleReleaseDeployer(http: http_),
       operations: SingleReleaseOperations(http: http_),
+      multiReleaseDeployer: MultiReleaseDeployer(http: http_),
+      multiReleaseOperations: MultiReleaseOperations(http: http_),
       helper: TransactionHelper(http: http_, signer: signer),
       queries: EscrowQueries(http: http_),
       config: config,
@@ -61,6 +70,8 @@ class TrustlessWorkClient {
       signer: signer,
       deployer: SingleReleaseDeployer(http: http_),
       operations: SingleReleaseOperations(http: http_),
+      multiReleaseDeployer: MultiReleaseDeployer(http: http_),
+      multiReleaseOperations: MultiReleaseOperations(http: http_),
       helper: TransactionHelper(http: http_, signer: signer),
       queries: EscrowQueries(http: http_),
       config: config,
@@ -74,6 +85,8 @@ class TrustlessWorkClient {
     required TransactionSigner signer,
     required SingleReleaseDeployer deployer,
     required SingleReleaseOperations operations,
+    required MultiReleaseDeployer multiReleaseDeployer,
+    required MultiReleaseOperations multiReleaseOperations,
     required TransactionHelper helper,
     required EscrowQueries queries,
     required TrustlessWorkConfig config,
@@ -81,6 +94,8 @@ class TrustlessWorkClient {
     HorizonEffectsSource? horizonEffectsOverride,
   })  : _deployer = deployer,
         _operations = operations,
+        _multiReleaseDeployer = multiReleaseDeployer,
+        _multiReleaseOperations = multiReleaseOperations,
         _helper = helper,
         _queries = queries,
         _config = config,
@@ -89,6 +104,8 @@ class TrustlessWorkClient {
 
   final SingleReleaseDeployer _deployer;
   final SingleReleaseOperations _operations;
+  final MultiReleaseDeployer _multiReleaseDeployer;
+  final MultiReleaseOperations _multiReleaseOperations;
   final TransactionHelper _helper;
   final EscrowQueries _queries;
   final TrustlessWorkConfig _config;
@@ -175,6 +192,106 @@ class TrustlessWorkClient {
   }
 
   Future<Escrow> getEscrow(String contractId) => _queries.getEscrow(contractId);
+
+  // =========================================================================
+  // Multi-release surface (parallel to the single-release methods above).
+  //
+  // The endpoints and entities are distinct at the gateway level:
+  //   - /deployer/multi-release + /escrow/multi-release/*
+  //   - MultiReleaseEscrow has no top-level amount; each milestone carries
+  //     its own `amount`, `approvedFlag`, and optional `disputeStartedBy`.
+  // State refresh after every mutation uses `getMultiReleaseEscrow`, which
+  // decodes the gateway response into a `MultiReleaseEscrow`.
+  // =========================================================================
+
+  Future<MultiReleaseEscrow> initializeMultiReleaseEscrow(
+    MultiReleaseContract contract,
+  ) async {
+    final xdr = await _multiReleaseDeployer.deploy(contract);
+    final submitResponse = await _helper.signAndSubmit(xdr);
+    final contractId = submitResponse['contractId'];
+    if (contractId is! String || contractId.isEmpty) {
+      throw StateError('Gateway did not return contractId after deploy.');
+    }
+    return _queries.getMultiReleaseEscrow(contractId);
+  }
+
+  Future<MultiReleaseEscrow> fundMultiReleaseEscrow(
+    FundEscrowPayload payload,
+  ) async {
+    final xdr = await _multiReleaseOperations.fund(payload);
+    await _helper.signAndSubmit(xdr);
+    return _queries.getMultiReleaseEscrow(payload.contractId);
+  }
+
+  /// Releases the balance tied to a specific milestone. Requires the
+  /// target milestone to be `Completed` and approved, and not under
+  /// dispute. Other milestones remain untouched.
+  Future<MultiReleaseEscrow> releaseMultiReleaseMilestone(
+    MultiReleaseReleaseFundsPayload payload,
+  ) async {
+    final xdr = await _multiReleaseOperations.release(payload);
+    await _helper.signAndSubmit(xdr);
+    return _queries.getMultiReleaseEscrow(payload.contractId);
+  }
+
+  /// Modifies an existing multi-release escrow. Legal only before any
+  /// milestone is approved — the gateway returns 500 once any flag has
+  /// flipped true.
+  Future<MultiReleaseEscrow> updateMultiReleaseEscrow(
+    UpdateEscrowPayload payload,
+  ) async {
+    final xdr = await _multiReleaseOperations.update(payload);
+    await _helper.signAndSubmit(xdr);
+    return _queries.getMultiReleaseEscrow(payload.contractId);
+  }
+
+  /// Reports a milestone status change (e.g. flipping a milestone to
+  /// `Completed` with evidence) on a multi-release contract.
+  Future<MultiReleaseEscrow> changeMultiReleaseMilestoneStatus(
+    ChangeMilestoneStatusPayload payload,
+  ) async {
+    final xdr = await _multiReleaseOperations.changeMilestoneStatus(payload);
+    await _helper.signAndSubmit(xdr);
+    return _queries.getMultiReleaseEscrow(payload.contractId);
+  }
+
+  /// Approves a specific milestone. In multi-release this flips just
+  /// the target milestone's `approvedFlag` and makes it immediately
+  /// releasable; other milestones are unaffected.
+  Future<MultiReleaseEscrow> approveMultiReleaseMilestone(
+    ApproveMilestonePayload payload,
+  ) async {
+    final xdr = await _multiReleaseOperations.approveMilestone(payload);
+    await _helper.signAndSubmit(xdr);
+    return _queries.getMultiReleaseEscrow(payload.contractId);
+  }
+
+  /// Starts a dispute on a specific milestone. Same architectural
+  /// boundary as [startDispute]: the SDK exposes only the on-chain
+  /// primitive; off-chain mediation / arbitration decisions come from
+  /// the HabitaNexus backend `contract-core` module.
+  Future<MultiReleaseEscrow> startMultiReleaseDispute(
+    MultiReleaseStartDisputePayload payload,
+  ) async {
+    final xdr = await _multiReleaseOperations.startDispute(payload);
+    await _helper.signAndSubmit(xdr);
+    return _queries.getMultiReleaseEscrow(payload.contractId);
+  }
+
+  /// Executes the USDC split that resolves a milestone dispute. Same
+  /// architectural boundary as [resolveDispute]: distribution figures
+  /// come from an off-chain arbiter, not from the SDK.
+  Future<MultiReleaseEscrow> resolveMultiReleaseDispute(
+    MultiReleaseResolveDisputePayload payload,
+  ) async {
+    final xdr = await _multiReleaseOperations.resolveDispute(payload);
+    await _helper.signAndSubmit(xdr);
+    return _queries.getMultiReleaseEscrow(payload.contractId);
+  }
+
+  Future<MultiReleaseEscrow> getMultiReleaseEscrow(String contractId) =>
+      _queries.getMultiReleaseEscrow(contractId);
 
   /// Observable stream of state transitions on an escrow contract.
   ///
