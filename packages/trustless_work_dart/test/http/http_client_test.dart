@@ -68,6 +68,21 @@ void main() {
       );
     });
 
+    test('putJson sends a PUT with the body', () async {
+      String? method;
+      final mock = MockClient((req) async {
+        method = req.method;
+        expect(req.url.path, '/escrow/single-release/update-escrow');
+        return http.Response(jsonEncode({'transactionXdr': 'X'}), 200);
+      });
+      final client = HttpClient(config: cfg, inner: mock);
+      await client.putJson<Map<String, dynamic>>(
+        '/escrow/single-release/update-escrow',
+        body: const {'contractId': 'CAAA'},
+      );
+      expect(method, 'PUT');
+    });
+
     test('wraps socket-level failures as NetworkError', () async {
       final mock = MockClient((_) async => throw http.ClientException('boom'));
       final client = HttpClient(config: cfg, inner: mock);
