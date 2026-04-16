@@ -599,14 +599,14 @@ import 'package:trustless_work_dart/src/models/network.dart';
 void main() {
   group('TrustlessWorkConfig', () {
     test('testnet factory points to dev URL', () {
-      const cfg = TrustlessWorkConfig.testnet(apiKey: 'k');
+      final cfg = TrustlessWorkConfig.testnet(apiKey: 'k');
       expect(cfg.baseUrl.toString(), 'https://dev.api.trustlesswork.com');
       expect(cfg.apiKey, 'k');
       expect(cfg.network, Network.testnet);
     });
 
     test('mainnet factory points to prod URL', () {
-      const cfg = TrustlessWorkConfig.mainnet(apiKey: 'k');
+      final cfg = TrustlessWorkConfig.mainnet(apiKey: 'k');
       expect(cfg.baseUrl.toString(), 'https://api.trustlesswork.com');
       expect(cfg.network, Network.mainnet);
     });
@@ -824,10 +824,10 @@ void main() {
       expect(signed, isNotEmpty);
     });
 
-    test('wraps invalid XDR into SigningError', () async {
+    test('wraps invalid XDR into SigningError', () {
       final signer = KeyPairSigner(keypair: keypair, network: Network.testnet);
-      await expectLater(
-        signer.signXdr('not a real xdr envelope'),
+      expect(
+        () => signer.signXdr('not a real xdr envelope'),
         throwsA(isA<SigningError>()),
       );
     });
