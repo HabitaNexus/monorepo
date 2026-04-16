@@ -202,4 +202,222 @@ void main() {
     );
     expect(escrow.contractId, 'CAAA');
   });
+
+  // ===================================================================
+  // Multi-release client surface.
+  // ===================================================================
+
+  http.Response fakeMultiReleaseEscrowJson() => http.Response(
+        jsonEncode({
+          'contractId': 'CAAA',
+          'engagementId': 'lease-mr',
+          'title': 'x',
+          'description': 'd',
+          'platformFee': 0.0,
+          'receiverMemo': 0,
+          'roles': <Map<String, Object?>>[],
+          'milestones': <Map<String, Object?>>[
+            {
+              'description': 'Pago 1',
+              'amount': 500,
+              'status': 'pending',
+              'approvedFlag': false,
+            },
+          ],
+          'trustline': <String, Object?>{
+            'address': 'C',
+            'name': 'USDC',
+            'decimals': 7,
+          },
+          'flags': <String, Object?>{
+            'approved': false,
+            'disputed': false,
+            'released': false,
+          },
+          'isActive': true,
+        }),
+        200,
+      );
+
+  test(
+    'initializeMultiReleaseEscrow signs XDR and returns resolved MultiReleaseEscrow',
+    () async {
+      // Sequence: (1) /deployer/multi-release → transactionXdr,
+      //           (2) /helper/send-transaction → { contractId: 'CAAA' },
+      //           (3) /escrow/multi-release/get-escrow → MultiReleaseEscrow json
+      final mock = wireMockedGateway([
+        http.Response(jsonEncode({'transactionXdr': 'MR_INIT_XDR'}), 201),
+        http.Response(jsonEncode({'contractId': 'CAAA'}), 200),
+        fakeMultiReleaseEscrowJson(),
+      ]);
+      final client = buildClient(mock);
+      final escrow = await client.initializeMultiReleaseEscrow(
+        const MultiReleaseContract(
+          signer: 'GAAA',
+          engagementId: 'lease-mr',
+          title: 'x',
+          description: 'd',
+          platformFee: 0,
+          roles: [],
+          milestones: [
+            {'description': 'Pago 1', 'amount': 500},
+          ],
+          trustline: [],
+        ),
+      );
+      expect(escrow.contractId, 'CAAA');
+      expect(escrow.milestones.single.amount, 500);
+    },
+  );
+
+  test('fundMultiReleaseEscrow returns refreshed MultiReleaseEscrow', () async {
+    final mock = wireMockedGateway([
+      http.Response(jsonEncode({'transactionXdr': 'MR_FUND_XDR'}), 201),
+      http.Response(jsonEncode({'status': 'SUCCESS'}), 200),
+      fakeMultiReleaseEscrowJson(),
+    ]);
+    final client = buildClient(mock);
+    final escrow = await client.fundMultiReleaseEscrow(
+      const FundEscrowPayload(
+        contractId: 'CAAA',
+        signer: 'GAAA',
+        amount: '500',
+      ),
+    );
+    expect(escrow.contractId, 'CAAA');
+  });
+
+  test(
+    'releaseMultiReleaseMilestone returns refreshed MultiReleaseEscrow',
+    () async {
+      final mock = wireMockedGateway([
+        http.Response(jsonEncode({'transactionXdr': 'MR_REL_XDR'}), 201),
+        http.Response(jsonEncode({'status': 'SUCCESS'}), 200),
+        fakeMultiReleaseEscrowJson(),
+      ]);
+      final client = buildClient(mock);
+      final escrow = await client.releaseMultiReleaseMilestone(
+        const MultiReleaseReleaseFundsPayload(
+          contractId: 'CAAA',
+          releaseSigner: 'GREL',
+          milestoneIndex: '0',
+        ),
+      );
+      expect(escrow.contractId, 'CAAA');
+    },
+  );
+
+  test(
+    'updateMultiReleaseEscrow returns refreshed MultiReleaseEscrow',
+    () async {
+      final mock = wireMockedGateway([
+        http.Response(jsonEncode({'transactionXdr': 'MR_UPD_XDR'}), 200),
+        http.Response(jsonEncode({'status': 'SUCCESS'}), 200),
+        fakeMultiReleaseEscrowJson(),
+      ]);
+      final client = buildClient(mock);
+      final escrow = await client.updateMultiReleaseEscrow(
+        const UpdateEscrowPayload(
+          signer: 'GPLATFORM',
+          contractId: 'CAAA',
+          escrow: <String, Object?>{'engagementId': 'lease-mr'},
+        ),
+      );
+      expect(escrow.contractId, 'CAAA');
+    },
+  );
+
+  test(
+    'changeMultiReleaseMilestoneStatus returns refreshed MultiReleaseEscrow',
+    () async {
+      final mock = wireMockedGateway([
+        http.Response(jsonEncode({'transactionXdr': 'MR_CMS_XDR'}), 201),
+        http.Response(jsonEncode({'status': 'SUCCESS'}), 200),
+        fakeMultiReleaseEscrowJson(),
+      ]);
+      final client = buildClient(mock);
+      final escrow = await client.changeMultiReleaseMilestoneStatus(
+        const ChangeMilestoneStatusPayload(
+          contractId: 'CAAA',
+          milestoneIndex: '0',
+          newEvidence: 'ipfs://hash',
+          newStatus: 'Completed',
+          serviceProvider: 'GSERVICE',
+        ),
+      );
+      expect(escrow.contractId, 'CAAA');
+    },
+  );
+
+  test(
+    'approveMultiReleaseMilestone returns refreshed MultiReleaseEscrow',
+    () async {
+      final mock = wireMockedGateway([
+        http.Response(jsonEncode({'transactionXdr': 'MR_APM_XDR'}), 201),
+        http.Response(jsonEncode({'status': 'SUCCESS'}), 200),
+        fakeMultiReleaseEscrowJson(),
+      ]);
+      final client = buildClient(mock);
+      final escrow = await client.approveMultiReleaseMilestone(
+        const ApproveMilestonePayload(
+          contractId: 'CAAA',
+          milestoneIndex: '0',
+          approver: 'GAPPROVER',
+        ),
+      );
+      expect(escrow.contractId, 'CAAA');
+    },
+  );
+
+  test(
+    'startMultiReleaseDispute returns refreshed MultiReleaseEscrow',
+    () async {
+      final mock = wireMockedGateway([
+        http.Response(jsonEncode({'transactionXdr': 'MR_DSP_XDR'}), 201),
+        http.Response(jsonEncode({'status': 'SUCCESS'}), 200),
+        fakeMultiReleaseEscrowJson(),
+      ]);
+      final client = buildClient(mock);
+      final escrow = await client.startMultiReleaseDispute(
+        const MultiReleaseStartDisputePayload(
+          contractId: 'CAAA',
+          milestoneIndex: '0',
+          signer: 'GAPPROVER',
+        ),
+      );
+      expect(escrow.contractId, 'CAAA');
+    },
+  );
+
+  test(
+    'resolveMultiReleaseDispute returns refreshed MultiReleaseEscrow',
+    () async {
+      final mock = wireMockedGateway([
+        http.Response(jsonEncode({'transactionXdr': 'MR_RES_XDR'}), 201),
+        http.Response(jsonEncode({'status': 'SUCCESS'}), 200),
+        fakeMultiReleaseEscrowJson(),
+      ]);
+      final client = buildClient(mock);
+      final escrow = await client.resolveMultiReleaseDispute(
+        const MultiReleaseResolveDisputePayload(
+          contractId: 'CAAA',
+          disputeResolver: 'GRESOLVER',
+          milestoneIndex: '0',
+          distributions: [
+            DisputeDistribution(address: 'GAPPROVER', amount: 300),
+            DisputeDistribution(address: 'GRECEIVER', amount: 200),
+          ],
+        ),
+      );
+      expect(escrow.contractId, 'CAAA');
+    },
+  );
+
+  test('getMultiReleaseEscrow returns decoded MultiReleaseEscrow', () async {
+    final mock = wireMockedGateway([fakeMultiReleaseEscrowJson()]);
+    final client = buildClient(mock);
+    final escrow = await client.getMultiReleaseEscrow('CAAA');
+    expect(escrow.contractId, 'CAAA');
+    expect(escrow.milestones.single.amount, 500);
+  });
 }

@@ -41,4 +41,63 @@ void main() {
     expect(escrow.contractId, 'CAAA');
     expect(escrow.isActive, isTrue);
   });
+
+  test(
+    'getMultiReleaseEscrow POSTs to /escrow/multi-release/get-escrow and decodes',
+    () async {
+      final mock = MockClient((req) async {
+        expect(req.url.path, '/escrow/multi-release/get-escrow');
+        final body = jsonDecode(req.body) as Map<String, dynamic>;
+        expect(body['contractId'], 'CAAA');
+        return http.Response(
+          jsonEncode({
+            'contractId': 'CAAA',
+            'engagementId': 'lease-2',
+            'title': 't',
+            'description': 'd',
+            'platformFee': 0.0,
+            'receiverMemo': 0,
+            'roles': <Map<String, Object?>>[],
+            'milestones': <Map<String, Object?>>[
+              {
+                'description': 'Pago 1',
+                'amount': 500,
+                'status': 'pending',
+                'approvedFlag': false,
+              },
+              {
+                'description': 'Pago 2',
+                'amount': 750,
+                'status': 'pending',
+                'approvedFlag': false,
+              },
+            ],
+            'trustline': <String, Object?>{
+              'address': 'C',
+              'name': 'USDC',
+              'decimals': 7,
+            },
+            'flags': <String, Object?>{
+              'approved': false,
+              'disputed': false,
+              'released': false,
+            },
+            'isActive': true,
+          }),
+          200,
+        );
+      });
+      final queries = EscrowQueries(
+        http: HttpClient(
+          config: TrustlessWorkConfig.testnet(apiKey: 'k'),
+          inner: mock,
+        ),
+      );
+
+      final escrow = await queries.getMultiReleaseEscrow('CAAA');
+      expect(escrow.contractId, 'CAAA');
+      expect(escrow.milestones, hasLength(2));
+      expect(escrow.milestones[0].amount, 500);
+    },
+  );
 }
