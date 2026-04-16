@@ -2490,7 +2490,10 @@ void main() {
     final stream = PollingEventStream(
       contractId: 'CAAA',
       pollInterval: const Duration(milliseconds: 10),
-      fetch: () async => snapshots[idx++.clamp(0, snapshots.length - 1)],
+      fetch: () async {
+        final i = idx < snapshots.length - 1 ? idx++ : snapshots.length - 1;
+        return snapshots[i];
+      },
       now: () => DateTime(2026, 4, 15),
     );
 
@@ -2796,6 +2799,7 @@ Future<void> main() async {
   final keypair = stellar.KeyPair.random();
   await stellar.FriendBot.fundTestAccount(keypair.accountId);
 
+  // ignore: unused_local_variable
   final client = TrustlessWorkClient(
     config: TrustlessWorkConfig.testnet(apiKey: apiKey),
     signer: KeyPairSigner(keypair: keypair, network: Network.testnet),
