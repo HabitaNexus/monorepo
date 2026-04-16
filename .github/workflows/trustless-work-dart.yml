@@ -1,0 +1,44 @@
+# .github/workflows/trustless-work-dart.yml
+name: trustless_work_dart
+
+on:
+  push:
+    paths:
+      - 'packages/trustless_work_dart/**'
+      - 'packages/trustless_work_flutter_storage/**'
+      - '.github/workflows/trustless-work-dart.yml'
+  pull_request:
+    paths:
+      - 'packages/trustless_work_dart/**'
+      - 'packages/trustless_work_flutter_storage/**'
+
+jobs:
+  core:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/trustless_work_dart
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dart-lang/setup-dart@v1
+        with:
+          sdk: 3.2.5
+      - run: dart pub get
+      - run: dart run build_runner build --delete-conflicting-outputs
+      - run: dart analyze
+      - run: dart format --set-exit-if-changed .
+      - run: dart test --exclude-tags integration --coverage=coverage
+
+  storage:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/trustless_work_flutter_storage
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+      - run: flutter pub get
+      - run: flutter analyze
+      - run: flutter test
