@@ -332,3 +332,25 @@ ci-mobile-build: ## Build mobile APK
 
 ci-mobile-test: ## Run tests in CI mode
 	@cd $(MOBILE_DIR) && flutter test --coverage
+
+# ==========================================
+# Trustless Work packages
+# ==========================================
+
+TW_CORE := packages/trustless_work_dart
+TW_STORAGE := packages/trustless_work_flutter_storage
+
+.PHONY: trustless-work-test trustless-work-analyze trustless-work-format trustless-work-ci
+
+trustless-work-test: ## Run tests for both trustless-work packages (core + storage sibling)
+	cd $(TW_CORE) && dart run build_runner build --delete-conflicting-outputs && dart test --exclude-tags integration
+	cd $(TW_STORAGE) && flutter test
+
+trustless-work-analyze: ## Analyze both trustless-work packages
+	cd $(TW_CORE) && dart analyze
+	cd $(TW_STORAGE) && flutter analyze
+
+trustless-work-format: ## Format both trustless-work packages
+	dart format $(TW_CORE) $(TW_STORAGE)
+
+trustless-work-ci: trustless-work-format trustless-work-analyze trustless-work-test ## Run the full local CI equivalent for trustless-work packages

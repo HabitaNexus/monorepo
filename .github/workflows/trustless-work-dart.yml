@@ -1,0 +1,48 @@
+# .github/workflows/trustless-work-dart.yml
+name: trustless_work_dart
+
+on:
+  push:
+    paths:
+      - 'packages/trustless_work_dart/**'
+      - 'packages/trustless_work_flutter_storage/**'
+      - '.github/workflows/trustless-work-dart.yml'
+  pull_request:
+    paths:
+      - 'packages/trustless_work_dart/**'
+      - 'packages/trustless_work_flutter_storage/**'
+
+jobs:
+  core:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/trustless_work_dart
+    steps:
+      - uses: actions/checkout@v4
+      # Flutter action is required because stellar_flutter_sdk transitively
+      # depends on the Flutter SDK (despite being available on pub.dev as a
+      # Dart library). The core package remains usable from Flutter apps,
+      # Flutter Web, and Jaspr; pure-Dart server/CLI usage would need a
+      # different Stellar client and is deferred to v0.2.
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+      - run: dart pub get
+      - run: dart run build_runner build --delete-conflicting-outputs
+      - run: dart analyze
+      - run: dart test --exclude-tags integration --coverage=coverage
+
+  storage:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/trustless_work_flutter_storage
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+      - run: flutter pub get
+      - run: flutter analyze
+      - run: flutter test
