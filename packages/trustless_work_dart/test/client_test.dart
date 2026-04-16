@@ -509,4 +509,40 @@ void main() {
       expect(response.escrows, hasLength(2));
     },
   );
+
+  // ===================================================================
+  // Balance queries (HAB-62) — end-to-end wiring through the client.
+  // ===================================================================
+
+  test(
+    'getMultipleEscrowBalances GETs /helper/get-multiple-escrow-balance '
+    'with addresses as repeat-params and decodes the balance array',
+    () async {
+      final mock = MockClient((req) async {
+        expect(req.method, 'GET');
+        expect(req.url.path, '/helper/get-multiple-escrow-balance');
+        expect(
+          req.url.queryParametersAll['addresses'],
+          <String>['CAAA', 'CBBB'],
+        );
+        return http.Response(
+          jsonEncode([
+            {'address': 'CAAA', 'balance': 30},
+            {'address': 'CBBB', 'balance': 10},
+          ]),
+          200,
+        );
+      });
+      final client = buildClient(mock);
+      final response = await client.getMultipleEscrowBalances(
+        const ['CAAA', 'CBBB'],
+      );
+      expect(response.balances, hasLength(2));
+      expect(
+        response.balances.map((b) => b.address),
+        ['CAAA', 'CBBB'],
+      );
+      expect(response.balances.first.balance, 30);
+    },
+  );
 }
