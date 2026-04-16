@@ -13,6 +13,7 @@ import '../events/hybrid_event_stream.dart';
 import '../events/stellar_event_sources.dart';
 import '../http/http_client.dart';
 import '../models/escrow.dart';
+import '../models/get_escrow_balances_response.dart';
 import '../models/get_escrows_from_indexer_response.dart';
 import '../models/multi_release_escrow.dart';
 import '../models/payloads/approve_milestone_payload.dart';
@@ -349,6 +350,19 @@ class TrustlessWorkClient {
         contractIds,
         validateOnChain: validateOnChain,
       );
+
+  /// Batch-fetches USDC balances for a list of escrow contract
+  /// [addresses] via `GET /helper/get-multiple-escrow-balance`.
+  ///
+  /// Primary consumer: dashboards that list many escrows at once and
+  /// need their current balance in a single round-trip rather than N
+  /// separate reads. [addresses] is serialised as a repeat-param query
+  /// (`?addresses=CAAA&addresses=CBBB`), matching the OpenAPI default
+  /// for array query parameters.
+  Future<GetEscrowBalancesResponse> getMultipleEscrowBalances(
+    List<String> addresses,
+  ) =>
+      _indexerQueries.getMultipleEscrowBalances(addresses);
 
   /// Observable stream of state transitions on an escrow contract.
   ///

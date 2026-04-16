@@ -29,9 +29,17 @@ class HttpClient {
   }) =>
       _send<T>('PUT', path, body: body);
 
+  /// GETs [path] with an optional query string.
+  ///
+  /// Values in [queryParameters] may be either a single `String` or an
+  /// `Iterable<String>` — the latter is serialised as a repeat-param
+  /// (`?k=a&k=b`), which is what `Uri.replace` does natively and what
+  /// OpenAPI calls `style: form, explode: true` (the default for array
+  /// query parameters). Callers that want CSV serialisation should
+  /// pre-join into a single `String` value themselves.
   Future<T> getJson<T>(
     String path, {
-    Map<String, String>? queryParameters,
+    Map<String, dynamic /* String | Iterable<String> */ >? queryParameters,
   }) =>
       _send<T>('GET', path, queryParameters: queryParameters);
 
@@ -39,7 +47,7 @@ class HttpClient {
     String method,
     String path, {
     Map<String, Object?>? body,
-    Map<String, String>? queryParameters,
+    Map<String, dynamic /* String | Iterable<String> */ >? queryParameters,
   }) async {
     final uri = _config.baseUrl.replace(
       path: path,
