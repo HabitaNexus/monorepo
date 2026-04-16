@@ -9,9 +9,14 @@ import '../events/escrow_event.dart';
 import '../events/polling_event_stream.dart';
 import '../http/http_client.dart';
 import '../models/escrow.dart';
+import '../models/payloads/approve_milestone_payload.dart';
+import '../models/payloads/change_milestone_status_payload.dart';
 import '../models/payloads/fund_escrow_payload.dart';
 import '../models/payloads/release_funds_payload.dart';
+import '../models/payloads/resolve_dispute_payload.dart';
 import '../models/payloads/single_release_contract.dart';
+import '../models/payloads/start_dispute_payload.dart';
+import '../models/payloads/update_escrow_payload.dart';
 import '../signer/transaction_signer.dart';
 import 'trustless_work_config.dart';
 
@@ -92,6 +97,63 @@ class TrustlessWorkClient {
 
   Future<Escrow> releaseFunds(ReleaseFundsPayload payload) async {
     final xdr = await _operations.release(payload);
+    await _helper.signAndSubmit(xdr);
+    return _queries.getEscrow(payload.contractId);
+  }
+
+  /// Modifies an existing escrow. Legal only before any milestone is
+  /// approved — the gateway returns 500 if called after approval.
+  Future<Escrow> updateEscrow(UpdateEscrowPayload payload) async {
+    final xdr = await _operations.update(payload);
+    await _helper.signAndSubmit(xdr);
+    return _queries.getEscrow(payload.contractId);
+  }
+
+  /// Reports a milestone status change on behalf of the service
+  /// provider. Typical use: flipping a milestone to `Completed` with
+  /// evidence once deliverables are ready for approval.
+  Future<Escrow> changeMilestoneStatus(
+    ChangeMilestoneStatusPayload payload,
+  ) async {
+    final xdr = await _operations.changeMilestoneStatus(payload);
+    await _helper.signAndSubmit(xdr);
+    return _queries.getEscrow(payload.contractId);
+  }
+
+  /// Approves a milestone on behalf of the approver. Once all
+  /// milestones are approved, the contract's `approved` flag flips and
+  /// `releaseFunds` becomes callable.
+  Future<Escrow> approveMilestone(ApproveMilestonePayload payload) async {
+    final xdr = await _operations.approveMilestone(payload);
+    await _helper.signAndSubmit(xdr);
+    return _queries.getEscrow(payload.contractId);
+  }
+
+  /// Flips the contract's `disputed` flag on-chain.
+  ///
+  /// Architectural boundary: this is the on-chain primitive only. The
+  /// SDK does NOT make dispute decisions. The off-chain mediation /
+  /// arbitration workflow (MEDIATION 48h -> ARBITRATION 7d ->
+  /// JUDICIAL_ESCALATED) lives in the HabitaNexus backend
+  /// `contract-core` module — see
+  /// `business/spikes/06-contract-core-megaprompt.md` sections 7 and
+  /// 12. Callers should only invoke this once an off-chain process
+  /// has authorised the escalation.
+  Future<Escrow> startDispute(StartDisputePayload payload) async {
+    final xdr = await _operations.startDispute(payload);
+    await _helper.signAndSubmit(xdr);
+    return _queries.getEscrow(payload.contractId);
+  }
+
+  /// Executes the on-chain USDC split that resolves a dispute.
+  ///
+  /// Architectural boundary: the SDK does NOT decide how to split
+  /// funds. The `distributions` list must come from an off-chain
+  /// arbiter in the HabitaNexus backend `contract-core` module (see
+  /// `business/spikes/06-contract-core-megaprompt.md` §7 and §12). The
+  /// SDK submits whatever split the `disputeResolver` key signs.
+  Future<Escrow> resolveDispute(ResolveDisputePayload payload) async {
+    final xdr = await _operations.resolveDispute(payload);
     await _helper.signAndSubmit(xdr);
     return _queries.getEscrow(payload.contractId);
   }
