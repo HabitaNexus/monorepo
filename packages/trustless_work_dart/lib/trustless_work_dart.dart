@@ -12,6 +12,7 @@ export 'src/events/soroban_event_decoder.dart';
 export 'src/events/stellar_event_sources.dart';
 export 'src/models/escrow.dart';
 export 'src/models/flags.dart';
+export 'src/models/get_escrow_balances_response.dart';
 export 'src/models/get_escrows_from_indexer_response.dart';
 export 'src/models/milestone.dart';
 export 'src/models/multi_release_escrow.dart';
