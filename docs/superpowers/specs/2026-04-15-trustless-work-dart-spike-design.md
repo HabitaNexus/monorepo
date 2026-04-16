@@ -333,7 +333,7 @@ Gated por `--tags=integration`; no corre en CI default, sí en CI scheduled (dia
 
 - `dart analyze` sin warnings.
 - `dart format --set-exit-if-changed .` pasa.
-- `pana` (pub score) ≥ 130/140 antes de publish.
+- `pana` (pub score) baseline: **130/160** al cierre de HAB-57 (spike). Brechas conocidas: falta `example/` (0/10) y dependencias con constraints debajo del último stable (`freezed_annotation ^2.4.4` vs 3.0.0, `stellar_flutter_sdk ^1.9.0` vs 2.0.0 — 0/10), y algunos lints/formato menores surgidos de la versión más nueva del formatter (40/50). Se cierran antes de publish en v0.2.
 
 ## 11. Roadmap
 
