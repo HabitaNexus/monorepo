@@ -204,4 +204,64 @@ void main() {
       );
     },
   );
+
+  group('IndexerQueries.getMultipleEscrowBalances', () {
+    test(
+      'GETs /helper/get-multiple-escrow-balance with `addresses` as a '
+      'repeat-param query (OpenAPI style:form, explode:true)',
+      () async {
+        final mock = MockClient((req) async {
+          expect(req.method, 'GET');
+          expect(req.url.path, '/helper/get-multiple-escrow-balance');
+          // Repeat-param, NOT csv: `queryParametersAll['addresses']` must
+          // be the full list (verified against
+          // https://api.trustlesswork.com/docs-json on 2026-04-15 — the
+          // OpenAPI schema is `type: array` with default serialization,
+          // which for query params is explode=true).
+          expect(
+            req.url.queryParametersAll['addresses'],
+            <String>['CAAA', 'CBBB'],
+          );
+          return http.Response(
+            jsonEncode([
+              {'address': 'CAAA', 'balance': 30},
+              {'address': 'CBBB', 'balance': 10},
+            ]),
+            200,
+          );
+        });
+
+        final queries = IndexerQueries(http: buildHttp(mock));
+        final response = await queries.getMultipleEscrowBalances(
+          const ['CAAA', 'CBBB'],
+        );
+        expect(response.balances, hasLength(2));
+        expect(response.balances[0].address, 'CAAA');
+        expect(response.balances[0].balance, 30);
+        expect(response.balances[1].address, 'CBBB');
+        expect(response.balances[1].balance, 10);
+      },
+    );
+
+    test('decodes an empty balances array to an empty response', () async {
+      final mock = MockClient((_) async => http.Response(
+            jsonEncode(const <dynamic>[]),
+            200,
+          ));
+      final queries = IndexerQueries(http: buildHttp(mock));
+      final response =
+          await queries.getMultipleEscrowBalances(const ['CAAA']);
+      expect(response.balances, isEmpty);
+    });
+
+    test('throws ArgumentError when the addresses list is empty', () async {
+      final queries = IndexerQueries(
+        http: buildHttp(MockClient((_) async => http.Response('', 200))),
+      );
+      await expectLater(
+        queries.getMultipleEscrowBalances(const <String>[]),
+        throwsArgumentError,
+      );
+    });
+  });
 }
