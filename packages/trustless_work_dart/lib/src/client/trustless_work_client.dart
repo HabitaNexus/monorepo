@@ -6,7 +6,8 @@ import '../endpoints/helpers.dart';
 import '../endpoints/queries.dart';
 import '../endpoints/single_release_operations.dart';
 import '../events/escrow_event.dart';
-import '../events/polling_event_stream.dart';
+import '../events/hybrid_event_stream.dart';
+import '../events/stellar_event_sources.dart';
 import '../http/http_client.dart';
 import '../models/escrow.dart';
 import '../models/payloads/approve_milestone_payload.dart';
@@ -42,6 +43,7 @@ class TrustlessWorkClient {
       operations: SingleReleaseOperations(http: http_),
       helper: TransactionHelper(http: http_, signer: signer),
       queries: EscrowQueries(http: http_),
+      config: config,
     );
   }
 
@@ -50,6 +52,8 @@ class TrustlessWorkClient {
     required TrustlessWorkConfig config,
     required TransactionSigner signer,
     required http.Client innerHttp,
+    SorobanEventSource? sorobanEvents,
+    HorizonEffectsSource? horizonEffects,
   }) {
     final http_ = HttpClient(config: config, inner: innerHttp);
     return TrustlessWorkClient._(
@@ -59,6 +63,9 @@ class TrustlessWorkClient {
       operations: SingleReleaseOperations(http: http_),
       helper: TransactionHelper(http: http_, signer: signer),
       queries: EscrowQueries(http: http_),
+      config: config,
+      sorobanEventsOverride: sorobanEvents,
+      horizonEffectsOverride: horizonEffects,
     );
   }
 
@@ -69,15 +76,24 @@ class TrustlessWorkClient {
     required SingleReleaseOperations operations,
     required TransactionHelper helper,
     required EscrowQueries queries,
+    required TrustlessWorkConfig config,
+    SorobanEventSource? sorobanEventsOverride,
+    HorizonEffectsSource? horizonEffectsOverride,
   })  : _deployer = deployer,
         _operations = operations,
         _helper = helper,
-        _queries = queries;
+        _queries = queries,
+        _config = config,
+        _sorobanEventsOverride = sorobanEventsOverride,
+        _horizonEffectsOverride = horizonEffectsOverride;
 
   final SingleReleaseDeployer _deployer;
   final SingleReleaseOperations _operations;
   final TransactionHelper _helper;
   final EscrowQueries _queries;
+  final TrustlessWorkConfig _config;
+  final SorobanEventSource? _sorobanEventsOverride;
+  final HorizonEffectsSource? _horizonEffectsOverride;
 
   Future<Escrow> initializeEscrow(SingleReleaseContract contract) async {
     final xdr = await _deployer.deploy(contract);
@@ -160,16 +176,41 @@ class TrustlessWorkClient {
 
   Future<Escrow> getEscrow(String contractId) => _queries.getEscrow(contractId);
 
-  @experimental
+  /// Observable stream of state transitions on an escrow contract.
+  ///
+  /// v0.2 implementation: hybrid Horizon SSE + Soroban `getEvents`
+  /// (see `HybridEventStream`). The legacy `pollInterval` parameter
+  /// is accepted for source-compatibility but has no effect — the
+  /// hybrid stream manages its own adaptive 2s–30s cadence. It will
+  /// be removed in v0.3.
+  ///
+  /// Mobile consumers that care about iOS/Android background
+  /// lifecycle should attach a `WidgetsBindingObserver` to the stream
+  /// they subscribe to and call `resumeFromBackground()` on the
+  /// underlying `HybridEventStream` via the `escrowEventStream()`
+  /// helper if they need that hook. The default `escrowEvents` path
+  /// handles disconnects via internal reconciliation so most callers
+  /// never have to care.
   Stream<EscrowEvent> escrowEvents(
     String contractId, {
+    @Deprecated('No-op in v0.2; HybridEventStream manages its own '
+        'adaptive interval. Will be removed in v0.3.')
     Duration pollInterval = const Duration(seconds: 15),
   }) {
-    final stream = PollingEventStream(
+    return escrowEventStream(contractId).events;
+  }
+
+  /// Lower-level accessor that returns the `HybridEventStream` so
+  /// advanced callers (e.g. a Flutter companion) can call
+  /// `resumeFromBackground()` directly.
+  HybridEventStream escrowEventStream(String contractId) {
+    return HybridEventStream(
       contractId: contractId,
-      fetch: () => _queries.getEscrow(contractId),
-      pollInterval: pollInterval,
+      fetchEscrow: () => _queries.getEscrow(contractId),
+      sorobanEvents: _sorobanEventsOverride ??
+          SorobanRpcEventSource(network: _config.network),
+      horizonEffects: _horizonEffectsOverride ??
+          HorizonSseEffectsSource(network: _config.network),
     );
-    return stream.events;
   }
 }

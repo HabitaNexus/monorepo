@@ -3,7 +3,12 @@ export 'src/client/trustless_work_config.dart';
 export 'src/errors/result.dart';
 export 'src/errors/trustless_work_error.dart';
 export 'src/events/escrow_event.dart';
+export 'src/events/hybrid_event_stream.dart'
+    show HybridEventStream, HorizonEffectsSource, SorobanEventPage,
+        SorobanEventSource;
 export 'src/events/polling_event_stream.dart';
+export 'src/events/soroban_event_decoder.dart';
+export 'src/events/stellar_event_sources.dart';
 export 'src/models/escrow.dart';
 export 'src/models/flags.dart';
 export 'src/models/milestone.dart';
