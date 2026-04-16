@@ -1082,7 +1082,7 @@ void main() {
     });
 
     test('wraps socket-level failures as NetworkError', () async {
-      final mock = MockClient((_) async => throw const http.ClientException('boom'));
+      final mock = MockClient((_) async => throw http.ClientException('boom'));
       final client = HttpClient(config: cfg, inner: mock);
       await expectLater(
         client.postJson<Map<String, dynamic>>('/x', body: const {}),
