@@ -2,6 +2,7 @@ import 'package:test/test.dart';
 import 'package:trustless_work_dart/src/models/payloads/fund_escrow_payload.dart';
 import 'package:trustless_work_dart/src/models/payloads/release_funds_payload.dart';
 import 'package:trustless_work_dart/src/models/payloads/single_release_contract.dart';
+import 'package:trustless_work_dart/src/models/payloads/approve_milestone_payload.dart';
 import 'package:trustless_work_dart/src/models/payloads/change_milestone_status_payload.dart';
 import 'package:trustless_work_dart/src/models/payloads/update_escrow_payload.dart';
 
@@ -98,6 +99,20 @@ void main() {
       ChangeMilestoneStatusPayload.fromJson(payload.toJson()),
       payload,
     );
+  });
+
+  test('ApproveMilestonePayload round-trips through JSON', () {
+    const payload = ApproveMilestonePayload(
+      contractId: 'CAAA',
+      milestoneIndex: '0',
+      approver: 'GAPPROVER',
+    );
+    expect(payload.toJson(), {
+      'contractId': 'CAAA',
+      'milestoneIndex': '0',
+      'approver': 'GAPPROVER',
+    });
+    expect(ApproveMilestonePayload.fromJson(payload.toJson()), payload);
   });
 
   test('UpdateEscrowPayload omits isActive when null', () {
