@@ -3,6 +3,7 @@ import 'package:meta/meta.dart';
 
 import '../endpoints/deployer.dart';
 import '../endpoints/helpers.dart';
+import '../endpoints/indexer_queries.dart';
 import '../endpoints/multi_release_deployer.dart';
 import '../endpoints/multi_release_operations.dart';
 import '../endpoints/queries.dart';
@@ -12,6 +13,7 @@ import '../events/hybrid_event_stream.dart';
 import '../events/stellar_event_sources.dart';
 import '../http/http_client.dart';
 import '../models/escrow.dart';
+import '../models/get_escrows_from_indexer_response.dart';
 import '../models/multi_release_escrow.dart';
 import '../models/payloads/approve_milestone_payload.dart';
 import '../models/payloads/change_milestone_status_payload.dart';
@@ -52,6 +54,7 @@ class TrustlessWorkClient {
       multiReleaseOperations: MultiReleaseOperations(http: http_),
       helper: TransactionHelper(http: http_, signer: signer),
       queries: EscrowQueries(http: http_),
+      indexerQueries: IndexerQueries(http: http_),
       config: config,
     );
   }
@@ -74,6 +77,7 @@ class TrustlessWorkClient {
       multiReleaseOperations: MultiReleaseOperations(http: http_),
       helper: TransactionHelper(http: http_, signer: signer),
       queries: EscrowQueries(http: http_),
+      indexerQueries: IndexerQueries(http: http_),
       config: config,
       sorobanEventsOverride: sorobanEvents,
       horizonEffectsOverride: horizonEffects,
@@ -89,6 +93,7 @@ class TrustlessWorkClient {
     required MultiReleaseOperations multiReleaseOperations,
     required TransactionHelper helper,
     required EscrowQueries queries,
+    required IndexerQueries indexerQueries,
     required TrustlessWorkConfig config,
     SorobanEventSource? sorobanEventsOverride,
     HorizonEffectsSource? horizonEffectsOverride,
@@ -98,6 +103,7 @@ class TrustlessWorkClient {
         _multiReleaseOperations = multiReleaseOperations,
         _helper = helper,
         _queries = queries,
+        _indexerQueries = indexerQueries,
         _config = config,
         _sorobanEventsOverride = sorobanEventsOverride,
         _horizonEffectsOverride = horizonEffectsOverride;
@@ -108,6 +114,7 @@ class TrustlessWorkClient {
   final MultiReleaseOperations _multiReleaseOperations;
   final TransactionHelper _helper;
   final EscrowQueries _queries;
+  final IndexerQueries _indexerQueries;
   final TrustlessWorkConfig _config;
   final SorobanEventSource? _sorobanEventsOverride;
   final HorizonEffectsSource? _horizonEffectsOverride;
@@ -292,6 +299,56 @@ class TrustlessWorkClient {
 
   Future<MultiReleaseEscrow> getMultiReleaseEscrow(String contractId) =>
       _queries.getMultiReleaseEscrow(contractId);
+
+  // =========================================================================
+  // Indexer queries (HAB-61).
+  //
+  // Batch / filter reads backed by the TW indexer (the Go service exposed
+  // under /helper/* on the same gateway). Primary consumer: the HabitaNexus
+  // dashboard listing all escrows for a given user, role, or contractId list.
+  //
+  // The indexer response shape diverges from Escrow / MultiReleaseEscrow
+  // (roles-as-object, Firestore timestamps, nested milestone flags), so
+  // these methods return IndexerEscrow via GetEscrowsFromIndexerResponse
+  // instead of Escrow. See get_escrows_from_indexer_response.dart for the
+  // rationale.
+  // =========================================================================
+
+  /// Lists escrows where [role] is held by address [user].
+  ///
+  /// Typical dashboard call: "show me every escrow where I'm the
+  /// approver" -> `getEscrowsFromIndexerByRole(role: IndexerRole.approver,
+  /// user: myPublicKey)`.
+  Future<GetEscrowsFromIndexerResponse> getEscrowsFromIndexerByRole({
+    required IndexerRole role,
+    required String user,
+  }) =>
+      _indexerQueries.getEscrowsFromIndexerByRole(role: role, user: user);
+
+  /// Lists escrows where [signer] acted as ANY signer on the contract
+  /// (deploy / fund / approve / release / dispute).
+  ///
+  /// Broader than the role query — catches activity from roles whose
+  /// address has rotated since the contract was deployed.
+  Future<GetEscrowsFromIndexerResponse> getEscrowsFromIndexerBySigner(
+    String signer,
+  ) =>
+      _indexerQueries.getEscrowsFromIndexerBySigner(signer);
+
+  /// Batch-fetches escrows by contract id.
+  ///
+  /// [contractIds] is serialised as a comma-separated query parameter.
+  /// Setting [validateOnChain] to `true` asks the indexer to verify each
+  /// escrow against the blockchain before returning — slower, but proves
+  /// the cached data matches on-chain state.
+  Future<GetEscrowsFromIndexerResponse> getEscrowFromIndexerByContractIds(
+    List<String> contractIds, {
+    bool? validateOnChain,
+  }) =>
+      _indexerQueries.getEscrowFromIndexerByContractIds(
+        contractIds,
+        validateOnChain: validateOnChain,
+      );
 
   /// Observable stream of state transitions on an escrow contract.
   ///

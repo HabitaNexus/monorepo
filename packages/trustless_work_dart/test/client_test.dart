@@ -420,4 +420,93 @@ void main() {
     expect(escrow.contractId, 'CAAA');
     expect(escrow.milestones.single.amount, 500);
   });
+
+  // ===================================================================
+  // Indexer queries (HAB-61) — end-to-end wiring through the client.
+  // ===================================================================
+
+  Map<String, Object?> fakeIndexerRow(String contractId) => {
+        'contractId': contractId,
+        'signer': 'GAAA',
+        'type': 'single-release',
+        'engagementId': 'lease-1',
+        'title': 't',
+        'description': 'd',
+        'milestones': <Map<String, Object?>>[],
+        'platformFee': 0,
+        'receiverMemo': 0,
+        'roles': <String, Object?>{'approver': 'GAPP'},
+        'trustline': <String, Object?>{'address': 'C', 'name': 'USDC'},
+        'isActive': true,
+        'flags': <String, Object?>{
+          'disputed': false,
+          'released': false,
+          'resolved': false,
+        },
+      };
+
+  test(
+    'getEscrowsFromIndexerByRole GETs /helper/get-escrows-by-role and '
+    'decodes the indexer array',
+    () async {
+      final mock = MockClient((req) async {
+        expect(req.method, 'GET');
+        expect(req.url.path, '/helper/get-escrows-by-role');
+        expect(req.url.queryParameters['role'], 'approver');
+        expect(req.url.queryParameters['roleAddress'], 'GAAA');
+        return http.Response(
+          jsonEncode([fakeIndexerRow('C1'), fakeIndexerRow('C2')]),
+          200,
+        );
+      });
+      final client = buildClient(mock);
+      final response = await client.getEscrowsFromIndexerByRole(
+        role: IndexerRole.approver,
+        user: 'GAAA',
+      );
+      expect(response.escrows.map((e) => e.contractId), ['C1', 'C2']);
+    },
+  );
+
+  test(
+    'getEscrowsFromIndexerBySigner GETs /helper/get-escrows-by-signer',
+    () async {
+      final mock = MockClient((req) async {
+        expect(req.method, 'GET');
+        expect(req.url.path, '/helper/get-escrows-by-signer');
+        expect(req.url.queryParameters['signer'], 'GBBB');
+        return http.Response(
+          jsonEncode([fakeIndexerRow('CSIG')]),
+          200,
+        );
+      });
+      final client = buildClient(mock);
+      final response =
+          await client.getEscrowsFromIndexerBySigner('GBBB');
+      expect(response.escrows.single.contractId, 'CSIG');
+    },
+  );
+
+  test(
+    'getEscrowFromIndexerByContractIds GETs /helper/get-escrow-by-contract-ids '
+    'with comma-joined contractIds and validateOnChain',
+    () async {
+      final mock = MockClient((req) async {
+        expect(req.method, 'GET');
+        expect(req.url.path, '/helper/get-escrow-by-contract-ids');
+        expect(req.url.queryParameters['contractIds'], 'CAAA,CBBB');
+        expect(req.url.queryParameters['validateOnChain'], 'true');
+        return http.Response(
+          jsonEncode([fakeIndexerRow('CAAA'), fakeIndexerRow('CBBB')]),
+          200,
+        );
+      });
+      final client = buildClient(mock);
+      final response = await client.getEscrowFromIndexerByContractIds(
+        const ['CAAA', 'CBBB'],
+        validateOnChain: true,
+      );
+      expect(response.escrows, hasLength(2));
+    },
+  );
 }

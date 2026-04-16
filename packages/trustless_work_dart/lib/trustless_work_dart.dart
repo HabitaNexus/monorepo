@@ -1,5 +1,6 @@
 export 'src/client/trustless_work_client.dart';
 export 'src/client/trustless_work_config.dart';
+export 'src/endpoints/indexer_queries.dart' show IndexerQueries, IndexerRole;
 export 'src/errors/result.dart';
 export 'src/errors/trustless_work_error.dart';
 export 'src/events/escrow_event.dart';
@@ -11,6 +12,7 @@ export 'src/events/soroban_event_decoder.dart';
 export 'src/events/stellar_event_sources.dart';
 export 'src/models/escrow.dart';
 export 'src/models/flags.dart';
+export 'src/models/get_escrows_from_indexer_response.dart';
 export 'src/models/milestone.dart';
 export 'src/models/multi_release_escrow.dart';
 export 'src/models/multi_release_milestone.dart';
