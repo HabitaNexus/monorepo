@@ -2,6 +2,8 @@ export 'src/client/trustless_work_client.dart';
 export 'src/client/trustless_work_config.dart';
 export 'src/errors/result.dart';
 export 'src/errors/trustless_work_error.dart';
+export 'src/events/escrow_event.dart';
+export 'src/events/polling_event_stream.dart';
 export 'src/models/escrow.dart';
 export 'src/models/flags.dart';
 export 'src/models/milestone.dart';

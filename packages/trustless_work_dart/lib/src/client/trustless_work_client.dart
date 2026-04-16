@@ -5,6 +5,8 @@ import '../endpoints/deployer.dart';
 import '../endpoints/helpers.dart';
 import '../endpoints/queries.dart';
 import '../endpoints/single_release_operations.dart';
+import '../events/escrow_event.dart';
+import '../events/polling_event_stream.dart';
 import '../http/http_client.dart';
 import '../models/escrow.dart';
 import '../models/payloads/fund_escrow_payload.dart';
@@ -95,4 +97,17 @@ class TrustlessWorkClient {
   }
 
   Future<Escrow> getEscrow(String contractId) => _queries.getEscrow(contractId);
+
+  @experimental
+  Stream<EscrowEvent> escrowEvents(
+    String contractId, {
+    Duration pollInterval = const Duration(seconds: 15),
+  }) {
+    final stream = PollingEventStream(
+      contractId: contractId,
+      fetch: () => _queries.getEscrow(contractId),
+      pollInterval: pollInterval,
+    );
+    return stream.events;
+  }
 }
