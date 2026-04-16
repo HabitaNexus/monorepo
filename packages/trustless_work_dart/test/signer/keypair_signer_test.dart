@@ -41,10 +41,10 @@ void main() {
       expect(signed, isNotEmpty);
     });
 
-    test('wraps invalid XDR into SigningError', () async {
+    test('wraps invalid XDR into SigningError', () {
       final signer = KeyPairSigner(keypair: keypair, network: Network.testnet);
-      await expectLater(
-        signer.signXdr('not a real xdr envelope'),
+      expect(
+        () => signer.signXdr('not a real xdr envelope'),
         throwsA(isA<SigningError>()),
       );
     });
