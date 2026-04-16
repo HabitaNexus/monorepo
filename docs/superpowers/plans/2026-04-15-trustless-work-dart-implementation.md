@@ -2098,16 +2098,19 @@ void main() {
       ),
     ]);
 
-    final client = TrustlessWorkClient(
+    // Smoke-test the public constructor compiles and returns the right type.
+    final publicClient = TrustlessWorkClient(
       config: TrustlessWorkConfig.testnet(apiKey: 'k'),
       signer: CallbackSigner(
         publicKey: 'GAAA',
         signXdr: (xdr) async => 'S_$xdr',
       ),
-      httpClient: http.Client(),  // ignored; overridden below via factory
+      httpClient: http.Client(),
     );
+    expect(publicClient, isA<TrustlessWorkClient>());
 
-    // For the test we swap the HTTP client via a re-binding.
+    // For the actual assertions we swap the HTTP client via the forTesting
+    // factory so `MockClient` captures the three-endpoint sequence.
     final clientForTest = TrustlessWorkClient.forTesting(
       config: TrustlessWorkConfig.testnet(apiKey: 'k'),
       signer: CallbackSigner(
