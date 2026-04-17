@@ -1,0 +1,182 @@
+# =============================================================================
+# Material for MkDocs — HabitaNexus Documentation
+# Marketplace de alquiler de viviendas a largo plazo con contratos negociables
+# =============================================================================
+
+site_name: HabitaNexus
+site_description: "Marketplace de alquiler con negociación digital de contratos — SOPs, investigación y arquitectura"
+site_url: https://habitanexus.github.io/monorepo/
+repo_url: https://github.com/HabitaNexus/monorepo
+repo_name: HabitaNexus/monorepo
+edit_uri: edit/main/docs/site/content/
+
+docs_dir: content
+site_dir: site
+
+# =============================================================================
+# Theme Configuration
+# =============================================================================
+theme:
+  name: material
+  language: es
+  palette:
+    - scheme: default
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/brightness-7
+        name: Cambiar a modo oscuro
+    - scheme: slate
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/brightness-4
+        name: Cambiar a modo claro
+  font:
+    text: Inter
+    code: JetBrains Mono
+  features:
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.sections
+    - navigation.expand
+    - navigation.path
+    - navigation.top
+    - navigation.indexes
+    - search.highlight
+    - search.share
+    - search.suggest
+    - content.code.copy
+    - content.code.annotate
+    - content.tabs.link
+    - content.action.edit
+    - content.action.view
+    - toc.follow
+  icon:
+    repo: fontawesome/brands/github
+    edit: material/pencil
+    view: material/eye
+
+# =============================================================================
+# Plugins
+# =============================================================================
+plugins:
+  - search:
+      lang: es
+  # Optional plugins — require pip install -r requirements.txt
+  # GitHub Actions workflow installs all deps automatically
+  # For local dev: mkdocs serve works with just search plugin
+  # - mermaid2:
+  #     version: 11.4.1
+  #     zoom: true
+  #     theme: base
+  # - git-revision-date-localized:
+  #     enable_creation_date: true
+  # - git-committers:
+  #     repository: HabitaNexus/monorepo
+  # - minify:
+  #     minify_html: true
+
+# =============================================================================
+# Markdown Extensions
+# =============================================================================
+markdown_extensions:
+  - abbr
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+      title: En esta página
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.caret
+  - pymdownx.critic
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.magiclink:
+      normalize_issue_symbols: true
+      repo_url_shorthand: true
+      user: HabitaNexus
+      repo: monorepo
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.tabbed:
+      alternate_style: true
+      combine_header_slug: true
+      slugify: !!python/object/apply:pymdownx.slugs.slugify
+        kwds:
+          case: lower
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+
+# =============================================================================
+# Navigation
+# =============================================================================
+nav:
+  - Inicio: index.md
+  - SOPs:
+    - docs/sops/index.md
+    - "Flujo de Arrendamiento": docs/sops/flujo-arrendamiento.md
+    - "Escrow · Depósito de Garantía": docs/sops/escrow-deposito-garantia.md
+    - "Adiciones · Internacionalización": docs/sops/adiciones-internacionalizacion.md
+    - "Referidos · Fixii": docs/sops/referidos-fixii.md
+  - Investigación:
+    - docs/investigacion/index.md
+    - "Hallazgos · Contratos Informales": docs/investigacion/hallazgos-contratos-informales.md
+    - "Plantilla · Entrevista de Problema": docs/investigacion/plantilla-entrevista-problema.md
+    - "Plantilla · Perfil de Expectativas": docs/investigacion/plantilla-perfil-expectativas-cliente.md
+  - Usuarios:
+    - docs/usuarios/index.md
+    - "Inquilino · Ejemplo": docs/usuarios/inquilino-ejemplo.md
+    - "Inquilino · Mery": docs/usuarios/inquilino-mery.md
+    - "Propietario · José Peñaranda": docs/usuarios/propietario-jose-penaranda.md
+    - "Propietario · Hermano de José": docs/usuarios/propietario-hermano-jose.md
+  - UX Research:
+    - docs/ux-research/index.md
+    - "Journey · José lista propiedad": docs/ux-research/journey-jose-listado-propiedad/index.md
+    - "Storyboard · José propietario": docs/ux-research/storyboard-jose-propietario/analysis.md
+  - Normativa:
+    - docs/normativa/index.md
+    - "Ley 7527": docs/normativa/ley-7527.md
+  - Planes:
+    - docs/planes/index.md
+    - "Trustless Work Dart · Spike": docs/planes/trustless-work-dart-spike.md
+    - "Trustless Work Dart · Spike Design": docs/planes/trustless-work-dart-spike-design.md
+    - "Trustless Work Dart · Implementation": docs/planes/trustless-work-dart-implementation.md
+
+# =============================================================================
+# Extra
+# =============================================================================
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/HabitaNexus/monorepo
+  generator: false
+
+dev_addr: 0.0.0.0:8001
+
+extra_css:
+  - stylesheets/habitanexus.css
+
+extra_javascript:
+  - javascripts/mermaid-init.mjs

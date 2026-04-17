@@ -400,8 +400,8 @@ Pendiente de preguntar en call de alineación:
 
 ## 16. Referencias
 
-- [`docs/sop-escrow-deposito-garantia.md`](../../sop-escrow-deposito-garantia.md) — SOP de negocio con diagrama Mermaid.
-- [`docs/sop-flujo-arrendamiento.md`](../../sop-flujo-arrendamiento.md) — flujo general del arrendamiento.
+- [`escrow-deposito-garantia.md`](../sops/escrow-deposito-garantia.md) — SOP de negocio con diagrama Mermaid.
+- [`flujo-arrendamiento.md`](../sops/flujo-arrendamiento.md) — flujo general del arrendamiento.
 - [Trustless Work React SDK](https://github.com/Trustless-Work/react-library-trustless-work) — referencia de API.
 - [Trustless Work docs](https://docs.trustlesswork.com/trustless-work) — API reference con OpenAPI fragments.
 - [`stellar_flutter_sdk`](https://pub.dev/packages/stellar_flutter_sdk) — XDR signing + network primitives.

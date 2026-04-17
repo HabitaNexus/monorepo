@@ -12,11 +12,11 @@
 
 **Referencias:**
 - Contratos de arrendamiento reales escaneados (Heredia, Alajuela)
-- [Cadena de Valor](../business/02-solucion-validacion/11-cadena-de-valor.md)
-- [Solución Ideal](../business/02-solucion-validacion/02-solucion-ideal.md)
-- [Fuentes de Ingresos](../business/02-solucion-validacion/08-fuentes-de-ingresos.md)
-- [Relaciones con los Clientes](../business/02-solucion-validacion/14-relaciones-con-los-clientes.md)
-- [Problemática](../business/02-solucion-validacion/01-problematica.md)
+- [Cadena de Valor](https://github.com/HabitaNexus/monorepo/blob/main/business/02-solucion-validacion/11-cadena-de-valor.md)
+- [Solución Ideal](https://github.com/HabitaNexus/monorepo/blob/main/business/02-solucion-validacion/02-solucion-ideal.md)
+- [Fuentes de Ingresos](https://github.com/HabitaNexus/monorepo/blob/main/business/02-solucion-validacion/08-fuentes-de-ingresos.md)
+- [Relaciones con los Clientes](https://github.com/HabitaNexus/monorepo/blob/main/business/02-solucion-validacion/14-relaciones-con-los-clientes.md)
+- [Problemática](https://github.com/HabitaNexus/monorepo/blob/main/business/02-solucion-validacion/01-problematica.md)
 
 ---
 
@@ -61,7 +61,7 @@ HabitaNexus genera ingresos en tres momentos del ciclo de arrendamiento:
 
 ## Fase 1: Listado de la Propiedad
 
-> **Problema que resuelve:** "Revisar manualmente 25+ grupos de Facebook foto por foto, sin filtro de presupuesto, mezclando alquileres de ₡100K con ventas de $1M" — [Problemática #1](../business/02-solucion-validacion/01-problematica.md)
+> **Problema que resuelve:** "Revisar manualmente 25+ grupos de Facebook foto por foto, sin filtro de presupuesto, mezclando alquileres de ₡100K con ventas de $1M" — [Problemática #1](https://github.com/HabitaNexus/monorepo/blob/main/business/02-solucion-validacion/01-problematica.md)
 
 ### Objetivo
 El propietario o arrendador publica el inmueble con la información suficiente para que un inquilino tome una decisión informada.
@@ -166,7 +166,7 @@ El propietario o arrendador publica el inmueble con la información suficiente p
 
 ## Fase 2: Descubrimiento
 
-> **Problema que resuelve:** Búsqueda fragmentada en 25+ grupos de Facebook, Encuentra24, Marketplace — sin filtros reales de presupuesto. "De 2 meses a <1 semana de búsqueda" — [Propuesta de Valor](../business/02-solucion-validacion/04-propuesta-unica-de-valor.md)
+> **Problema que resuelve:** Búsqueda fragmentada en 25+ grupos de Facebook, Encuentra24, Marketplace — sin filtros reales de presupuesto. "De 2 meses a <1 semana de búsqueda" — [Propuesta de Valor](https://github.com/HabitaNexus/monorepo/blob/main/business/02-solucion-validacion/04-propuesta-unica-de-valor.md)
 
 ### Objetivo
 El inquilino encuentra propiedades que se ajustan a su presupuesto, zona, y necesidades.
@@ -241,7 +241,7 @@ El inquilino verifica en persona el estado real del inmueble después de haber a
 
 ## Fase 4: Negociación
 
-> **Problema que resuelve:** "Cada propietario inventa su propio proceso por WhatsApp, hace preguntas invasivas, discrimina a freelancers/solteras/personas con mascotas" — [Problemática #2](../business/02-solucion-validacion/01-problematica.md). La negociación estandarizada elimina discriminación y da transparencia total.
+> **Problema que resuelve:** "Cada propietario inventa su propio proceso por WhatsApp, hace preguntas invasivas, discrimina a freelancers/solteras/personas con mascotas" — [Problemática #2](https://github.com/HabitaNexus/monorepo/blob/main/business/02-solucion-validacion/01-problematica.md). La negociación estandarizada elimina discriminación y da transparencia total.
 
 ### Objetivo
 Inquilino y propietario negocian los términos del contrato dentro de la plataforma mediante propuestas y contrapropuestas estructuradas.
@@ -429,7 +429,7 @@ El contrato sigue la estructura de la Ley 7527 e incorpora las cláusulas observ
 
 ## Fase 6: Convivencia
 
-> **Problema que resuelve:** "Propietarios trasladan costos de mantenimiento (goteras, electricidad, pintura), no devuelven depósito de garantía, prohíben visitas familiares en emergencias" — [Problemática #3](../business/02-solucion-validacion/01-problematica.md). El sistema de reclamos bidireccional es la funcionalidad que convierte a HabitaNexus de un marketplace en una **plataforma de gestión de la relación arrendador-inquilino**.
+> **Problema que resuelve:** "Propietarios trasladan costos de mantenimiento (goteras, electricidad, pintura), no devuelven depósito de garantía, prohíben visitas familiares en emergencias" — [Problemática #3](https://github.com/HabitaNexus/monorepo/blob/main/business/02-solucion-validacion/01-problematica.md). El sistema de reclamos bidireccional es la funcionalidad que convierte a HabitaNexus de un marketplace en una **plataforma de gestión de la relación arrendador-inquilino**.
 
 ### Objetivo
 Gestionar la relación arrendador-inquilino durante la vigencia del contrato: pagos, inspecciones, reclamos, y comunicación.

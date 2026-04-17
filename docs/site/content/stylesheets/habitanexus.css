@@ -1,0 +1,112 @@
+/* =============================================================================
+   HabitaNexus Brand Palette
+   Forest Teal (hogar, arraigo) + Warm Terracotta (calidez) + Mint (tech)
+   Primary: #27403c — dark forest teal
+   ============================================================================= */
+
+:root {
+  /* Primary: Forest Teal */
+  --hn-primary: #27403c;
+  --hn-primary-light: #3D5F58;
+  --hn-primary-dark: #1A2C29;
+  /* Secondary: Warm Terracotta */
+  --hn-secondary: #C97B4B;
+  --hn-secondary-light: #E09770;
+  /* Accent: Mint */
+  --hn-accent: #2DD4BF;
+  /* Neutrals */
+  --hn-bg: #F5F7F6;
+  --hn-text: #1A2C29;
+  --hn-muted: #64746F;
+  /* Status */
+  --hn-success: #059669;
+  --hn-warning: #D97706;
+  --hn-error: #DC2626;
+}
+
+[data-md-color-scheme="slate"] {
+  --hn-bg: #121C1A;
+  --hn-text: #E6EDEB;
+  --hn-muted: #8FA39E;
+}
+
+/* =============================================================================
+   Material theme overrides (light + dark)
+   ============================================================================= */
+
+[data-md-color-scheme="default"] {
+  --md-primary-fg-color: var(--hn-primary);
+  --md-primary-fg-color--light: var(--hn-primary-light);
+  --md-primary-fg-color--dark: var(--hn-primary-dark);
+  --md-accent-fg-color: var(--hn-accent);
+  --md-default-bg-color: var(--hn-bg);
+  --md-default-fg-color: var(--hn-text);
+  --md-typeset-a-color: var(--hn-primary);
+}
+
+[data-md-color-scheme="slate"] {
+  --md-primary-fg-color: var(--hn-primary-dark);
+  --md-primary-fg-color--light: var(--hn-primary);
+  --md-primary-fg-color--dark: #0F1A18;
+  --md-accent-fg-color: var(--hn-accent);
+  --md-default-bg-color: var(--hn-bg);
+  --md-default-fg-color: var(--hn-text);
+  --md-typeset-a-color: var(--hn-accent);
+}
+
+/* Header */
+.md-header {
+  background-color: var(--hn-primary);
+}
+
+/* Tabs strip */
+.md-tabs {
+  background-color: var(--hn-primary-dark);
+}
+
+/* Admonitions */
+.md-typeset .admonition.note,
+.md-typeset details.note {
+  border-color: var(--hn-primary);
+}
+.md-typeset .admonition.warning,
+.md-typeset details.warning {
+  border-color: var(--hn-secondary);
+}
+.md-typeset .admonition.success,
+.md-typeset details.success {
+  border-color: var(--hn-success);
+}
+
+/* Code blocks */
+.md-typeset code {
+  color: var(--hn-primary);
+}
+[data-md-color-scheme="slate"] .md-typeset code {
+  color: var(--hn-accent);
+}
+
+/* Tables */
+.md-typeset table:not([class]) th {
+  background-color: var(--hn-primary);
+  color: #fff;
+}
+
+/* Buttons */
+.md-typeset .md-button--primary {
+  background-color: var(--hn-primary);
+  border-color: var(--hn-primary);
+  color: #fff;
+}
+.md-typeset .md-button--primary:hover {
+  background-color: var(--hn-primary-light);
+  border-color: var(--hn-primary-light);
+}
+
+/* Footer */
+.md-footer {
+  background-color: var(--hn-primary-dark);
+}
+.md-footer-meta {
+  background-color: #0F1A18;
+}
