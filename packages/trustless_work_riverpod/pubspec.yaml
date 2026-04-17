@@ -1,0 +1,23 @@
+name: trustless_work_riverpod
+description: Riverpod providers for Trustless Work escrow operations. Companion to trustless_work_dart.
+version: 0.1.0-dev.1
+repository: https://github.com/DojoCodingLabs/trustless-work-dart
+publish_to: 'none'
+
+environment:
+  sdk: ^3.2.5
+  flutter: '>=3.19.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_riverpod: ^2.4.9
+  trustless_work_dart:
+    path: ../trustless_work_dart
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  http: ^1.1.0
+  lints: ^4.0.0
+  stellar_flutter_sdk: ^1.9.0
