@@ -1,0 +1,65 @@
+# TODO: placeholder. El spec real se generará desde las rutas del backend Serverpod/Dart
+# (o desde el gateway GraphQL/REST cuando exista). Este archivo queda para que el viewer
+# de Stoplight Elements tenga algo que renderizar hasta que aterrice la primera API pública.
+# Reemplazar cuando la primera tarea de API pública de HabitaNexus se ejecute.
+openapi: 3.1.0
+info:
+  title: HabitaNexus API
+  version: 0.0.1-placeholder
+  summary: Marketplace de alquiler con negociación digital de contratos.
+  description: |
+    Placeholder OpenAPI spec. Aún no hay superficie pública estable.
+
+    Cuando aterrice la primera tarea de API pública (por ejemplo, endpoints de
+    listados de propiedades o el flujo de escrow de depósito de garantía con
+    Trustless Work), este archivo deberá regenerarse desde las rutas reales del
+    backend y reemplazar este stub.
+  contact:
+    name: HabitaNexus
+    url: https://github.com/HabitaNexus/monorepo
+  license:
+    name: BSL 1.1
+    url: https://github.com/HabitaNexus/monorepo/blob/main/LICENSE.md
+servers:
+  - url: https://api.habitanexus.example.com
+    description: Placeholder — el host real se define cuando se despliegue el backend.
+paths:
+  /health:
+    get:
+      operationId: healthCheck
+      summary: Healthcheck del servicio
+      description: Devuelve 200 si el backend está vivo. Stub — sin dependencias.
+      tags:
+        - system
+      responses:
+        "200":
+          description: Servicio operativo
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+              examples:
+                ok:
+                  value:
+                    status: ok
+                    version: 0.0.1-placeholder
+components:
+  schemas:
+    HealthStatus:
+      type: object
+      required:
+        - status
+      properties:
+        status:
+          type: string
+          enum:
+            - ok
+            - degraded
+            - down
+          description: Estado general del servicio.
+        version:
+          type: string
+          description: Versión del servicio en ejecución.
+tags:
+  - name: system
+    description: Endpoints de salud y diagnóstico.

@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>HabitaNexus — API Reference</title>
+    <meta
+      name="description"
+      content="Referencia interactiva de la API de HabitaNexus, renderizada con Stoplight Elements."
+    />
+
+    <!-- Stoplight Elements (CDN) -->
+    <script
+      type="module"
+      src="https://unpkg.com/@stoplight/elements/web-components.min.js"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/@stoplight/elements/styles.min.css"
+    />
+
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        font-family: Inter, system-ui, sans-serif;
+      }
+      elements-api {
+        display: block;
+        height: 100vh;
+      }
+    </style>
+  </head>
+  <body>
+    <elements-api
+      apiDescriptionUrl="./openapi.yaml"
+      router="hash"
+      layout="sidebar"
+      tryItCredentialsPolicy="same-origin"
+    ></elements-api>
+  </body>
+</html>
