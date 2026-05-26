@@ -14,7 +14,7 @@ part 'start_dispute_payload.g.dart';
 /// does it know about the off-chain mediation/arbitration workflow
 /// (MEDIATION 48h -> ARBITRATION 7d -> JUDICIAL_ESCALATED). That
 /// workflow lives in the HabitaNexus backend `contract-core` module.
-/// See `business/spikes/06-contract-core-megaprompt.md` sections 7
+/// See `HabitaNexus/business-model → spikes/06-contract-core-megaprompt.md` sections 7
 /// and 12 for the off-chain state machine.
 @freezed
 class StartDisputePayload with _$StartDisputePayload {

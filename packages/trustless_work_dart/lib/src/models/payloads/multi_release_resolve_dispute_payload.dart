@@ -19,7 +19,7 @@ part 'multi_release_resolve_dispute_payload.g.dart';
 /// IMPORTANT — architectural boundary: the SDK does NOT decide the
 /// split. The `distributions` list must come from an off-chain arbiter
 /// in the HabitaNexus backend `contract-core` module (see
-/// `business/spikes/06-contract-core-megaprompt.md` §7 and §12). The SDK
+/// `HabitaNexus/business-model → spikes/06-contract-core-megaprompt.md` §7 and §12). The SDK
 /// submits whatever split the `disputeResolver` key signs.
 @freezed
 class MultiReleaseResolveDisputePayload

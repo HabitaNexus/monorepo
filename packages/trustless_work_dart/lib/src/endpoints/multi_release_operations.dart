@@ -31,7 +31,7 @@ import '../models/payloads/update_escrow_payload.dart';
 /// The SDK only exposes the on-chain primitives. The off-chain
 /// mediation / arbitration state machine lives in the HabitaNexus
 /// backend `contract-core` module — see
-/// `business/spikes/06-contract-core-megaprompt.md` sections 7 and 12.
+/// `HabitaNexus/business-model → spikes/06-contract-core-megaprompt.md` sections 7 and 12.
 class MultiReleaseOperations {
   MultiReleaseOperations({required HttpClient http}) : _http = http;
 

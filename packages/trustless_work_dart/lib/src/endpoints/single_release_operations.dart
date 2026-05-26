@@ -18,7 +18,7 @@ import '../models/payloads/update_escrow_payload.dart';
 /// (`startDispute` and `resolveDispute`). The off-chain mediation /
 /// arbitration state machine (MEDIATION 48h -> ARBITRATION 7d ->
 /// JUDICIAL_ESCALATED) lives in the HabitaNexus backend `contract-core`
-/// module — see `business/spikes/06-contract-core-megaprompt.md`
+/// module — see `HabitaNexus/business-model → spikes/06-contract-core-megaprompt.md`
 /// sections 7 and 12.
 class SingleReleaseOperations {
   SingleReleaseOperations({required HttpClient http}) : _http = http;
@@ -62,7 +62,7 @@ class SingleReleaseOperations {
   /// The SDK does NOT decide the split. The `distributions` list must
   /// come from an off-chain arbiter in the HabitaNexus backend
   /// `contract-core` module (see
-  /// `business/spikes/06-contract-core-megaprompt.md` §7 and §12). The
+  /// `HabitaNexus/business-model → spikes/06-contract-core-megaprompt.md` §7 and §12). The
   /// SDK simply submits whatever split the arbiter signed.
   Future<String> resolveDispute(ResolveDisputePayload payload) =>
       _postForXdr('/escrow/single-release/resolve-dispute', payload.toJson());

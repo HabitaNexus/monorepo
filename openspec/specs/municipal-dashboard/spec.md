@@ -4,7 +4,7 @@
 **Prioridad**: Media (post-traccion, ~500+ contratos)
 **Servicios afectados**: GIS Service, Analytics Service, Contract Service
 **Referencia de implementacion**: AltruPets B2G (`apps/web/b2g/`)
-**Spikes**: [03-inventario-arcgis](../../../business/spikes/03-inventario-arcgis-municipalidades.md), [05-plan-regulador](../../../business/spikes/05-plan-regulador-pitch.md)
+**Spikes**: [03-inventario-arcgis](https://github.com/HabitaNexus/business-model/blob/main/spikes/03-inventario-arcgis-municipalidades.md), [05-plan-regulador](https://github.com/HabitaNexus/business-model/blob/main/spikes/05-plan-regulador-pitch.md) (repo `business-model`)
 
 ---
 

@@ -261,15 +261,16 @@ abstract class PaymentProvider {
 
 ## Modelo de Negocio
 
-La documentación completa del modelo de negocio está en [`business/`](business/):
+La documentación completa del modelo de negocio vive en un repositorio independiente: **[HabitaNexus/business-model](https://github.com/HabitaNexus/business-model)** (privado).
 
 | Espacio | Entregables | Estado |
 |---------|-------------|--------|
-| [📋 Problema e Hipótesis](business/01-problema-hipotesis/) | 5 documentos | ✅ Validado |
-| [🔬 Solución y Validación](business/02-solucion-validacion/) | 16 documentos (BMC + validación) | ✅ Completado |
-| [🚀 Ejecución y Aceleración](business/03-ejecucion-aceleracion/) | 10 documentos | ✅ Completado |
+| 📋 Problema e Hipótesis | 5 documentos | ✅ Validado |
+| 🔬 Solución y Validación | 16 documentos (BMC + validación) | ✅ Completado |
+| ⚙️ Ejecución | 5 documentos | ✅ Completado |
+| 🚀 Aceleración | 5 documentos | ✅ Completado |
 
-**Números clave**: TAM $2.450M · SOM $7.6M · LTV:CAC 16:1 · Break-even Mes 11 · [Pitch Deck](business/03-ejecucion-aceleracion/10-pitch-deck.md)
+**Números clave**: TAM $2.450M · SOM $7.6M · LTV:CAC 16:1 · Break-even Mes 11 · Pitch Deck en `04-aceleracion/05-pitch-deck.md` del repo `business-model`.
 
 ## Licencia
 

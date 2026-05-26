@@ -32,7 +32,7 @@ class DisputeDistribution with _$DisputeDistribution {
 /// much each party gets. That decision is made off-chain by the
 /// HabitaNexus backend `contract-core` module (MEDIATION -> ARBITRATION
 /// -> JUDICIAL_ESCALATED pipeline; see
-/// `business/spikes/06-contract-core-megaprompt.md` sections 7 and
+/// `HabitaNexus/business-model → spikes/06-contract-core-megaprompt.md` sections 7 and
 /// 12). The SDK simply executes whatever split the arbiter supplied,
 /// as signed by the `disputeResolver` key configured on the escrow.
 @freezed

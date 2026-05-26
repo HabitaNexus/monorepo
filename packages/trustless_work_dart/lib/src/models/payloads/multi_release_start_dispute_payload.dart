@@ -13,7 +13,7 @@ part 'multi_release_start_dispute_payload.g.dart';
 /// IMPORTANT — architectural boundary: this SDK exposes only the on-chain
 /// primitive. The off-chain MEDIATION -> ARBITRATION -> JUDICIAL_ESCALATED
 /// workflow lives in the HabitaNexus backend `contract-core` module —
-/// see `business/spikes/06-contract-core-megaprompt.md` sections 7 and 12.
+/// see `HabitaNexus/business-model → spikes/06-contract-core-megaprompt.md` sections 7 and 12.
 @freezed
 class MultiReleaseStartDisputePayload with _$MultiReleaseStartDisputePayload {
   const factory MultiReleaseStartDisputePayload({
