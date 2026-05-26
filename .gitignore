@@ -30,6 +30,8 @@ migrate_working_dir/
 .pub-cache/
 .pub/
 /build/
+# Build artifacts in nested packages/apps (e.g. apps/mobile/build/)
+**/build/
 
 # Symbolication related
 app.*.symbols
