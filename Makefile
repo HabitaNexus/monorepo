@@ -14,7 +14,7 @@
 
 TIMEOUT ?= 900000
 
-.PHONY: help setup bootstrap-dev \
+.PHONY: help setup bootstrap-dev bootstrap-dev-manual \
         dev-minikube-deploy dev-minikube-clear dev-minikube-destroy \
         dev-terraform-deploy dev-terraform-destroy dev-terraform-clean \
         dev-argocd-deploy dev-argocd-destroy dev-argocd-status dev-argocd-password \
@@ -135,7 +135,10 @@ setup: ## First-time setup: install dependencies
 # DEV - Bootstrap (GitOps/ArgoCD + Harbor)
 # ==========================================
 
-bootstrap-dev: ## Full setup with GitOps/ArgoCD and Harbor Registry
+bootstrap-dev: ## Full setup with GitOps/ArgoCD and Harbor Registry (logged wrapper)
+	@$(SCRIPTS_DIR)/bootstrap-dev.sh
+
+bootstrap-dev-manual: ## Full DEV setup, phase-by-phase (no logging wrapper)
 	@echo "$(RED)Cleaning previous DEV environment...$(NC)"
 	@$(MAKE) dev-minikube-destroy || true
 	@$(MAKE) dev-terraform-clean
