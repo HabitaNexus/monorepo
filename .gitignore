@@ -48,3 +48,8 @@ app.*.map.json
 
 # MkDocs build output
 docs/site/site/
+
+# Bootstrap / deployment logs (keep directory structure via .gitkeep)
+logs/**/*.log
+!logs/.gitkeep
+!logs/**/.gitkeep
