@@ -11,8 +11,8 @@ dependencies:
     sdk: flutter
   widgetbook_annotation: ^3.10.0
   widgetbook: ^3.21.0
-  habitanexus_mobile:
-    path: ../mobile
+  habitanexus_ui:
+    path: ../../packages/habitanexus_ui
 
 dev_dependencies:
   flutter_test:
