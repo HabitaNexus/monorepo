@@ -45,6 +45,8 @@ dependencies:
   flutter_secure_storage: ^9.0.0
 
   # Trustless Work (workspace siblings)
+  habitanexus_ui:
+    path: ../../packages/habitanexus_ui
   trustless_work_dart:
     path: ../../packages/trustless_work_dart
   trustless_work_flutter_storage:
