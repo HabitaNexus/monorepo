@@ -1,0 +1,25 @@
+name: habitanexus_widgetbook
+description: "Catálogo de widgets de HabitaNexus con Widgetbook — taxonomía Atomic Design."
+publish_to: 'none'
+version: 0.1.0+1
+
+environment:
+  sdk: '>=3.2.5 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  widgetbook_annotation: ^3.10.0
+  widgetbook: ^3.21.0
+  habitanexus_mobile:
+    path: ../mobile
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  build_runner: ^2.4.0
+  widgetbook_generator: ^3.21.0
+
+flutter:
+  uses-material-design: true
