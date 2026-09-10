@@ -1,9 +1,8 @@
-import 'dart:io';
 import 'package:dio/dio.dart';
-import '../../domain/entities/workspace_nearby.dart';
-import '../../domain/repositories/workspace_nearby_repository.dart';
-import '../datasources/remote/google_places_remote_datasource.dart';
-import '../datasources/workspace_nearby_datasource.dart';
+import '../../../domain/entities/workspace_nearby.dart';
+import '../../../domain/repositories/workspace_nearby_repository.dart';
+import './google_places_remote_datasource.dart';
+import '../workspace_nearby_datasource.dart';
 
 /// Implementación concreta del repositorio de espacios de trabajo cercanos.
 ///
