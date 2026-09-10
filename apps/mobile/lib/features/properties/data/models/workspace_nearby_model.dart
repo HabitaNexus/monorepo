@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:equatable/equatable.dart';
 
 /// Modelo de datos para un espacio de trabajo cercano normalizado.
@@ -90,10 +92,12 @@ class WorkspaceNearbyModel extends Equatable {
 
     final dLat = (lat2 - lat1) * dToRad;
     final dLon = (lon2 - lon1) * dToRad;
-    final a = dLat * dLat +
-        (dLon * dLon) *
-            (1 - dLat * dLat); // simplified haversine
-    final c = 2 * (a > 0 ? a.sqrt() : 0).atan2((1 - a).sqrt());
+    final radLat1 = lat1 * dToRad;
+    final radLat2 = lat2 * dToRad;
+
+    final a = sin(dLat / 2) * sin(dLat / 2) +
+        cos(radLat1) * cos(radLat2) * sin(dLon / 2) * sin(dLon / 2);
+    final c = 2 * atan2(sqrt(a), sqrt(1 - a));
 
     return earthRadiusKm * c;
   }

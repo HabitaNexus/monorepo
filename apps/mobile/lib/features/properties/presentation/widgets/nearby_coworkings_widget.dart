@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../core/theme/app_theme.dart';
+import '../../domain/entities/workspace_nearby.dart';
 import '../providers/coworking_nearby_provider.dart';
 
 /// Widget que muestra espacios de trabajo cercanos (coworkings y cafés con WiFi)
@@ -45,7 +45,7 @@ class _NearbyCoworkingsWidgetState
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final state = ref.watch(coworkingNearbyProvider);
 
     return Column(
@@ -112,7 +112,7 @@ class _NearbyCoworkingsWidgetState
       margin: const EdgeInsets.only(right: 12),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: AppTheme.surfaceColor,
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: Colors.grey.shade300),
       ),

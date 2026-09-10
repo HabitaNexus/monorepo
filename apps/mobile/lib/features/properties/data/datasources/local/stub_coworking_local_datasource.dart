@@ -1,4 +1,4 @@
-import '../../domain/entities/workspace_nearby.dart';
+import '../../../domain/entities/workspace_nearby.dart';
 import '../workspace_nearby_datasource.dart';
 
 /// Stub de datasource local para coworkings cercanos.
