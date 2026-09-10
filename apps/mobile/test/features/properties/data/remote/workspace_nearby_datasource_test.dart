@@ -4,7 +4,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:habitanexus_mobile/features/properties/data/datasources/remote/google_places_remote_datasource.dart';
 import 'package:habitanexus_mobile/features/properties/data/datasources/workspace_nearby_datasource.dart';
 import 'package:habitanexus_mobile/features/properties/data/models/workspace_nearby_model.dart';
-import '../helpers/mock_dio.dart';
+import '../../helpers/mock_dio.dart';
 
 void main() {
   group('GooglePlacesRemoteDatasource', () {
