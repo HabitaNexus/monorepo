@@ -1,0 +1,20 @@
+name: claims
+description: Pure-Dart domain for bidirectional rental claims (HAB-39). Claim entity with SOP §6.3 state machine, 5-day response timeout and tracking codes. No Flutter dependency.
+version: 0.1.0
+repository: https://github.com/HabitaNexus/monorepo
+issue_tracker: https://github.com/HabitaNexus/monorepo/issues
+
+environment:
+  sdk: ^3.2.5
+
+dependencies:
+  freezed_annotation: ^2.4.4
+  json_annotation: ^4.9.0
+  meta: ^1.11.0
+
+dev_dependencies:
+  build_runner: ^2.4.13
+  freezed: ^2.5.7
+  json_serializable: ^6.8.0
+  lints: ^4.0.0
+  test: ^1.25.0
