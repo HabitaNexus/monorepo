@@ -1,46 +1,56 @@
-# Plan — Merge `develop` en `feat/habitanexus-ui-package` (PR #18)
+# Plan — Rebase de `feat/habitanexus-ui-package` contra `origin/develop` (PR #18)
 
-Fecha: 2026-09-10
+Fecha: 2026-09-16 (actualizado; plan original de merge 2026-09-10 superado por rebase)
 Rama: `feat/habitanexus-ui-package` → base `develop`
-PR: #18 — `feat(ui): scaffold del package compartido habitanexus_ui — tema M3`
-Estado: aprobado por usuario (`aprobado`)
+PR: #18 — `feat(ui): scaffold del package compartido habitanexus_ui — tema M3` (draft, handoff a Naidelyn bajo HAB-20)
 
 ## Objetivo
 
-Fusionar `develop` en `feat/habitanexus-ui-package` para desbloquear PR #18 y dejarlo listo para merge.
+Dejar PR #18 lineal contra `origin/develop` (sin merges intermedios) y en verde,
+listo para que Naidelyn lo retome bajo
+[HAB-20](https://linear.app/habitanexus/issue/HAB-20/design-system-tema-base-componentes-atomicos).
 
-## Contexto
+## Estrategia
 
-- Base rama: `586184c feat(ui): scaffold del package compartido habitanexus_ui — tema M3`.
-- `develop` aporta HAB-91 (`ac14171 feat(properties): HAB-91 nearby coworkings...`) + `384ad90 checkpoint`.
-- Conflicto esperado en `apps/mobile/lib/core/theme/app_theme.dart`:
-  - `develop`: implementación local `AppTheme` con `lightTheme`/`darkTheme`, `useMaterial3: true`, `seedColor: 0xFF1A5276`.
-  - Rama: re-export a `package:habitanexus_ui/src/theme/app_theme.dart` (migración PR #18 al package compartido).
+Rebase (no merge): se descartan los commits de merge `c62e3c2` y `841063d`
+(su contenido — HAB-91, restore PRDS #29 — ya está en `develop`) y se replican
+los 3 commits propios:
 
-## Decisión
+1. `45e0ac6 feat(ui): scaffold del package compartido habitanexus_ui` (ex-`586184c`)
+2. `dbca5bd docs: guardar plan de merge...` (ex-`263086a`, este archivo)
+3. `4686db2 fix(properties): HAB-91...` (ex-`c3e2dc9`)
 
-- `apps/mobile/lib/core/theme/app_theme.dart` conserva versión de la rama (re-export 2 líneas).
-- Resto de archivos de `develop` se auto-fusionan (staged `A`), incluyendo HAB-91, properties, widgetbook, docs.
+## Conflicto único (esperado)
 
-## Pasos ejecutados
+`apps/mobile/lib/core/theme/app_theme.dart`: `develop` (vía HAB-91 final, PR #24)
+enriqueció el tema local (`surfaceColor`, `scaffoldBackgroundColor`).
+Resolución fiel al PR: la app conserva el **re-export** de 2 líneas y el tema
+enriquecido se traslada al package (`packages/habitanexus_ui/lib/src/theme/app_theme.dart`).
 
-1. Verificado `git diff develop..HEAD -- apps/mobile/lib/core/theme/app_theme.dart`.
-2. Ejecutado `git merge develop` → conflicto solo en `app_theme.dart` (verificado con `git diff --name-only --diff-filter=U`).
-3. Resuelto `app_theme.dart` a re-export + `git add`.
-4. Commit de merge: `c62e3c2 Merge branch 'develop' into feat/habitanexus-ui-package`.
-5. Push a `origin/feat/habitanexus-ui-package`.
-6. Verificado PR #18: `mergeable=MERGEABLE`, `isDraft=false`, `mergeStateStatus=BLOCKED` (sin checks reportados).
+## Fix adicional del rebase (widgetbook en rojo)
 
-## Archivos relevantes
+`develop` trae `apps/widgetbook/lib/use_cases/properties/nearby_coworkings_widget_use_case.dart`
+(HAB-91, PR #24), que importa `habitanexus_mobile` + `flutter_riverpod`: con el
+scaffold (widgetbook→`habitanexus_ui`) no compilaba, y `flutter_riverpod` ni
+siquiera es dep de widgetbook en `develop`. Fix mínimo sin migrar UI:
 
-- `apps/mobile/lib/core/theme/app_theme.dart`: único conflicto, resuelto a re-export.
-- `apps/mobile/lib/features/properties/*`: HAB-91 auto-fusionado (datasources, models, providers, widgets).
-- `apps/mobile/test/features/properties/*`: tests HAB-91 traídos por merge.
-- `apps/widgetbook/lib/use_cases/properties/nearby_coworkings_widget_use_case.dart`: auto-fusionado.
-- `docs/HAB-91-RESUMEN.md`: auto-fusionado.
+- `apps/widgetbook/pubspec.yaml`: agrega `flutter_riverpod: ^2.4.9` y restaura
+  `habitanexus_mobile` (path) como **dep temporal** documentado hasta la
+  migración HAB-20 (al migrar los widgets a `src/{atoms,molecules,organisms}/`, eliminarlo).
+- Story: agrega imports faltantes de `WorkspaceNearby` y `WorkspaceNearbyRepository`.
+- `flutter pub get` + `flutter analyze`: **No issues found!**
 
-## Pendiente
+## Verificado post-rebase
 
-1. Aclarar `BLOCKED` en PR #18 (branch protection sin checks reportados).
-2. `flutter test` en rama fusionada.
-3. Merge final PR #18 a `develop`.
+- `flutter analyze` mobile (properties + tests): 0 errores.
+- `flutter analyze` widgetbook: No issues found!
+- `flutter test` mobile: ver log `/tmp/opencode/flutter-test-rebase.log`.
+- `prds-check-local.sh 18 --as-ready`: EXIT 0 (solo warning de tamaño con excepción mecánica).
+
+## Handoff a Naidelyn (HAB-20)
+
+1. Proposal OpenSpec de HAB-20 (bloqueante por criterio del equipo) + eventual
+   spec `design-system` madre.
+2. Migración de `NearbyCoworkingsWidget` y `SpaceTypeIcon` al package,
+   stories apuntando a `habitanexus_ui`, eliminar dep temporal `habitanexus_mobile`.
+3. Marcar ready → verificar `prds-check` → merge.
