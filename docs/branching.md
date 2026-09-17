@@ -1,48 +1,47 @@
-# Estrategia de Ramas — GitFlow
+# Estrategia de Ramas — GitFlow 3 ramas
 
-Este monorepo usa **GitFlow** con dos ramas de larga vida:
+Este monorepo usa **GitFlow con tres ramas de larga vida**:
 
-| Rama | Propósito | Protección | Despliegue (futuro) |
+| Rama | Propósito | Protección | Despliegue (ArgoCD) |
 |------|-----------|------------|---------------------|
-| `main` | Producción. Solo recibe releases. | ✅ PR obligatorio, sin push directo/force/delete | Entorno **prod** |
-| `develop` | Integración del trabajo diario. **Rama default.** | Abierta (push directo permitido durante desarrollo activo) | Entorno **staging** |
+| `main` | Producción. Solo recibe releases desde `staging`. | ✅ PR obligatorio, sin push directo/force/delete | Entorno **prod** (`k8s/overlays/prod`) |
+| `staging` | Pre-producción / candidata a release. Puerto de salida a `main`. | ✅ PR obligatorio, sin push directo | Entorno **staging** (`k8s/overlays/staging`) |
+| `develop` | Integración del trabajo diario. **Rama default.** | Abierta (push directo permitido durante desarrollo activo) | Entorno **dev** (`k8s/overlays/dev`) |
 
 ## Flujo de trabajo
 
 ```
-feature/HAB-XXX-descripcion   ─┐
-                                ├─► develop ──(release/x.y.z)──► main ──(tag vX.Y.Z)──► prod
-hotfix/HAB-XXX-descripcion ─────┘ (desde main, se mergea a main + develop)
+feature/HAB-XXX-descripcion ──┐
+                              ├─► develop ──(promoción)──► staging ──(release/x.y.z)──► main ──(tag vX.Y.Z)──► prod
+hotfix/HAB-XXX-descripcion ───┘                        ▲
+                                                        └── back-merge hotfix ────────────┘
 ```
 
 - **Features:** salen de `develop` → `feature/{issue}-{slug}` → PR de vuelta a `develop`.
   Linear autogenera el `gitBranchName` por issue (ver `linear-setup.json` → `branchPattern`).
-- **Releases:** `release/x.y.z` desde `develop` → PR a `main` (con squash merge, ver `linear-setup.json`).
-  Al mergear se etiqueta `vX.Y.Z` y se promueve a producción.
-- **Hotfixes:** `hotfix/{issue}-{slug}` desde `main` → PR a `main` y back-merge a `develop`.
+- **Promoción a staging:** `develop` → PR a `staging`. ArgoCD despliega el overlay `staging` automáticamente.
+- **Releases:** `release/x.y.z` desde `staging` → PR a `main`. Al mergear se etiqueta `vX.Y.Z`.
+  **`main` solo recibe cambios vía release desde `staging`** — nunca push directo ni PR desde feature.
+- **Hotfixes:** `hotfix/{issue}-{slug}` desde `main` → PR a `main` + back-merge a `develop`.
 
-## Mapeo a entornos Kubernetes (propuesto — pendiente de cablear)
+## Mapeo a entornos Kubernetes (ArgoCD GitOps)
 
-> ⚠️ El pipeline de despliegue todavía **no está implementado**. La estructura GitOps existe como
-> scaffolding (`k8s/argocd/{applications,projects}` y `k8s/overlays/{dev,qa,staging,prod}` con Kustomize),
-> pero las `Application` de ArgoCD están vacías y **falta elegir el proveedor de Kubernetes**
-> (OVHcloud Managed Kubernetes / GCP GKE / AWS EKS). Este mapeo se activa cuando se decida y se cablee.
+Cada `Application` de ArgoCD apunta a un overlay Kustomize con su `targetRevision` (rama):
 
 | Rama / evento | Overlay Kustomize | ArgoCD `targetRevision` | Entorno |
 |---------------|-------------------|-------------------------|---------|
 | `feature/*` (opcional, efímero) | `k8s/overlays/dev` | la rama feature | dev / preview |
-| `release/*` | `k8s/overlays/qa` | `release/*` | QA / candidata |
-| `develop` | `k8s/overlays/staging` | `develop` | **staging** |
+| `develop` | `k8s/overlays/dev` | `develop` | **dev** |
+| `staging` | `k8s/overlays/staging` | `staging` | **staging** |
 | `main` + tag `vX.Y.Z` | `k8s/overlays/prod` | tag/`main` | **producción** |
 
-Modelo recomendado: **GitOps con ArgoCD** — cada `Application` apunta a un overlay con su `targetRevision`
-(rama). Al mergear a `develop`, ArgoCD sincroniza el overlay `staging` automáticamente. Producción se
-promueve por release a `main` + tag, nunca por push directo (de ahí la protección de `main`).
+Al mergear a `develop`, ArgoCD sincroniza `overlays/dev`; al mergear a `staging`
+sincroniza `overlays/staging`; la promoción a producción es por release a `main` + tag.
 
 La IaC del cluster vive en `infrastructure/terraform/{environments,modules}` y los charts en
-`infrastructure/helm-charts/`.
+`infrastructure/helm-charts/`. Manifiestos ArgoCD: `k8s/argocd/{applications,projects}`.
 
 ## Notas
 
-- La rama default del repo es `develop`: los PR apuntan ahí salvo releases/hotfix (que van a `main`).
-- `main` requiere PR (0 aprobaciones configuradas para equipo chico; subir el umbral cuando crezca el equipo).
+- La rama default del repo es `develop`: los PR apuntan ahí salvo promociones/releases/hotfix.
+- `main` y `staging` requieren PR; `develop` permite push directo en desarrollo activo.
