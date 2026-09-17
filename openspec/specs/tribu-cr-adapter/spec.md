@@ -1,64 +1,73 @@
-# TRIBU-CR Adapter — Especificacion Completa
+# TRIBU-CR Adapter Specification
 
-**Dominio**: `tribu-cr-adapter`
-**Prioridad**: Alta (B2G)
-**Servicios afectados**: Tax Reporting Service, Contract Service, Payment Service
-**Arquitectura de referencia**: aduanext (Hexagonal / Ports & Adapters)
+## Purpose
+
+Integrate HabitaNexus with TRIBU-CR (the tax system that replaced ATV and D-125) to automatically report rental income to the Ministerio de Hacienda. Enables the B2G line and positions HabitaNexus as a tax compliance platform.
+
+**Services affected**: Tax Reporting Service, Contract Service, Payment Service
+**Architecture reference**: aduanext (Hexagonal / Ports & Adapters)
+**Priority**: High (B2G)
 
 ---
 
-## Vision General
+## Requirements
 
-Integrar HabitaNexus con TRIBU-CR (el sistema tributario que reemplazo al viejo ATV y la D-125) para reportar automaticamente ingresos por alquiler al Ministerio de Hacienda. Esto habilita la linea B2G y posiciona a HabitaNexus como plataforma de compliance tributario.
+### Requirement: Automatic Rental Income Reporting
 
-### Reutilizacion de aduanext
+The system SHALL automatically report rental income to TRIBU-CR for every signed contract, using the hacienda-cr gRPC sidecar.
 
-El patron se toma directamente de la arquitectura de aduanext:
+#### Scenario: Monthly rental income declaration
+- GIVEN an active signed contract
+- WHEN a monthly rent payment is processed
+- THEN the Tax Reporting Service generates a declaration
+- AND the declaration is sent to TRIBU-CR via the hacienda-cr sidecar
+- AND the owner is notified of the submitted declaration
 
-```
-libs/domain/ports/TaxReportingPort          # Interfaz pura (sin I/O)
-libs/adapters/tribu-cr/TribuRentalAdapter   # Implementacion concreta
-apps/hacienda-sidecar/                      # Mismo sidecar gRPC (@dojocoding/hacienda-cr)
-```
+#### Scenario: Declaration before deadline
+- GIVEN a rental income event for the previous month
+- WHEN the 15th of the current month arrives
+- THEN the declaration MUST have been submitted to TRIBU-CR
 
-**Dependencia clave**: `@dojocoding/hacienda-cr` como npm dependency (NUNCA forked, misma regla que aduanext).
+### Requirement: Tax Rate Calculation
 
-### Flujo
+The system SHALL calculate taxes at 15% on 85% of gross rental income (capital inmobiliario) and 13% IVA when monthly rent exceeds ₡693,300.
 
-1. Contrato firmado en HabitaNexus -> evento `ContractSigned`
-2. Cada pago mensual procesado -> evento `RentPaymentProcessed`
-3. Tax Reporting Service consume eventos y genera declaracion
-4. Declaracion se envia a TRIBU-CR via hacienda-cr sidecar (autenticacion OIDC)
-5. Propietario recibe notificacion de declaracion enviada
+#### Scenario: Standard rental income tax
+- GIVEN a monthly rent of ₡500,000
+- WHEN the tax declaration is generated
+- THEN the taxable base is ₡425,000 (85% of gross)
+- AND the tax is ₡63,750 (15% of taxable base)
 
-### Impuestos que Aplican
+#### Scenario: IVA applicable
+- GIVEN a monthly rent of ₡800,000
+- WHEN the tax declaration is generated
+- THEN IVA of 13% is applied on top of the income tax
 
-| Impuesto | Monto | Declaracion | Sistema |
-|---|---|---|---|
-| Renta capital inmobiliario | 15% sobre 85% ingreso bruto | Mensual (antes del 15 del mes siguiente) | TRIBU-CR |
-| IVA | 13% si alquiler >C693,300/mes | Mensual | TRIBU-CR |
-| Factura electronica | Obligatoria por cada pago recibido | Por transaccion | TRIBU-CR |
+### Requirement: Electronic Invoice Generation
 
-### Gateways (Outbound Ports)
+The system SHALL generate a electronic invoice (factura electrónica) for every payment received, as required by TRIBU-CR.
 
-```dart
-abstract class TaxReportingPort {
-  Future<TaxDeclaration> reportRentalIncome(RentalIncomeEvent event);
-  Future<Invoice> generateElectronicInvoice(PaymentEvent event);
-  Future<TaxStatus> checkComplianceStatus(String ownerId);
-}
-```
+#### Scenario: Invoice for each payment
+- GIVEN a processed rent payment
+- WHEN the payment is confirmed
+- THEN an electronic invoice is generated via the hacienda-cr sidecar
+- AND the invoice is stored and linked to the payment record
 
-### Consideraciones
+### Requirement: Compliance Status Checking
 
-- TRIBU-CR reemplazo a la D-125 del sistema ATV. NO usar referencias al sistema viejo.
-- La API de Hacienda existe: https://api.hacienda.go.cr/docs/ (contribuyentes, tipos de cambio, CABYS)
-- El sidecar gRPC de hacienda-cr ya maneja: OIDC auth, XAdES signing, proxy ATENA
-- Para TRIBU-CR se necesita extender el sidecar con servicio `TribuTaxReporter`
+The system SHALL allow checking the tax compliance status of any property owner.
 
-### Fuentes
+#### Scenario: Owner checks compliance
+- GIVEN an authenticated property owner
+- WHEN the owner requests their compliance status
+- THEN the system queries TRIBU-CR via the hacienda-cr sidecar
+- AND returns current compliance status (compliant, pending, overdue)
 
-- [API Hacienda](https://api.hacienda.go.cr/docs/)
-- [TRIBU-CR — Charla Hacienda](https://www.facebook.com/ministeriodehaciendacr/videos/1594884601883682/)
-- [hacienda-cr SDK](https://github.com/DojoCodingLabs/hacienda-cr)
-- aduanext: `libs/proto/hacienda.proto` (4 gRPC services)
+### Requirement: Port-Based Architecture
+
+The system SHALL use a `TaxReportingPort` interface following hexagonal architecture, with the TRIBU-CR implementation as a concrete adapter.
+
+#### Scenario: Port abstraction
+- GIVEN the TaxReportingPort interface
+- WHEN a new tax authority integration is needed
+- THEN a new adapter can implement the port without changing the core service

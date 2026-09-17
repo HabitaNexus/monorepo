@@ -7,7 +7,7 @@
 - **Contrato 1** — Casa en Heredia, La Aurora. Arrendador: María del Carmen Villegas Villegas → Arrendatario: Guillermo Varela Da Silva. Fecha: 30 de mayo de 2023.
 - **Contrato 2** — Apartamento No. 3, Apartamentos Las Palmas, Alajuela, Turrúcares. Arrendante: Eida Teresa Morales Arguedas → Arrendatario: Guillermo Varela Da Silva. Fecha: 9 de enero de 2024.
 
-**Fuente legal:** [Ley 7527](../normativa/ley-7527.md) (131 artículos, convertida a Markdown desde el texto oficial de la PGR)
+**Fuente legal:** [Ley 7527](../../reference/ley-7527.md) (131 artículos, convertida a Markdown desde el texto oficial de la PGR)
 
 ---
 

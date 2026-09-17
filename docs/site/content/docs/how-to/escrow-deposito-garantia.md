@@ -112,7 +112,7 @@ flowchart TD
 ## Referencias
 
 - [`flujo-arrendamiento.md`](./flujo-arrendamiento.md) — flujo general del arrendamiento, del cual este SOP profundiza la etapa de escrow.
-- [`trustless-work-dart-spike-design.md`](../planes/trustless-work-dart-spike-design.md) — spec técnica del SDK Dart.
+- [`trustless-work-dart-spike-design.md`](https://github.com/HabitaNexus/monorepo/blob/develop/docs/engineering/trustless-work-dart/trustless-work-dart-spike-design.md) — spec técnica del SDK Dart (artefacto de ingeniería en `docs/engineering/`).
 - `packages/trustless_work_dart/README.md` — doc del paquete (pendiente de crear).
 - `packages/trustless_work_flutter_storage/README.md` — doc del hermano (pendiente).
 - `~/Escritorio/lapc506-personal-dogfood/structure-decision.md` — contexto de urgencia legal (Delaware LLC + CR SRL).

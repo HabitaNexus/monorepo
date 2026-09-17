@@ -134,35 +134,35 @@ markdown_extensions:
 # =============================================================================
 nav:
   - Inicio: index.md
-  - SOPs:
-    - docs/sops/index.md
-    - "Flujo de Arrendamiento": docs/sops/flujo-arrendamiento.md
-    - "Escrow · Depósito de Garantía": docs/sops/escrow-deposito-garantia.md
-    - "Adiciones · Internacionalización": docs/sops/adiciones-internacionalizacion.md
-    - "Referidos · Fixii": docs/sops/referidos-fixii.md
-  - Investigación:
-    - docs/investigacion/index.md
-    - "Hallazgos · Contratos Informales": docs/investigacion/hallazgos-contratos-informales.md
-    - "Plantilla · Entrevista de Problema": docs/investigacion/plantilla-entrevista-problema.md
-    - "Plantilla · Perfil de Expectativas": docs/investigacion/plantilla-perfil-expectativas-cliente.md
-  - Usuarios:
-    - docs/usuarios/index.md
-    - "Inquilino · Ejemplo": docs/usuarios/inquilino-ejemplo.md
-    - "Inquilino · Mery": docs/usuarios/inquilino-mery.md
-    - "Propietario · José Peñaranda": docs/usuarios/propietario-jose-penaranda.md
-    - "Propietario · Hermano de José": docs/usuarios/propietario-hermano-jose.md
-  - UX Research:
-    - docs/ux-research/index.md
-    - "Journey · José lista propiedad": docs/ux-research/journey-jose-listado-propiedad/index.md
-    - "Storyboard · José propietario": docs/ux-research/storyboard-jose-propietario/analysis.md
-  - Normativa:
-    - docs/normativa/index.md
-    - "Ley 7527": docs/normativa/ley-7527.md
-  - Planes:
-    - docs/planes/index.md
-    - "Trustless Work Dart · Spike": docs/planes/trustless-work-dart-spike.md
-    - "Trustless Work Dart · Spike Design": docs/planes/trustless-work-dart-spike-design.md
-    - "Trustless Work Dart · Implementation": docs/planes/trustless-work-dart-implementation.md
+  - Tutoriales:
+    - docs/tutorials/index.md
+  - Guías (How-to):
+    - docs/how-to/index.md
+    - "Flujo de Arrendamiento": docs/how-to/flujo-arrendamiento.md
+    - "Escrow · Depósito de Garantía": docs/how-to/escrow-deposito-garantia.md
+    - "Adiciones · Internacionalización": docs/how-to/adiciones-internacionalizacion.md
+    - "Referidos · Fixii": docs/how-to/referidos-fixii.md
+  - Referencia:
+    - docs/reference/index.md
+    - "Ley 7527": docs/reference/ley-7527.md
+    - "Contratos de arrendamiento": docs/reference/contratos-arrendamiento/index.md
+  - Explicación:
+    - docs/explanation/index.md
+    - "Investigación":
+      - docs/explanation/investigacion/index.md
+      - "Hallazgos · Contratos Informales": docs/explanation/investigacion/hallazgos-contratos-informales.md
+      - "Plantilla · Entrevista de Problema": docs/explanation/investigacion/plantilla-entrevista-problema.md
+      - "Plantilla · Perfil de Expectativas": docs/explanation/investigacion/plantilla-perfil-expectativas-cliente.md
+    - "Usuarios":
+      - docs/explanation/usuarios/index.md
+      - "Inquilino · Ejemplo": docs/explanation/usuarios/inquilino-ejemplo.md
+      - "Inquilino · Mery": docs/explanation/usuarios/inquilino-mery.md
+      - "Propietario · José Peñaranda": docs/explanation/usuarios/propietario-jose-penaranda.md
+      - "Propietario · Hermano de José": docs/explanation/usuarios/propietario-hermano-jose.md
+    - "UX Research":
+      - docs/explanation/ux-research/index.md
+      - "Journey · José lista propiedad": docs/explanation/ux-research/journey-jose-listado-propiedad/index.md
+      - "Storyboard · José propietario": docs/explanation/ux-research/storyboard-jose-propietario/analysis.md
 
 # =============================================================================
 # Extra
