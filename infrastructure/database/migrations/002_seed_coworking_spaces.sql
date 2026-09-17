@@ -1,0 +1,12 @@
+INSERT INTO coworking_spaces (name, latitude, longitude, type, address, description, wifi_speed_mbps, noise_level, hours, outlets_available, day_pass_price_usd, monthly_membership_price_usd, partnership_status, has_parking, has_food, rating)
+VALUES
+    ('Selina San José', 9.9333, -84.0833, 'coworking', 'San José, Barrio Escalante', 'Coworking y hostel en el corazón de Escalante. Café, rooftop y comunidad nómada digital.', 50.0, 'moderate', '7:00 - 22:00', 40, 15.0, 200.0, 'none', false, true, 4.3),
+    ('Impact Hub San José', 9.9360, -84.0800, 'coworking', 'San José, Los Yoses', 'Red global de coworking con enfoque de impacto social. Salas de reunión y eventos.', 80.0, 'quiet', '8:00 - 18:00', 60, 12.0, 180.0, 'none', false, true, 4.5),
+    ('Café del Barista', 9.9345, -84.0710, 'cafe', 'San José, Barrio Escalante', 'Cafetería de especialidad con WiFi rápido y ambiente tranquilo.', 35.0, 'quiet', '7:00 - 19:00', 12, null, null, 'none', false, true, 4.6),
+    ('Starbucks Escazú', 9.9400, -84.1400, 'cafe', 'Escazú, Multiplaza', 'Starbucks con amplio espacio de mesas y WiFi gratuito.', 20.0, 'lively', '6:00 - 21:00', 20, null, null, 'none', true, true, 4.0),
+    ('CECI San José', 9.9310, -84.0750, 'ceci', 'San José, Centro', 'Centro Comunitario Inteligente del MICITT. Espacio gratuito con computadoras y WiFi.', 40.0, 'moderate', '8:00 - 16:00', 30, 0.0, 0.0, 'pending', false, false, 3.8),
+    ('Workzone Coworking', 9.9380, -84.0600, 'coworking', 'San José, Sabana Sur', 'Coworking profesional con oficinas privadas y salas de juntas.', 100.0, 'quiet', '6:00 - 20:00', 80, 20.0, 250.0, 'none', true, true, 4.7),
+    ('Café Reinventate', 9.9320, -84.0780, 'cafe', 'San José, Amón', 'Café cultural con arte local, WiFi y terraza al aire libre.', 25.0, 'quiet', '8:00 - 18:00', 8, null, null, 'none', false, true, 4.4),
+    ('CECI Tibás', 9.9600, -84.0800, 'ceci', 'Tibás, Centro', 'Centro Comunitario Inteligente con acceso gratuito a internet y talleres.', 30.0, 'moderate', '8:00 - 15:00', 20, 0.0, 0.0, 'pending', false, false, 3.5),
+    ('Coworking CR', 9.9350, -84.0900, 'coworking', 'San José, Rohrmoser', 'Espacio de coworking con ambiente profesional y networking semanal.', 60.0, 'moderate', '7:00 - 19:00', 50, 10.0, 150.0, 'none', true, true, 4.2),
+    ('La Vida Café', 9.9370, -84.0760, 'cafe', 'San José, Los Yoses', 'Cafetería con menú saludable y WiFi estable. Ideal para trabajar.', 30.0, 'moderate', '7:30 - 20:00', 10, null, null, 'none', false, true, 4.3);
