@@ -3,15 +3,11 @@ schema: spec-driven
 # Project context (optional)
 # This is shown to AI when creating artifacts.
 # Add your tech stack, conventions, style guides, domain knowledge, etc.
-context: |
-  Monorepo Flutter + NestJS (apps/backend) — HabitaNexus, mercado de alquiler residencial a largo plazo en Costa Rica.
-  - Mobile: Flutter (apps/mobile) con feature-first + Riverpod, paquetes Dart en packages/ (trustless_work_*).
-  - Backend: NestJS modular (contract-core, pagos/fiscal, ledger) — monolito modular antes que microservicios.
-  - Infra/GitOps: GitHub Actions (CI), ArgoCD + Kustomize (k8s/), Terraform (infrastructure/terraform).
-  - Ramas GitFlow: develop (integración) → staging → release → main (prod). main solo vía release desde staging.
-  - Specs por dominio (spec-driven): rental-flow, tribu-cr-adapter, municipal-dashboard.
-  - Normativa: Ley 7527 (arrendamiento urbano), escrow via Trustless Worker, factura electrónica Hacienda CR.
-  - Convenciones: conventional commits, OpenSpec delta-specs, specs en español (dominio CR).
+# Example:
+#   context: |
+#     Tech stack: TypeScript, React, Node.js
+#     We use conventional commits
+#     Domain: e-commerce platform
 
 # Per-artifact rules (optional)
 # Add custom rules for specific artifacts.
