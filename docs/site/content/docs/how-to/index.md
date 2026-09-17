@@ -1,6 +1,6 @@
-# SOPs — Procedimientos Operativos Estándar
+# Guías (How-to) — Procedimientos Operativos Estándar
 
-Procedimientos que codifican los flujos críticos del marketplace.
+Procedimientos que codifican los flujos críticos del marketplace. Orientados a la **tarea**: cómo ejecutar cada proceso del día a día.
 
 | SOP | Propósito |
 |-----|-----------|

@@ -14,14 +14,12 @@ A diferencia de Facebook Marketplace o Encuentra24, HabitaNexus permite negociar
 
 ## Documentación
 
-| Sección | Descripción |
+| Sección (modo Diátaxis) | Descripción |
 |---------|-------------|
-| [SOPs](docs/sops/index.md) | Procedimientos operativos: flujo de arrendamiento, escrow, referidos |
-| [Investigación](docs/investigacion/index.md) | Hallazgos de contratos informales + plantillas de entrevista |
-| [Usuarios](docs/usuarios/index.md) | Perfiles y expectativas de inquilinos y propietarios reales |
-| [UX Research](docs/ux-research/index.md) | Journey maps y storyboards interactivos |
-| [Normativa](docs/normativa/index.md) | Marco legal costarricense (Ley 7527) |
-| [Planes](docs/planes/index.md) | Spikes y planes de implementación técnica |
+| [Tutoriales](docs/tutorials/index.md) | Aprender haciendo (lecturas guiadas) |
+| [Guías · How-to](docs/how-to/index.md) | Procedimientos: flujo de arrendamiento, escrow, referidos |
+| [Referencia](docs/reference/index.md) | Marco legal costarricense y contratos (Ley 7527) |
+| [Explicación](docs/explanation/index.md) | Investigación, usuarios y UX research |
 
 ---
 
@@ -51,4 +49,4 @@ Delaware LLC (primaria) + CR SRL (OpCo local) — **"Delaware Tostada"**.
 
 !!! info "Estado del proyecto"
     HabitaNexus está en fase de **validación de problema** + **spike técnico** de escrow.
-    Ver [Hallazgos de contratos informales](docs/investigacion/hallazgos-contratos-informales.md) y [Trustless Work Spike](docs/planes/trustless-work-dart-spike.md).
+    Ver [Hallazgos de contratos informales](docs/explanation/investigacion/hallazgos-contratos-informales.md) y [Trustless Work Spike](https://github.com/HabitaNexus/monorepo/blob/develop/docs/engineering/trustless-work-dart/trustless-work-dart-spike.md).
