@@ -2,6 +2,21 @@
 
 Este proyecto utiliza el patrón de **Agent Skills** para proporcionar conocimiento contextual y capacidades especializadas a los asistentes de IA.
 
+## Estándares de Ingeniería (obligatorios)
+
+Antes de abrir cualquier PR o reorganizar código, leer y seguir:
+
+- **DSMS / IFS / CPS** — organización, estructura intra-archivo y barrels: [docs/process/code-organization-standards.md](docs/process/code-organization-standards.md)
+- **PRDS** — descripción y alcance de PRs: [docs/process/pull-request-description-and-scope.md](docs/process/pull-request-description-and-scope.md)
+- **BrS** — ramas, nombres y protección: [docs/branching.md](docs/branching.md)
+- **QT4L** — trazabilidad QA (four layers): [docs/process/qa-traceability.md](docs/process/qa-traceability.md)
+- **Índice de los 6 estándares** y orden de adopción: [docs/process/engineering-standards.md](docs/process/engineering-standards.md)
+
+Template de PR automático en `.github/PULL_REQUEST_TEMPLATE.md`. Si un issue Linear
+existe, el título y el cuerpo del PR DENTRO incluyen `HAB-N`. Todo cambio de
+comportamiento (delta de living spec OpenSpec) requiere la sección **QA traceability
+(four layers)** en `tasks.md` — ver [qt4l](docs/process/qa-traceability.md).
+
 ## ¿Qué son los Skills?
 
 Los skills son carpetas con archivos `SKILL.md` que contienen instrucciones y contexto específico. Ofrecen:

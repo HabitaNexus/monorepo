@@ -1,7 +1,7 @@
 name: trustless_work_riverpod
 description: Riverpod providers for Trustless Work escrow operations. Companion to trustless_work_dart.
 version: 0.1.0-dev.1
-repository: https://github.com/DojoCodingLabs/trustless-work-dart
+repository: https://github.com/HabitaNexus/monorepo
 publish_to: 'none'
 
 environment:
