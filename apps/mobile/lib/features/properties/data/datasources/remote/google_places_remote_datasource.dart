@@ -1,11 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:dio/dio.dart';
-import '../../domain/entities/workspace_nearby.dart';
-import '../../domain/repositories/workspace_nearby_repository.dart';
-import '../models/workspace_nearby_model.dart';
+import '../../../domain/entities/workspace_nearby.dart';
+import '../workspace_nearby_datasource.dart';
+import '../../models/workspace_nearby_model.dart';
 
-/// Implementación remota del repositorio de espacios de trabajo cercanos.
+/// Datasource remoto de espacios de trabajo cercanos.
 ///
 /// Llama al endpoint propio `GET /coworkings/nearby?lat=X&lng=Y&radius=Z`.
 /// El backend es quien llama a Google Places API, por lo que
@@ -13,7 +13,7 @@ import '../models/workspace_nearby_model.dart';
 ///
 /// Usa el patrón de datasource para permitir alternar entre
 /// fuente local (cache) y remota.
-class GooglePlacesRemoteDatasource implements WorkspaceNearbyRepository {
+class GooglePlacesRemoteDatasource implements WorkspaceNearbyDatasource {
   final Dio _dio;
   final String _baseUrl;
 

@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/entities/workspace_nearby.dart';
 import '../../domain/repositories/workspace_nearby_repository.dart';
-import '../data/datasources/remote/workspace_nearby_repository_impl.dart';
+import '../../data/datasources/remote/workspace_nearby_repository_impl.dart';
 import '../../data/config.dart';
 
 /// Estado del proveedor de espacios de trabajo cercanos.
