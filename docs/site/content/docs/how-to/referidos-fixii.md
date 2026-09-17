@@ -10,8 +10,8 @@
 
 **Referencias internas:**
 - [SOP — Flujo de Arrendamiento](flujo-arrendamiento.md) (secciones 6.2 Inspecciones y 6.3 Reclamos)
-- [Perfil de Jose Penaranda](../usuarios/propietario-jose-penaranda.md) — propietario que necesita fontaneros, electricistas y albaniles
-- [Journey Map — Jose lista propiedad](../ux-research/journey-jose-listado-propiedad/map.json) — oportunidad identificada: "Referido a Fixii si durante la inspeccion se detectan reparaciones que Jose no puede hacer solo"
+- [Perfil de Jose Penaranda](../explanation/usuarios/propietario-jose-penaranda.md) — propietario que necesita fontaneros, electricistas y albaniles
+- [Journey Map — Jose lista propiedad](../explanation/ux-research/journey-jose-listado-propiedad/map.json) — oportunidad identificada: "Referido a Fixii si durante la inspeccion se detectan reparaciones que Jose no puede hacer solo"
 - [Fuentes de Ingresos](https://github.com/HabitaNexus/monorepo/blob/main/business/02-solucion-validacion/08-fuentes-de-ingresos.md)
 
 ---
