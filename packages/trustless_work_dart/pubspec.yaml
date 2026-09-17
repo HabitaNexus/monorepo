@@ -1,8 +1,8 @@
 name: trustless_work_dart
 description: Pure-Dart client for the Trustless Work escrow API gateway on Stellar/Soroban. Works from Flutter, Jaspr, Dart server, or CLI.
 version: 0.1.0-dev.1
-repository: https://github.com/DojoCodingLabs/trustless-work-dart
-issue_tracker: https://github.com/DojoCodingLabs/trustless-work-dart/issues
+repository: https://github.com/HabitaNexus/monorepo
+issue_tracker: https://github.com/HabitaNexus/monorepo/issues
 
 environment:
   sdk: ^3.2.5
