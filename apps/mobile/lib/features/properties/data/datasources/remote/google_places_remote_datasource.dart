@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:dio/dio.dart';
 import '../../../domain/entities/workspace_nearby.dart';
-import '../workspace_nearby_datasource.dart';
 import '../../models/workspace_nearby_model.dart';
+import '../workspace_nearby_datasource.dart';
 
 /// Datasource remoto de espacios de trabajo cercanos.
 ///

@@ -1,4 +1,4 @@
-import 'dart:math';
+import 'dart:math' show atan2, cos, sin, sqrt;
 
 import 'package:equatable/equatable.dart';
 
@@ -92,12 +92,13 @@ class WorkspaceNearbyModel extends Equatable {
 
     final dLat = (lat2 - lat1) * dToRad;
     final dLon = (lon2 - lon1) * dToRad;
-    final radLat1 = lat1 * dToRad;
-    final radLat2 = lat2 * dToRad;
-
-    final a = sin(dLat / 2) * sin(dLat / 2) +
-        cos(radLat1) * cos(radLat2) * sin(dLon / 2) * sin(dLon / 2);
-    final c = 2 * atan2(sqrt(a), sqrt(1 - a));
+    final lat1Rad = lat1 * dToRad;
+    final lat2Rad = lat2 * dToRad;
+    final sinDLat = sin(dLat / 2);
+    final sinDLon = sin(dLon / 2);
+    final a =
+        sinDLat * sinDLat + cos(lat1Rad) * cos(lat2Rad) * sinDLon * sinDLon;
+    final c = 2 * atan2(sqrt(a.clamp(0.0, 1.0)), sqrt((1 - a).clamp(0.0, 1.0)));
 
     return earthRadiusKm * c;
   }
