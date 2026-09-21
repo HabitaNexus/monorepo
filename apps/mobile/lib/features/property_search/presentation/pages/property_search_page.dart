@@ -9,6 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
+import '../../../../core/widgets/app_bottom_nav.dart';
 import '../providers/property_search_providers.dart';
 import '../widgets/search_bar_widget.dart';
 import '../widgets/property_card.dart';
@@ -22,7 +23,6 @@ class PropertySearchPage extends ConsumerStatefulWidget {
 }
 
 class _PropertySearchPageState extends ConsumerState<PropertySearchPage> {
-  int _navIndex = 1;
   bool _showResults = false;
 
   static const String _hab26Url = 'https://github.com/HabitaNexus/monorepo/pull/35';
@@ -85,7 +85,7 @@ class _PropertySearchPageState extends ConsumerState<PropertySearchPage> {
                   Text(
                     '${stats.verifiedCount} verificadas',
                     style: theme.textTheme.bodySmall?.copyWith(
-                      color: Colors.green,
+                      color: colors.tertiary,
                     ),
                   ),
                 ],
@@ -209,37 +209,7 @@ class _PropertySearchPageState extends ConsumerState<PropertySearchPage> {
           if (comparison.isNotEmpty) const ComparisonWidget(),
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _navIndex,
-        onTap: (i) {
-          switch (i) {
-            case 0:
-              context.go('/');
-              break;
-            case 1:
-              // Already on search
-              break;
-            case 2:
-              context.go('/negociacion');
-              break;
-            case 3:
-              context.go('/contrato');
-              break;
-          }
-          setState(() => _navIndex = i);
-        },
-        items: const [
-          BottomNavigationBarItem(
-              icon: Icon(Icons.home_outlined), label: 'Inicio'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.explore_outlined), label: 'Buscar'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.handshake_outlined), label: 'Pactos'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.verified_user_outlined),
-              label: 'Contratos'),
-        ],
-      ),
+      bottomNavigationBar: const AppBottomNav(current: AppNavTab.buscar),
     );
   }
 }

@@ -95,7 +95,7 @@ class PropertyCard extends ConsumerWidget {
                         Icon(
                           Icons.verified,
                           size: 18,
-                          color: Colors.green,
+                          color: colors.tertiary,
                         ),
                     ],
                   ),
@@ -182,7 +182,7 @@ class PropertyCard extends ConsumerWidget {
                       IconButton(
                         icon: Icon(
                           isFavorite ? Icons.star : Icons.star_border,
-                          color: isFavorite ? Colors.amber : colors.onSurfaceVariant,
+                          color: isFavorite ? colors.primary : colors.onSurfaceVariant,
                         ),
                         onPressed: () {
                           ref.read(favoritesProvider.notifier).toggleFavorite(property.id);
