@@ -68,13 +68,15 @@ class Property {
     this.features = const {},
   });
 
-  /// Precio formateado
+  /// Precio formateado — USD global
   String get formattedPrice {
-    return '₡${priceMonthly.toStringAsFixed(0).replaceAllMapped(
+    return '\$${priceMonthly.toStringAsFixed(0).replaceAllMapped(
           RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
-          (Match m) => '${m[1]}.',
+          (Match m) => '${m[1]},',
         )}';
   }
+
+  String get formattedPriceWithSuffix => '$formattedPrice/mes';
 
   /// Tiempo relativo de creación
   String get timeAgo {

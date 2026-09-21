@@ -7,6 +7,7 @@ library;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../domain/global_countries.dart';
 import '../../domain/property.dart';
 import '../../domain/property_filter.dart';
 import '../providers/property_search_providers.dart';
@@ -40,14 +41,14 @@ class _SearchBarWidgetState extends ConsumerState<SearchBarWidget> {
     final filter = ref.watch(propertyFilterProvider);
     final isDark = theme.brightness == Brightness.dark;
 
-    // Resumen para el pill compacto (mobile)
-    final whereLabel = filter.province?.label ?? 'Cualquier lugar';
-    final priceLabel = filter.budgetRange == const RangeValues(100000, 500000)
+    // Resumen para el pill compacto (mobile) — global USD + 1..8 hab
+    final whereLabel = filter.locationLabel;
+    final priceLabel = filter.budgetRange == PropertyFilter.kDefaultBudget
         ? 'Cualquier precio'
-        : '₡${(filter.budgetRange.start / 1000).round()}k–₡${(filter.budgetRange.end / 1000).round()}k';
-    final roomsLabel = filter.minBedrooms == 1 && filter.maxBedrooms == 5
+        : '\$${filter.budgetRange.start.round()}–\$${filter.budgetRange.end.round()}';
+    final roomsLabel = filter.minBedrooms == 1 && filter.maxBedrooms == PropertyFilter.kDefaultMaxBedrooms
         ? 'Cualquier'
-        : '${filter.minBedrooms}–${filter.maxBedrooms} hab';
+        : '${filter.minBedrooms}–${filter.maxBedrooms == 8 ? '8+' : filter.maxBedrooms} hab';
     final petsLabel = filter.petPolicy == PetType.none ? 'Sin filtro' : filter.petPolicy.label;
     final bathLabel = filter.bathroomsLabel;
     final parkingLabel = filter.parkingLabel;
@@ -151,22 +152,22 @@ class _SearchBarWidgetState extends ConsumerState<SearchBarWidget> {
                   children: [
                     _QuickPill(
                       icon: Icons.public,
-                      label: 'Global',
-                      selected: filter.province == null,
+                      label: whereLabel,
+                      selected: filter.countryCode != null,
                       onTap: () => _showLocationSheet(filter),
                     ),
                     const SizedBox(width: 8),
                     _QuickPill(
                       icon: Icons.account_balance_wallet_outlined,
                       label: priceLabel,
-                      selected: filter.budgetRange != const RangeValues(100000, 500000),
+                      selected: filter.budgetRange != PropertyFilter.kDefaultBudget,
                       onTap: () => _showBudgetSheet(filter),
                     ),
                     const SizedBox(width: 8),
                     _QuickPill(
                       icon: Icons.bed_outlined,
                       label: roomsLabel,
-                      selected: !(filter.minBedrooms == 1 && filter.maxBedrooms == 5),
+                      selected: !(filter.minBedrooms == 1 && filter.maxBedrooms == PropertyFilter.kDefaultMaxBedrooms),
                       onTap: () => _showRoomsSheet(filter),
                     ),
                     const SizedBox(width: 8),
@@ -239,12 +240,19 @@ class _SearchBarWidgetState extends ConsumerState<SearchBarWidget> {
         isScrollControlled: true,
         backgroundColor: Theme.of(context).colorScheme.surfaceContainerLow,
         shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
-        builder: (_) => _LocationSheet(
-          selected: f.province,
-          onSelected: (p) {
+        builder: (_) => _GlobalLocationSheet(
+          initialCountry: f.countryCode,
+          initialRegion: f.region,
+          onSelected: (country, region) {
             Navigator.pop(context);
-            ref.read(propertyFilterProvider.notifier).state =
-                f.copyWith(province: p, clearProvince: p == null);
+            // Si país es null => global
+            if (country == null) {
+              ref.read(propertyFilterProvider.notifier).state =
+                  f.copyWith(clearCountry: true, clearRegion: true, clearProvince: true);
+            } else {
+              ref.read(propertyFilterProvider.notifier).state =
+                  f.copyWith(countryCode: country, region: region, clearRegion: region == null, clearProvince: true);
+            }
             widget.onSearch?.call();
           },
         ),
@@ -374,10 +382,9 @@ class _AirbnbPill extends StatelessWidget {
   }
 
   Widget _wideLayout(ColorScheme c) {
-    final where = filter.province?.label ?? 'Cualquier lugar';
-    final price = filter.budgetRange == const RangeValues(100000, 500000)
-        ? 'Cualquier precio'
-        : '₡${(filter.budgetRange.start / 1000).round()}k – ₡${(filter.budgetRange.end / 1000).round()}k';
+    final where = filter.locationLabel;
+    final isDefaultBudget = filter.budgetRange == PropertyFilter.kDefaultBudget;
+    final price = isDefaultBudget ? 'Cualquier precio' : '\$${filter.budgetRange.start.round()} – \$${filter.budgetRange.end.round()}';
     final rooms = filter.minBedrooms == 1 && filter.maxBedrooms == 5
         ? 'Agregar'
         : '${filter.minBedrooms}–${filter.maxBedrooms}';
@@ -560,16 +567,32 @@ class _QuickPill extends StatelessWidget {
 
 // ── Sheets ──────────────────────────────────────────────────────────
 
-class _LocationSheet extends StatelessWidget {
-  final CostaRicaProvince? selected;
-  final ValueChanged<CostaRicaProvince?> onSelected;
-  const _LocationSheet({required this.selected, required this.onSelected});
+/// Global: país con buscador + región. Si no logueado, pregunta país.
+class _GlobalLocationSheet extends StatefulWidget {
+  final String? initialCountry;
+  final String? initialRegion;
+  final void Function(String? countryCode, String? region) onSelected;
+  const _GlobalLocationSheet({required this.initialCountry, required this.initialRegion, required this.onSelected});
+  @override
+  State<_GlobalLocationSheet> createState() => _GlobalLocationSheetState();
+}
+class _GlobalLocationSheetState extends State<_GlobalLocationSheet> {
+  String _q = '';
+  String? _pickedCountry;
+  @override
+  void initState() {
+    super.initState();
+    _pickedCountry = widget.initialCountry;
+  }
+
   @override
   Widget build(BuildContext context) {
     final c = Theme.of(context).colorScheme;
+    final filtered = searchCountries(_q);
+    final picked = _pickedCountry == null ? null : countryByCode(_pickedCountry!);
     return SafeArea(
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
+        padding: EdgeInsets.fromLTRB(16, 12, 16, 24 + MediaQuery.of(context).viewInsets.bottom),
         child: Column(mainAxisSize: MainAxisSize.min, children: [
           Container(width: 36, height: 4, decoration: BoxDecoration(color: c.outlineVariant, borderRadius: BorderRadius.circular(2))),
           const SizedBox(height: 12),
@@ -578,11 +601,60 @@ class _LocationSheet extends StatelessWidget {
             const SizedBox(width: 8),
             Text('¿Dónde buscas?', style: Theme.of(context).textTheme.titleMedium?.copyWith(color: c.onSurface, fontWeight: FontWeight.w700)),
             const Spacer(),
-            Text('Global · CR', style: TextStyle(fontSize: 11, letterSpacing: 0.5, color: c.onSurfaceVariant)),
+            if (_pickedCountry == null)
+              Text('Global', style: TextStyle(fontSize: 11, color: c.onSurfaceVariant))
+            else
+              Text('${picked!.flag} ${picked.name}', style: TextStyle(fontSize: 11, color: c.onSurfaceVariant)),
           ]),
           const SizedBox(height: 12),
-          _SheetTile(title: 'Cualquier lugar — Búsqueda global', subtitle: 'Ver todas las provincias', selected: selected == null, onTap: () => onSelected(null)),
-          ...CostaRicaProvince.values.map((p) => _SheetTile(title: p.label, subtitle: 'Provincia', selected: selected == p, onTap: () => onSelected(p))),
+          // Buscador de países (en el mismo cosito)
+          TextField(
+            autofocus: false,
+            onChanged: (v) => setState(() => _q = v),
+            decoration: InputDecoration(
+              hintText: 'Busca país — ej. México, España, US…',
+              prefixIcon: const Icon(Icons.search, size: 18),
+              filled: true,
+              fillColor: c.surfaceContainer,
+              contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+              border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide(color: c.outlineVariant.withValues(alpha: 0.5))),
+            ),
+          ),
+          const SizedBox(height: 12),
+          // Si no hay país pickeado: lista de países
+          if (_pickedCountry == null) ...[
+            _SheetTile(title: 'Cualquier lugar — Global', subtitle: 'Ver todo el mundo', selected: widget.initialCountry == null && widget.initialRegion == null, onTap: () => widget.onSelected(null, null)),
+            const SizedBox(height: 4),
+            Flexible(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: filtered.map((co) => _SheetTile(
+                    title: '${co.flag} ${co.name}',
+                    subtitle: '${co.code} · ${co.regions.take(3).join(', ')}…',
+                    selected: false,
+                    onTap: () => setState(() => _pickedCountry = co.code),
+                  )).toList(),
+                ),
+              ),
+            ),
+          ] else ...[
+            // País pickeado: muestra regiones + volver
+            Row(children: [
+              TextButton.icon(onPressed: () => setState(() { _pickedCountry = null; _q = ''; }), icon: const Icon(Icons.arrow_back, size: 16), label: const Text('Cambiar país')),
+              const Spacer(),
+              TextButton(onPressed: () => widget.onSelected(_pickedCountry, null), child: Text('Todo ${picked!.name}', style: TextStyle(color: c.primary))),
+            ]),
+            Flexible(
+              child: SingleChildScrollView(
+                child: Column(children: [
+                  _SheetTile(title: 'Todo ${picked!.name}', subtitle: 'Sin filtrar por región', selected: widget.initialCountry == _pickedCountry && widget.initialRegion == null, onTap: () => widget.onSelected(_pickedCountry, null)),
+                  ...picked.regions.map((r) => _SheetTile(title: r, subtitle: picked.name, selected: widget.initialCountry == _pickedCountry && widget.initialRegion == r, onTap: () => widget.onSelected(_pickedCountry, r))),
+                ]),
+              ),
+            ),
+          ],
+          const SizedBox(height: 8),
+          Text('Se detecta país por login; si no estás logueado, elige aquí.', style: TextStyle(fontSize: 11, color: c.onSurfaceVariant)),
         ]),
       ),
     );
@@ -658,14 +730,14 @@ class _BudgetSheetState extends State<_BudgetSheet> {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               decoration: BoxDecoration(color: c.surfaceContainerHigh, borderRadius: BorderRadius.circular(8)),
-              child: Text('₡ ${( _v.start/1000).round()}k – ₡${(_v.end/1000).round()}k', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: c.onSurface)),
+              child: Text('\$${_v.start.round()} – \$${_v.end.round()}', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: c.onSurface)),
             ),
           ]),
           const SizedBox(height: 16),
-          RangeSlider(values: _v, min: 50000, max: 1000000, divisions: 19, labels: RangeLabels('₡${(_v.start/1000).round()}k','₡${(_v.end/1000).round()}k'), onChanged: (nv){ setState(()=> _v=nv); widget.onChanged(nv);} ),
+          RangeSlider(values: _v, min: 500, max: 5000, divisions: 9, labels: RangeLabels('\$${_v.start.round()}','\$${_v.end.round()}'), onChanged: (nv){ setState(()=> _v=nv); widget.onChanged(nv);} ),
           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            Text('₡75k', style: TextStyle(fontSize: 11, color: c.onSurfaceVariant)),
-            Text('₡1.5M+', style: TextStyle(fontSize: 11, color: c.onSurfaceVariant)),
+            Text('\$500', style: TextStyle(fontSize: 11, color: c.onSurfaceVariant)),
+            Text('\$5,000+', style: TextStyle(fontSize: 11, color: c.onSurfaceVariant)),
           ]),
           const SizedBox(height: 16),
           SizedBox(width: double.infinity, child: FilledButton(onPressed: widget.onApply, child: const Text('Aplicar'))),
@@ -698,7 +770,7 @@ class _RoomsSheetState extends State<_RoomsSheet> {
       Row(children:[
         Expanded(child: _Step(label:'Mín', value:_a, onDec: _a>1 ? ()=> setState(()=>_a--) : null, onInc: _a<_b ? ()=> setState(()=>_a++) : null)),
         const SizedBox(width:12),
-        Expanded(child: _Step(label:'Máx', value:_b, onDec: _b>_a ? ()=> setState(()=>_b--) : null, onInc: _b<5 ? ()=> setState(()=>_b++) : null)),
+        Expanded(child: _Step(label:'Máx', value:_b, onDec: _b>_a ? ()=> setState(()=>_b--) : null, onInc: _b<8 ? ()=> setState(()=>_b++) : null, maxLabel: _b==8 ? '8+' : null)),
       ]),
       const SizedBox(height:16),
       SizedBox(width: double.infinity, child: FilledButton(onPressed: ()=> widget.onChanged(_a,_b), child: const Text('Aplicar'))),
@@ -706,8 +778,8 @@ class _RoomsSheetState extends State<_RoomsSheet> {
   }
 }
 class _Step extends StatelessWidget{
-  final String label; final int value; final VoidCallback? onDec; final VoidCallback? onInc;
-  const _Step({required this.label, required this.value, required this.onDec, required this.onInc});
+  final String label; final int value; final VoidCallback? onDec; final VoidCallback? onInc; final String? maxLabel;
+  const _Step({required this.label, required this.value, required this.onDec, required this.onInc, this.maxLabel});
   @override Widget build(BuildContext context){
     final c=Theme.of(context).colorScheme;
     return Container(padding: const EdgeInsets.symmetric(horizontal:12, vertical:12), decoration: BoxDecoration(color:c.surfaceContainer, borderRadius: BorderRadius.circular(12)), child: Column(children:[
@@ -715,7 +787,7 @@ class _Step extends StatelessWidget{
       const SizedBox(height:8),
       Row(mainAxisAlignment: MainAxisAlignment.center, children:[
         IconButton.filledTonal(onPressed:onDec, icon: const Icon(Icons.remove, size:16)),
-        Padding(padding: const EdgeInsets.symmetric(horizontal:12), child: Text('$value', style: TextStyle(fontSize:20, fontWeight: FontWeight.w700, color:c.onSurface))),
+        Padding(padding: const EdgeInsets.symmetric(horizontal:12), child: Text(maxLabel ?? '$value', style: TextStyle(fontSize:20, fontWeight: FontWeight.w700, color:c.onSurface))),
         IconButton.filledTonal(onPressed:onInc, icon: const Icon(Icons.add, size:16)),
       ])
     ]));

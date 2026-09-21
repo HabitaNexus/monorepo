@@ -6,9 +6,11 @@ library;
 
 import 'package:flutter/material.dart';
 
+import 'global_countries.dart';
 import 'property.dart';
 
-/// Provincias de Costa Rica
+/// Provincias de Costa Rica — deprectado, usar countryCode/region (global).
+@Deprecated('Usar GlobalCountry / region (global)')
 enum CostaRicaProvince {
   sanJose('San José'),
   alajuela('Alajuela'),
@@ -17,38 +19,56 @@ enum CostaRicaProvince {
   guanacaste('Guanacaste'),
   puntaarenas('Puntarenas'),
   limon('Limón');
-
   const CostaRicaProvince(this.label);
   final String label;
 }
 
-/// Filtro de búsqueda de propiedades — global (HAB-18).
+/// Filtro de búsqueda — global (HAB-18). Precio en USD, ubicación por país/región.
 @immutable
 class PropertyFilter {
-  final RangeValues budgetRange;
+  static const RangeValues kDefaultBudget = RangeValues(500, 3000); // USD global
+  static const int kDefaultMaxBedrooms = 8;
+
+  final RangeValues budgetRange; // USD
+  final String? countryCode; // ISO2, e.g. US, CR. null = global / cualquiera
+  final String? region; // Estado / provincia dentro del país
+  // Compat CR deprecated
   final CostaRicaProvince? province;
   final String? canton;
+
   final int minBedrooms;
-  final int maxBedrooms;
-  final int minBathrooms; // 1..3 (Stitch: 1+,2+,3+)
-  final int parkingSpots; // 0=Sin filtro, 1=1 vehículo, 2=2 vehículos (Stitch)
+  final int maxBedrooms; // 1..8 (8 = 8+)
+  final int minBathrooms;
+  final int parkingSpots;
   final PetType petPolicy;
   final String searchQuery;
 
   const PropertyFilter({
-    this.budgetRange = const RangeValues(100000, 500000),
+    this.budgetRange = kDefaultBudget,
+    this.countryCode,
+    this.region,
     this.province,
     this.canton,
     this.minBedrooms = 1,
-    this.maxBedrooms = 5,
+    this.maxBedrooms = kDefaultMaxBedrooms,
     this.minBathrooms = 1,
     this.parkingSpots = 0,
     this.petPolicy = PetType.none,
     this.searchQuery = '',
   });
 
+  GlobalCountry? get country => countryCode == null ? null : countryByCode(countryCode!);
+  String get locationLabel {
+    if (countryCode == null) return 'Cualquier lugar';
+    final c = countryByCode(countryCode!);
+    if (region == null) return '${c.flag} ${c.name}';
+    return '${c.flag} $region, ${c.name}';
+  }
+
   PropertyFilter copyWith({
     RangeValues? budgetRange,
+    String? countryCode,
+    String? region,
     CostaRicaProvince? province,
     String? canton,
     int? minBedrooms,
@@ -57,11 +77,15 @@ class PropertyFilter {
     int? parkingSpots,
     PetType? petPolicy,
     String? searchQuery,
+    bool clearCountry = false,
+    bool clearRegion = false,
     bool clearProvince = false,
     bool clearCanton = false,
   }) {
     return PropertyFilter(
       budgetRange: budgetRange ?? this.budgetRange,
+      countryCode: clearCountry ? null : (countryCode ?? this.countryCode),
+      region: clearRegion ? null : (region ?? this.region),
       province: clearProvince ? null : (province ?? this.province),
       canton: clearCanton ? null : (canton ?? this.canton),
       minBedrooms: minBedrooms ?? this.minBedrooms,
@@ -73,11 +97,14 @@ class PropertyFilter {
     );
   }
 
-  /// Convierte el filtro a query params para la API
   Map<String, dynamic> toQueryParams() {
     return {
       'budget_min': budgetRange.start.round(),
       'budget_max': budgetRange.end.round(),
+      'currency': 'USD',
+      if (countryCode != null) 'country': countryCode,
+      if (region != null) 'region': region,
+      // compat
       if (province != null) 'province': province!.name,
       if (canton != null) 'canton': canton,
       'bedrooms_min': minBedrooms,
@@ -89,25 +116,27 @@ class PropertyFilter {
     };
   }
 
-  /// Verifica si el filtro tiene valores por defecto
   bool get isDefault =>
-      budgetRange == const RangeValues(100000, 500000) &&
+      budgetRange == kDefaultBudget &&
+      countryCode == null &&
+      region == null &&
       province == null &&
       canton == null &&
       minBedrooms == 1 &&
-      maxBedrooms == 5 &&
+      maxBedrooms == kDefaultMaxBedrooms &&
       minBathrooms == 1 &&
       parkingSpots == 0 &&
       petPolicy == PetType.none &&
       searchQuery.isEmpty;
 
-  /// Cuenta cuántos filtros están activos
   int get activeFilterCount {
     int count = 0;
-    if (budgetRange != const RangeValues(100000, 500000)) count++;
+    if (budgetRange != kDefaultBudget) count++;
+    if (countryCode != null) count++;
+    if (region != null) count++;
     if (province != null) count++;
     if (canton != null) count++;
-    if (minBedrooms != 1 || maxBedrooms != 5) count++;
+    if (minBedrooms != 1 || maxBedrooms != kDefaultMaxBedrooms) count++;
     if (minBathrooms != 1) count++;
     if (parkingSpots != 0) count++;
     if (petPolicy != PetType.none) count++;
