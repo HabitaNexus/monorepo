@@ -47,7 +47,7 @@ class _NegotiationDetailPageState
           IconButton(
             tooltip: 'Ir a firma digital',
             icon: const Icon(Icons.draw_outlined),
-            onPressed: () => context.push('/firma-digital'),
+            onPressed: () => context.push('/contrato'),
           ),
         ],
       ),
@@ -71,6 +71,14 @@ class _NegotiationDetailPageState
         onTap: (i) {
           if (i == 0) {
             context.go('/');
+            return;
+          }
+          if (i == 1) {
+            context.go('/');
+            return;
+          }
+          if (i == 3) {
+            context.go('/contrato');
             return;
           }
           setState(() => _navIndex = i);

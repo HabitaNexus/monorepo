@@ -15,9 +15,14 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const PropertySearchPage(),
       ),
       GoRoute(
+        path: '/contrato',
+        name: 'contrato',
+        builder: (context, state) => const DigitalSignaturePage(),
+      ),
+      GoRoute(
         path: '/firma-digital',
         name: 'firma-digital',
-        builder: (context, state) => const DigitalSignaturePage(),
+        redirect: (context, state) => '/contrato',
       ),
       GoRoute(
         path: '/negociacion',

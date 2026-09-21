@@ -223,7 +223,7 @@ class _PropertySearchPageState extends ConsumerState<PropertySearchPage> {
               context.go('/negociacion');
               break;
             case 3:
-              // context.go('/contratos');
+              context.go('/contrato');
               break;
           }
           setState(() => _navIndex = i);
