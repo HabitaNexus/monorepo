@@ -10,6 +10,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/global_countries.dart';
 import '../../domain/property.dart';
 import '../../domain/property_filter.dart';
+import '../providers/country_providers.dart';
 import '../providers/property_search_providers.dart';
 
 class SearchBarWidget extends ConsumerStatefulWidget {
@@ -245,7 +246,10 @@ class _SearchBarWidgetState extends ConsumerState<SearchBarWidget> {
           initialRegion: f.region,
           onSelected: (country, region) {
             Navigator.pop(context);
-            // Si país es null => global
+            if (country != null) {
+              // Persiste país elegido (si no logueado, se preguntará solo 1 vez)
+              ref.read(userCountryProvider.notifier).setCountry(country);
+            }
             if (country == null) {
               ref.read(propertyFilterProvider.notifier).state =
                   f.copyWith(clearCountry: true, clearRegion: true, clearProvince: true);
@@ -567,29 +571,37 @@ class _QuickPill extends StatelessWidget {
 
 // ── Sheets ──────────────────────────────────────────────────────────
 
-/// Global: país con buscador + región. Si no logueado, pregunta país.
-class _GlobalLocationSheet extends StatefulWidget {
+/// Global: país real (restcountries) + regiones reales (countriesnow) con buscador en el mismo cosito.
+/// Si no logueado, pregunta país. Detecta país por login vía userCountryProvider.
+class _GlobalLocationSheet extends ConsumerStatefulWidget {
   final String? initialCountry;
   final String? initialRegion;
   final void Function(String? countryCode, String? region) onSelected;
   const _GlobalLocationSheet({required this.initialCountry, required this.initialRegion, required this.onSelected});
   @override
-  State<_GlobalLocationSheet> createState() => _GlobalLocationSheetState();
+  ConsumerState<_GlobalLocationSheet> createState() => _GlobalLocationSheetState();
 }
-class _GlobalLocationSheetState extends State<_GlobalLocationSheet> {
+class _GlobalLocationSheetState extends ConsumerState<_GlobalLocationSheet> {
   String _q = '';
   String? _pickedCountry;
   @override
   void initState() {
     super.initState();
     _pickedCountry = widget.initialCountry;
+    // Auto-detecta país por login si no hay filtro y hay userCountry
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final userCountry = ref.read(userCountryProvider);
+      if (_pickedCountry == null && userCountry != null) {
+        setState(() => _pickedCountry = userCountry);
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     final c = Theme.of(context).colorScheme;
-    final filtered = searchCountries(_q);
-    final picked = _pickedCountry == null ? null : countryByCode(_pickedCountry!);
+    final countriesAsync = ref.watch(globalCountriesRealProvider);
+    final userCountry = ref.watch(userCountryProvider);
     return SafeArea(
       child: Padding(
         padding: EdgeInsets.fromLTRB(16, 12, 16, 24 + MediaQuery.of(context).viewInsets.bottom),
@@ -602,17 +614,24 @@ class _GlobalLocationSheetState extends State<_GlobalLocationSheet> {
             Text('¿Dónde buscas?', style: Theme.of(context).textTheme.titleMedium?.copyWith(color: c.onSurface, fontWeight: FontWeight.w700)),
             const Spacer(),
             if (_pickedCountry == null)
-              Text('Global', style: TextStyle(fontSize: 11, color: c.onSurfaceVariant))
+              Text(userCountry == null ? 'Global · Elige país' : 'Global', style: TextStyle(fontSize: 11, color: c.onSurfaceVariant))
             else
-              Text('${picked!.flag} ${picked.name}', style: TextStyle(fontSize: 11, color: c.onSurfaceVariant)),
+              Consumer(builder: (context, ref, _) {
+                final list = countriesAsync.valueOrNull;
+                GlobalCountry? picked;
+                if (list != null) {
+                  for (final cc in list) { if (cc.code == _pickedCountry) { picked = cc; break; } }
+                }
+                picked ??= countryByCode(_pickedCountry!);
+                return Text('${picked.flag} ${picked.name}', style: TextStyle(fontSize: 11, color: c.onSurfaceVariant));
+              }),
           ]),
           const SizedBox(height: 12),
-          // Buscador de países (en el mismo cosito)
           TextField(
             autofocus: false,
             onChanged: (v) => setState(() => _q = v),
             decoration: InputDecoration(
-              hintText: 'Busca país — ej. México, España, US…',
+              hintText: 'Busca país — ej. México, España, US… (API real)',
               prefixIcon: const Icon(Icons.search, size: 18),
               filled: true,
               fillColor: c.surfaceContainer,
@@ -621,40 +640,65 @@ class _GlobalLocationSheetState extends State<_GlobalLocationSheet> {
             ),
           ),
           const SizedBox(height: 12),
-          // Si no hay país pickeado: lista de países
           if (_pickedCountry == null) ...[
             _SheetTile(title: 'Cualquier lugar — Global', subtitle: 'Ver todo el mundo', selected: widget.initialCountry == null && widget.initialRegion == null, onTap: () => widget.onSelected(null, null)),
             const SizedBox(height: 4),
             Flexible(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: filtered.map((co) => _SheetTile(
-                    title: '${co.flag} ${co.name}',
-                    subtitle: '${co.code} · ${co.regions.take(3).join(', ')}…',
-                    selected: false,
-                    onTap: () => setState(() => _pickedCountry = co.code),
-                  )).toList(),
-                ),
+              child: countriesAsync.when(
+                data: (list) {
+                  final q = _q.trim().toLowerCase();
+                  final filtered = q.isEmpty ? list : list.where((co) => co.name.toLowerCase().contains(q) || co.code.toLowerCase().contains(q)).toList();
+                  if (filtered.isEmpty) return Padding(padding: const EdgeInsets.all(16), child: Text('Sin resultados', style: TextStyle(color: c.onSurfaceVariant)));
+                  return SingleChildScrollView(
+                    child: Column(children: filtered.take(50).map((co) => _SheetTile(
+                      title: '${co.flag} ${co.name}',
+                      subtitle: '${co.code} · ${co.regions.isEmpty ? 'cargando regiones…' : co.regions.take(3).join(', ')}',
+                      selected: false,
+                      onTap: () => setState(() => _pickedCountry = co.code),
+                    )).toList()),
+                  );
+                },
+                loading: () => const Padding(padding: EdgeInsets.all(16), child: Center(child: CircularProgressIndicator())),
+                error: (e, _) => Column(children: searchCountries(_q).map((co) => _SheetTile(title: '${co.flag} ${co.name}', subtitle: '${co.code} · offline', selected: false, onTap: () => setState(() => _pickedCountry = co.code))).toList()),
               ),
             ),
           ] else ...[
-            // País pickeado: muestra regiones + volver
             Row(children: [
               TextButton.icon(onPressed: () => setState(() { _pickedCountry = null; _q = ''; }), icon: const Icon(Icons.arrow_back, size: 16), label: const Text('Cambiar país')),
               const Spacer(),
-              TextButton(onPressed: () => widget.onSelected(_pickedCountry, null), child: Text('Todo ${picked!.name}', style: TextStyle(color: c.primary))),
+              Consumer(builder: (context, ref, _) {
+                final list = ref.watch(globalCountriesRealProvider).valueOrNull;
+                GlobalCountry? picked;
+                if (list != null) { for (final cc in list) { if (cc.code == _pickedCountry) { picked = cc; break; } } }
+                picked ??= countryByCode(_pickedCountry!);
+                return TextButton(onPressed: () => widget.onSelected(_pickedCountry, null), child: Text('Todo ${picked.name}', style: TextStyle(color: c.primary)));
+              }),
             ]),
             Flexible(
-              child: SingleChildScrollView(
-                child: Column(children: [
-                  _SheetTile(title: 'Todo ${picked!.name}', subtitle: 'Sin filtrar por región', selected: widget.initialCountry == _pickedCountry && widget.initialRegion == null, onTap: () => widget.onSelected(_pickedCountry, null)),
-                  ...picked.regions.map((r) => _SheetTile(title: r, subtitle: picked.name, selected: widget.initialCountry == _pickedCountry && widget.initialRegion == r, onTap: () => widget.onSelected(_pickedCountry, r))),
-                ]),
-              ),
+              child: Consumer(builder: (context, ref, _) {
+                final regionsAsync = ref.watch(countryRegionsProvider(_pickedCountry!));
+                final pickedList = ref.watch(globalCountriesRealProvider).valueOrNull;
+                GlobalCountry? picked;
+                if (pickedList != null) { for (final cc in pickedList) { if (cc.code == _pickedCountry) { picked = cc; break; } } }
+                picked ??= countryByCode(_pickedCountry!);
+                return regionsAsync.when(
+                  data: (regions) => SingleChildScrollView(
+                    child: Column(children: [
+                      _SheetTile(title: 'Todo ${picked!.name}', subtitle: 'Sin filtrar por región', selected: widget.initialCountry == _pickedCountry && widget.initialRegion == null, onTap: () => widget.onSelected(_pickedCountry, null)),
+                      ...regions.map((r) => _SheetTile(title: r, subtitle: picked!.name, selected: widget.initialCountry == _pickedCountry && widget.initialRegion == r, onTap: () => widget.onSelected(_pickedCountry, r))),
+                    ]),
+                  ),
+                  loading: () => const Padding(padding: EdgeInsets.all(16), child: Center(child: CircularProgressIndicator())),
+                  error: (e, _) => SingleChildScrollView(child: Column(children: [
+                    _SheetTile(title: 'Todo ${picked!.name}', subtitle: 'Sin filtrar', selected: widget.initialCountry == _pickedCountry && widget.initialRegion == null, onTap: () => widget.onSelected(_pickedCountry, null)),
+                    ...picked!.regions.map((r) => _SheetTile(title: r, subtitle: picked!.name, selected: widget.initialCountry == _pickedCountry && widget.initialRegion == r, onTap: () => widget.onSelected(_pickedCountry, r))),
+                  ])),
+                );
+              }),
             ),
           ],
           const SizedBox(height: 8),
-          Text('Se detecta país por login; si no estás logueado, elige aquí.', style: TextStyle(fontSize: 11, color: c.onSurfaceVariant)),
+          Text(userCountry == null ? 'No logueado — elige país (se guardará). Logueado: se auto-selecciona tu país.' : 'País detectado por login: $userCountry. Cambia si buscas en otro país.', style: TextStyle(fontSize: 11, color: c.onSurfaceVariant)),
         ]),
       ),
     );
