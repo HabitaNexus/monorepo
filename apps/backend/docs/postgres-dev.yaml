@@ -1,0 +1,43 @@
+# Postgres dev local para apps/backend (HAB-26).
+# Uso (requiere Podman): podman play kube apps/backend/docs/postgres-dev.yaml
+# Provee pg_cron + pg_net vía imagen supabase/postgres (15.x).
+# Nota: en esta rama el manifiesto está autorizado pero sin aplicar —
+# el entorno de desarrollo no dispone del runtime Podman.
+apiVersion: v1
+kind: Pod
+metadata:
+  name: habitanexus-postgres-dev
+  labels:
+    app: habitanexus-postgres-dev
+spec:
+  containers:
+    - name: postgres
+      image: supabase/postgres:15.8.1.060
+      ports:
+        - containerPort: 5432
+          hostPort: 5432
+      env:
+        - name: POSTGRES_USER
+          value: habitanexus
+        - name: POSTGRES_PASSWORD
+          value: habitanexus
+        - name: POSTGRES_DB
+          value: habitanexus
+      volumeMounts:
+        - name: pgdata
+          mountPath: /var/lib/postgresql/data
+  volumes:
+    - name: pgdata
+      persistentVolumeClaim:
+        claimName: habitanexus-pgdata-dev
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: habitanexus-pgdata-dev
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
