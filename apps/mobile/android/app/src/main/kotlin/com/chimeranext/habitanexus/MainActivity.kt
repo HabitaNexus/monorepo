@@ -1,4 +1,4 @@
-package com.lapc506.flutter_longterm_rental_demo
+package com.chimeranext.habitanexus
 
 import io.flutter.embedding.android.FlutterActivity
 
