@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{width:100vw;margin:0;padding:0;}body{overscroll-behavior:none;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "on-surface": "#dde2f8", "error-container": "#93000a", "tertiary-container": "#b2bede", "on-primary": "#003731", "tertiary-fixed": "#d8e2ff", "background": "#0d1322", "secondary": "#80d5cb", "surface-container-lowest": "#080e1d", "primary": "#57f1db", "on-tertiary-fixed": "#0f1b34", "on-tertiary": "#24304a", "outline": "#859490", "inverse-surface": "#dde2f8", "surface-tint": "#3cddc7", "primary-fixed-dim": "#3cddc7", "primary-fixed": "#62fae3", "surface-container-low": "#151b2b", "surface": "#0d1322", "surface-variant": "#2e3445", "secondary-fixed": "#9cf2e8", "on-background": "#dde2f8", "surface-container-highest": "#2e3445", "on-secondary-container": "#9af0e5", "on-primary-container": "#00574d", "on-tertiary-container": "#414d68", "on-secondary": "#003733", "on-primary-fixed": "#00201c", "secondary-container": "#007068", "on-surface-variant": "#bacac5", "tertiary-fixed-dim": "#bac6e7", "primary-container": "#2dd4bf", "on-error": "#690005", "error": "#ffb4ab", "surface-container": "#191f2f", "on-secondary-fixed-variant": "#00504a", "on-error-container": "#ffdad6", "on-tertiary-fixed-variant": "#3b4661", "on-secondary-fixed": "#00201d", "secondary-fixed-dim": "#80d5cb", "surface-dim": "#0d1322", "on-primary-fixed-variant": "#005047", "surface-bright": "#33394a", "surface-container-high": "#242a3a", "outline-variant": "#3c4a46", "inverse-primary": "#006b5f", "inverse-on-surface": "#2a3041", "tertiary": "#cedafb" }, "borderRadius": { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" }, "spacing": { "space-lg": "1.5rem", "space-xs": "0.25rem", "margin": "1rem", "gutter-tablet": "1.5rem", "space-md": "1rem", "space-sm": "0.5rem", "margin-tablet": "2rem", "gutter": "1rem", "space-xl": "2rem" }, "fontFamily": { "headline-sm": ["Inter"], "body-lg": ["Inter"], "label-sm": ["Inter"], "financial-display": ["Inter"], "headline-xl-mobile": ["Inter"], "label-md": ["Inter"], "body-sm": ["Inter"], "headline-md": ["Inter"], "financial-md": ["Inter"], "legal-code": ["Inter"], "body-md": ["Inter"], "headline-xl": ["Inter"], "headline-lg": ["Inter"] }, "fontSize": { "headline-sm": ["16px", { "lineHeight": "22px", "fontWeight": "600" }], "body-lg": ["15px", { "lineHeight": "22px", "fontWeight": "400" }], "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "500" }], "financial-display": ["28px", { "lineHeight": "34px", "letterSpacing": "-0.02em", "fontWeight": "700" }], "headline-xl-mobile": ["26px", { "lineHeight": "32px", "letterSpacing": "-0.015em", "fontWeight": "700" }], "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.04em", "fontWeight": "600" }], "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }], "headline-md": ["18px", { "lineHeight": "24px", "letterSpacing": "-0.005em", "fontWeight": "600" }], "financial-md": ["18px", { "lineHeight": "24px", "letterSpacing": "-0.01em", "fontWeight": "700" }], "legal-code": ["11px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500" }], "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }], "headline-xl": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }], "headline-lg": ["22px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "700" }] } } } }</script><meta content="mobile_tab" name="shell-type"/><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-surface font-body-md text-body-md text-on-surface flex flex-col min-h-screen"><header class="fixed top-0 w-full z-50 pt-safe bg-surface-container-low/80 backdrop-blur-xl shadow-[0_4px_20px_rgba(0,0,0,0.35)]"><div class="h-16 px-margin flex items-center justify-between gap-space-sm"><div class="flex items-center gap-space-sm min-w-0 flex-1"><img alt="HabitaNexus Logo" class="h-8 w-auto object-contain flex-shrink-0" src="https://lh3.googleusercontent.com/aida/AEtjO1UbO0SPUlk81JvKYUKluitlGGUeCv34XoaSRtHvq3etVQvBSZVXFRnI8ZyCBCJCXsFf_ryeMouSn2ckh_NwmLe-AwFXwuLtOa9m6u1Lwyzy8TZwD1pngcKdVeb1D_yiOpYz4ohrDeolOVnvAl6MpZjYq7vLRaHYiJc-TFI_rYKxH_b7Nc31B_mH6bHYQNk3JlrfKrUCA2AquzJaoOgScbQzvSQ1JTB3KjEgdvaycR5Fgraxl6v6kpSN20D8"/><div class="flex flex-col min-w-0"><div class="flex items-center gap-space-xs"><span class="font-headline-sm text-headline-sm text-on-surface truncate">HabitaNexus</span><div class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-primary-container/10"><span class="material-symbols-outlined text-[12px] text-primary-container">verified</span><span class="font-label-sm text-label-sm text-primary-container">CR OK</span></div></div><span class="font-label-sm text-label-sm text-on-surface-variant truncate">Negociaciones</span></div></div><div class="flex items-center gap-space-xs flex-shrink-0"><button aria-label="Notificaciones" class="w-11 h-11 flex items-center justify-center relative text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-[22px]">notifications</span><span class="absolute top-2.5 right-2.5 w-2 h-2 rounded-full bg-primary-container ring-2 ring-surface-container-low"></span></button><div class="flex items-center justify-center p-0.5 rounded-full bg-surface-variant/40"><img alt="Profile" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCDyyaftiQHgUt8J-WYUI8epJ19nip1KVe1JWt7dcPR51LI54_eA236VkjGOALoy3q5ASDHkybp5QkJ2rIs0QeDn7-baBX4ywFOUXDbyJDP03nOdEO8ZGaktemo8YC7YiniQsS8gjJS2Ke_u-1pggQdD7kmnWyaWvAlSmOEFsStAkY_bX2LZjd1H4s-GEQJ2ft6IYzNR5n7lxuYa4ErnJXIxSN0FrzcibxJT-6S5Uvbxi5VL32Yu_HzhA"/></div></div></div></header><main class="flex flex-col relative w-full pt-16 pb-24 bg-surface min-h-screen"><div class="flex flex-col w-full px-margin pb-10 space-y-space-md">
+<!-- TOP CONTEXT HEADER -->
+<div class="bg-surface-container-low p-space-md rounded-xl shadow-md flex flex-col gap-space-sm">
+<div class="flex items-start justify-between gap-space-xs">
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5">
+<span class="font-label-sm text-label-sm text-primary font-bold tracking-wider uppercase">EXPEDIENTE HAB-27</span>
+<span class="font-legal-code text-legal-code text-on-surface-variant">#NEG-2025-089</span>
+</div>
+<h1 class="font-headline-md text-headline-md text-on-surface font-bold truncate">Altamira Sky 402</h1>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Rohrmoser, San José • Condominio Vertical</span>
+</div>
+<div class="flex flex-col items-end shrink-0">
+<span class="px-2 py-0.5 rounded-full bg-primary-container/15 text-primary-container font-label-sm text-label-sm font-semibold inline-flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-primary-container animate-ping"></span>
+          Ronda 3 de 5
+        </span>
+<span class="font-label-sm text-label-sm text-secondary mt-1">Turno: Tu decisión</span>
+</div>
+</div>
+<!-- Countdown ticker pill -->
+<div class="flex items-center justify-between bg-surface-container px-3 py-2 rounded-lg">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[18px]">timer</span>
+<span class="font-body-sm text-body-sm text-on-surface">Plazo para responder:</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="inline-block w-2 h-2 rounded-full bg-secondary-container"></span>
+<span class="font-headline-sm text-headline-sm text-primary font-bold">18h 42m</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">restantes</span>
+</div>
+</div>
+</div>
+<!-- TIMELINE DE RONDAS AUDITABLE -->
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center justify-between px-0.5">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-primary text-[16px]">history_edu</span>
+<span class="font-label-md text-label-md text-on-surface uppercase tracking-wide">Registro de Rondas</span>
+</div>
+<span class="font-legal-code text-legal-code text-secondary flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">lock</span>
+        SOP-04 Blockchain
+      </span>
+</div>
+<!-- Horizontal Rounds Strip -->
+<div class="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar">
+<!-- Ronda 1 -->
+<div class="flex-1 min-w-[100px] bg-surface-container-low p-2 rounded-lg flex flex-col opacity-75">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-on-surface-variant">R1 • Inquilino</span>
+<span class="material-symbols-outlined text-[12px] text-on-surface-variant">lock_clock</span>
+</div>
+<span class="font-body-sm text-body-sm font-semibold text-on-surface">14 Oct</span>
+<span class="font-legal-code text-[10px] text-outline">Borrador base</span>
+</div>
+<!-- Ronda 2 -->
+<div class="flex-1 min-w-[100px] bg-surface-container-low p-2 rounded-lg flex flex-col opacity-75">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-on-surface-variant">R2 • Carlos M.</span>
+<span class="material-symbols-outlined text-[12px] text-on-surface-variant">lock_clock</span>
+</div>
+<span class="font-body-sm text-body-sm font-semibold text-on-surface">15 Oct</span>
+<span class="font-legal-code text-[10px] text-outline">Contraoferta</span>
+</div>
+<!-- Ronda 3 (Active) -->
+<div class="flex-1 min-w-[115px] bg-surface-container-high p-2 rounded-lg flex flex-col shadow-sm relative overflow-hidden">
+<div class="absolute top-0 right-0 w-8 h-8 bg-primary/10 rounded-bl-full flex items-start justify-end p-1">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+</div>
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-primary font-bold">R3 • Actual</span>
+<span class="material-symbols-outlined text-[14px] text-primary">edit_note</span>
+</div>
+<span class="font-body-sm text-body-sm font-bold text-on-surface">En revisión</span>
+<span class="font-legal-code text-[10px] text-primary-container">4 cambios activos</span>
+</div>
+</div>
+</div>
+<!-- BANNER DIFF & SELECTOR DE FILTROS -->
+<div class="bg-surface-container p-space-md rounded-xl flex flex-col gap-3 shadow-sm">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-lg bg-surface-container-highest flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-[20px]">difference</span>
+</div>
+<div>
+<span class="font-headline-sm text-headline-sm text-on-surface block">Métricas del Diff</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">34 términos normados en Ley 7527</span>
+</div>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="px-2 py-1 bg-surface-container-highest text-secondary text-label-sm font-legal-code rounded">SHA: 8a4b...2f1</span>
+</div>
+</div>
+<!-- Mini stats metrics -->
+<div class="grid grid-cols-2 gap-2 pt-1">
+<div class="bg-surface-container-low p-2.5 rounded-lg flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-secondary-container"></span>
+<span class="font-body-sm text-body-sm text-on-surface">En Acuerdo</span>
+</div>
+<span class="font-headline-sm text-headline-sm text-primary font-bold">30</span>
+</div>
+<div class="bg-surface-container-low p-2.5 rounded-lg flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-error-container"></span>
+<span class="font-body-sm text-body-sm text-on-surface">Con Diferencias</span>
+</div>
+<span class="font-headline-sm text-headline-sm text-error font-bold">4</span>
+</div>
+</div>
+<!-- Filter Toggle Tabs -->
+<div class="flex bg-surface-container-lowest p-1 rounded-lg gap-1 text-center" id="filter-container">
+<button class="flex-1 py-1.5 px-2 rounded-md font-label-sm text-label-sm font-semibold transition-all bg-surface-container text-primary" id="btn-all" onclick="filterTerms('all')">
+        Todos (34)
+      </button>
+<button class="flex-1 py-1.5 px-2 rounded-md font-label-sm text-label-sm font-semibold transition-all text-on-surface-variant hover:text-on-surface" id="btn-diff" onclick="filterTerms('diff')">
+        Solo Diff (4)
+      </button>
+<button class="flex-1 py-1.5 px-2 rounded-md font-label-sm text-label-sm font-semibold transition-all text-on-surface-variant hover:text-on-surface" id="btn-ok" onclick="filterTerms('ok')">
+        Acuerdo (30)
+      </button>
+</div>
+</div>
+<!-- SLOT HAB-28: WIDGET CALCULADORA COSTOS TOTALES ESCROW -->
+<div class="bg-surface-container-low p-space-md rounded-xl shadow-md flex flex-col gap-3">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[20px]">account_balance</span>
+<div>
+<span class="font-headline-sm text-headline-sm text-on-surface">Cálculo Fiduciario Escrow</span>
+<span class="font-legal-code text-legal-code text-on-surface-variant block">Módulo HAB-28 • Banco Custodio BCCR</span>
+</div>
+</div>
+<span class="px-2 py-0.5 rounded bg-primary/10 text-primary font-label-sm text-label-sm uppercase">En Vivo</span>
+</div>
+<div class="space-y-1.5 pt-1">
+<div class="flex items-center justify-between text-body-sm">
+<span class="text-on-surface-variant">Canon mensual propuesto:</span>
+<span class="text-on-surface font-semibold">₡495,000</span>
+</div>
+<div class="flex items-center justify-between text-body-sm">
+<span class="text-on-surface-variant">Fianza en garantía (1 mes en Escrow):</span>
+<span class="text-on-surface font-semibold">₡495,000</span>
+</div>
+<div class="flex items-center justify-between text-body-sm">
+<div class="flex items-center gap-1">
+<span class="text-on-surface-variant">Comisión fiduciaria neutral (1.5%):</span>
+<span class="material-symbols-outlined text-[13px] text-outline">help</span>
+</div>
+<span class="text-on-surface font-semibold">₡7,425</span>
+</div>
+<div class="pt-2 mt-1 bg-surface-container px-3 py-2 rounded-lg flex items-center justify-between">
+<span class="font-body-md text-body-md font-bold text-on-surface">Costo Total de Ingreso:</span>
+<span class="font-financial-display text-financial-display text-primary font-bold">₡997,425</span>
+</div>
+</div>
+<div class="flex items-center gap-1.5 text-legal-code text-legal-code text-outline">
+<span class="material-symbols-outlined text-[14px] text-secondary">verified_user</span>
+<span>Fondos inmovilizados hasta entrega pericial mediante SOP-04.</span>
+</div>
+</div>
+<!-- SLOT HAB-29: ALERTA LEGAL LEY 7527 -->
+<div class="bg-surface-container-highest p-space-md rounded-xl flex items-start gap-3 shadow-sm">
+<span class="material-symbols-outlined text-secondary text-[24px] shrink-0 mt-0.5">gavel</span>
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-2">
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold">Aviso Normativo • Ley 7527</span>
+<span class="font-label-sm text-label-sm px-1.5 py-0.5 rounded bg-surface-container-low text-secondary font-semibold">HAB-29</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+        El plazo pactado (<span class="text-on-surface font-semibold">12 meses</span>) es inferior al plazo estándar legal de 3 años estipulado en Costa Rica. El sistema anexará automáticamente la cláusula de <span class="text-secondary font-medium">renuncia tácita temporal y prórroga expresa</span> para plena validez registral.
+      </p>
+</div>
+</div>
+<!-- COMPARADOR SIDE-BY-SIDE: 34 TÉRMINOS NEGOCIABLES -->
+<div class="space-y-space-md">
+<div class="flex items-center justify-between px-1">
+<span class="font-headline-md text-headline-md text-on-surface font-bold">Términos Comparados</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Pull Request View</span>
+</div>
+<!-- Header dual de columnas sticky-like -->
+<div class="grid grid-cols-2 gap-2 bg-surface-container-low p-2 rounded-lg text-center shadow-sm">
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-primary font-semibold">Tu Propuesta</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Inquilino (Tú)</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-secondary font-semibold">Contrapropuesta</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Carlos M. (Propietario)</span>
+</div>
+</div>
+<!-- GRUPO 1: ECONÓMICOS & PAGOS -->
+<div class="group-wrapper space-y-2" data-group="1">
+<div class="flex items-center justify-between bg-surface-container px-3 py-2 rounded-lg">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[18px]">payments</span>
+<span class="font-headline-sm text-headline-sm text-on-surface">1. Económicos &amp; Pagos</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">4 términos</span>
+</div>
+<!-- Término 1: Precio (DIFF) -->
+<div class="term-row is-diff bg-surface-container-low p-3 rounded-lg space-y-2">
+<div class="flex items-center justify-between">
+<span class="font-body-sm text-body-sm font-semibold text-on-surface">1. Precio Mensual del Canon</span>
+<span class="px-2 py-0.5 rounded bg-surface-variant text-secondary font-label-sm text-label-sm font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">change_circle</span> DIFF (+₡15,000)
+          </span>
+</div>
+<div class="grid grid-cols-2 gap-2">
+<div class="bg-surface-container p-2 rounded text-left">
+<span class="font-legal-code text-legal-code text-on-surface-variant block">Tu Oferta</span>
+<span class="font-body-md text-body-md font-semibold text-on-surface line-through opacity-80">₡480,000</span>
+</div>
+<div class="bg-surface-container-high p-2 rounded text-left">
+<span class="font-legal-code text-legal-code text-secondary block">Contraoferta</span>
+<span class="font-financial-md text-financial-md font-bold text-primary">₡495,000</span>
+</div>
+</div>
+</div>
+<!-- Término 2: Depósito (DIFF) -->
+<div class="term-row is-diff bg-surface-container-low p-3 rounded-lg space-y-2">
+<div class="flex items-center justify-between">
+<span class="font-body-sm text-body-sm font-semibold text-on-surface">2. Depósito en Garantía (Escrow)</span>
+<span class="px-2 py-0.5 rounded bg-surface-variant text-secondary font-label-sm text-label-sm font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">change_circle</span> DIFF (+₡15,000)
+          </span>
+</div>
+<div class="grid grid-cols-2 gap-2">
+<div class="bg-surface-container p-2 rounded text-left">
+<span class="font-legal-code text-legal-code text-on-surface-variant block">Tu Oferta</span>
+<span class="font-body-md text-body-md font-semibold text-on-surface">1 mes (₡480,000)</span>
+</div>
+<div class="bg-surface-container-high p-2 rounded text-left">
+<span class="font-legal-code text-legal-code text-secondary block">Contraoferta</span>
+<span class="font-financial-md text-financial-md font-bold text-primary">1 mes (₡495,000)</span>
+</div>
+</div>
+</div>
+<!-- Término 3: Día de pago (OK) -->
+<div class="term-row is-ok bg-surface-container-low p-3 rounded-lg space-y-2">
+<div class="flex items-center justify-between">
+<span class="font-body-sm text-body-sm font-semibold text-on-surface">3. Día de Pago Exigible</span>
+<span class="px-2 py-0.5 rounded bg-surface-container text-primary font-label-sm text-label-sm font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">check_circle</span> ACUERDO
+          </span>
+</div>
+<div class="grid grid-cols-2 gap-2 text-body-sm text-on-surface">
+<div class="bg-surface-container p-2 rounded">Día 1 de cada mes</div>
+<div class="bg-surface-container p-2 rounded">Día 1 de cada mes</div>
+</div>
+</div>
+<!-- Término 4: Ajuste IPC (OK) -->
+<div class="term-row is-ok bg-surface-container-low p-3 rounded-lg space-y-2">
+<div class="flex items-center justify-between">
+<span class="font-body-sm text-body-sm font-semibold text-on-surface">4. Reajuste Anual Inflacionario</span>
+<span class="px-2 py-0.5 rounded bg-surface-container text-primary font-label-sm text-label-sm font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">check_circle</span> ACUERDO
+          </span>
+</div>
+<div class="grid grid-cols-2 gap-2 text-body-sm text-on-surface">
+<div class="bg-surface-container p-2 rounded">IPC Oficial BCCR</div>
+<div class="bg-surface-container p-2 rounded">IPC Oficial BCCR</div>
+</div>
+</div>
+</div>
+<!-- GRUPO 2: PLAZO & FECHAS -->
+<div class="group-wrapper space-y-2" data-group="2">
+<div class="flex items-center justify-between bg-surface-container px-3 py-2 rounded-lg">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[18px]">calendar_month</span>
+<span class="font-headline-sm text-headline-sm text-on-surface">2. Plazo &amp; Fechas</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">3 términos</span>
+</div>
+<!-- Término 5: Duración (OK c/alerta) -->
+<div class="term-row is-ok bg-surface-container-low p-3 rounded-lg space-y-2">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-1">
+<span class="font-body-sm text-body-sm font-semibold text-on-surface">5. Duración del Contrato</span>
+<span class="material-symbols-outlined text-secondary text-[14px]">warning</span>
+</div>
+<span class="px-2 py-0.5 rounded bg-surface-container text-primary font-label-sm text-label-sm font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">check_circle</span> ACUERDO (HAB-29)
+          </span>
+</div>
+<div class="grid grid-cols-2 gap-2 text-body-sm text-on-surface">
+<div class="bg-surface-container p-2 rounded">12 meses forzosos</div>
+<div class="bg-surface-container p-2 rounded">12 meses forzosos</div>
+</div>
+</div>
+<!-- Término 6: Inicio (OK) -->
+<div class="term-row is-ok bg-surface-container-low p-3 rounded-lg space-y-2">
+<div class="flex items-center justify-between">
+<span class="font-body-sm text-body-sm font-semibold text-on-surface">6. Fecha de Entrega y Posesión</span>
+<span class="px-2 py-0.5 rounded bg-surface-container text-primary font-label-sm text-label-sm font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">check_circle</span> ACUERDO
+          </span>
+</div>
+<div class="grid grid-cols-2 gap-2 text-body-sm text-on-surface">
+<div class="bg-surface-container p-2 rounded">01 Nov 2025</div>
+<div class="bg-surface-container p-2 rounded">01 Nov 2025</div>
+</div>
+</div>
+<!-- Término 7: Mudanza Gracia (DIFF) -->
+<div class="term-row is-diff bg-surface-container-low p-3 rounded-lg space-y-2">
+<div class="flex items-center justify-between">
+<span class="font-body-sm text-body-sm font-semibold text-on-surface">7. Periodo de Gracia para Mudanza</span>
+<span class="px-2 py-0.5 rounded bg-surface-variant text-secondary font-label-sm text-label-sm font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">change_circle</span> DIFF (-1 día)
+          </span>
+</div>
+<div class="grid grid-cols-2 gap-2">
+<div class="bg-surface-container p-2 rounded text-left text-body-sm text-on-surface">
+            3 días anticipados
+          </div>
+<div class="bg-surface-container-high p-2 rounded text-left text-body-sm font-semibold text-primary">
+            2 días anticipados
+          </div>
+</div>
+</div>
+</div>
+<!-- GRUPO 3: MASCOTAS & COHABITANTES -->
+<div class="group-wrapper space-y-2" data-group="3">
+<div class="flex items-center justify-between bg-surface-container px-3 py-2 rounded-lg">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[18px]">pets</span>
+<span class="font-headline-sm text-headline-sm text-on-surface">3. Mascotas &amp; Cohabitantes</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">5 términos</span>
+</div>
+<!-- Término 8: Perros (DIFF) -->
+<div class="term-row is-diff bg-surface-container-low p-3 rounded-lg space-y-2">
+<div class="flex items-center justify-between">
+<span class="font-body-sm text-body-sm font-semibold text-on-surface">8. Tenencia de Caninos</span>
+<span class="px-2 py-0.5 rounded bg-surface-variant text-secondary font-label-sm text-label-sm font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">change_circle</span> DIFF
+          </span>
+</div>
+<div class="grid grid-cols-2 gap-2 text-body-sm">
+<div class="bg-surface-container p-2 rounded text-on-surface">
+            Permitido (1 raza mediana)
+          </div>
+<div class="bg-surface-container-high p-2 rounded text-primary font-semibold">
+            Permitido (1 raza mediana, máx 15kg)
+          </div>
+</div>
+</div>
+<!-- Términos 9 a 11 (OK) -->
+<div class="term-row is-ok bg-surface-container-low p-3 rounded-lg space-y-2">
+<div class="flex items-center justify-between">
+<span class="font-body-sm text-body-sm font-semibold text-on-surface">9. Felinos / Gatos</span>
+<span class="px-2 py-0.5 rounded bg-surface-container text-primary font-label-sm text-label-sm font-bold">ACUERDO</span>
+</div>
+<div class="grid grid-cols-2 gap-2 text-body-sm text-on-surface">
+<div class="bg-surface-container p-2 rounded">No solicitados</div>
+<div class="bg-surface-container p-2 rounded">No autorizados</div>
+</div>
+</div>
+<div class="term-row is-ok bg-surface-container-low p-3 rounded-lg space-y-2">
+<div class="flex items-center justify-between">
+<span class="font-body-sm text-body-sm font-semibold text-on-surface">10. Fauna Exótica u Otras Especies</span>
+<span class="px-2 py-0.5 rounded bg-surface-container text-primary font-label-sm text-label-sm font-bold">ACUERDO</span>
+</div>
+<div class="grid grid-cols-2 gap-2 text-body-sm text-on-surface">
+<div class="bg-surface-container p-2 rounded">Ninguna</div>
+<div class="bg-surface-container p-2 rounded">Prohibición expresa</div>
+</div>
+</div>
+<div class="term-row is-ok bg-surface-container-low p-3 rounded-lg space-y-2">
+<div class="flex items-center justify-between">
+<span class="font-body-sm text-body-sm font-semibold text-on-surface">11. Cohabitantes Adultos Permanentes</span>
+<span class="px-2 py-0.5 rounded bg-surface-container text-primary font-label-sm text-label-sm font-bold">ACUERDO</span>
+</div>
+<div class="grid grid-cols-2 gap-2 text-body-sm text-on-surface">
+<div class="bg-surface-container p-2 rounded">2 adultos registrados</div>
+<div class="bg-surface-container p-2 rounded">2 adultos registrados</div>
+</div>
+</div>
+<!-- Término 12: Huéspedes (DIFF) -->
+<div class="term-row is-diff bg-surface-container-low p-3 rounded-lg space-y-2">
+<div class="flex items-center justify-between">
+<span class="font-body-sm text-body-sm font-semibold text-on-surface">12. Límite de Huéspedes Temporales</span>
+<span class="px-2 py-0.5 rounded bg-surface-variant text-secondary font-label-sm text-label-sm font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">change_circle</span> DIFF
+          </span>
+</div>
+<div class="grid grid-cols-2 gap-2 text-body-sm">
+<div class="bg-surface-container p-2 rounded text-on-surface">
+            Hasta 15 días continuos
+          </div>
+<div class="bg-surface-container-high p-2 rounded text-primary font-semibold">
+            Hasta 10 días continuos
+          </div>
+</div>
+</div>
+</div>
+<!-- GRUPO 4: SERVICIOS & SUMINISTROS -->
+<div class="group-wrapper space-y-2" data-group="4">
+<div class="flex items-center justify-between bg-surface-container px-3 py-2 rounded-lg">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[18px]">bolt</span>
+<span class="font-headline-sm text-headline-sm text-on-surface">4. Servicios &amp; Suministros</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">7 términos</span>
+</div>
+<!-- Término 13: Agua (DIFF) -->
+<div class="term-row is-diff bg-surface-container-low p-3 rounded-lg space-y-2">
+<div class="flex items-center justify-between">
+<span class="font-body-sm text-body-sm font-semibold text-on-surface">13. Agua Potable (AyA / Medidor)</span>
+<span class="px-2 py-0.5 rounded bg-surface-variant text-secondary font-label-sm text-label-sm font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">change_circle</span> DIFF
+          </span>
+</div>
+<div class="grid grid-cols-2 gap-2 text-body-sm">
+<div class="bg-surface-container p-2 rounded text-on-surface">
+            Incluido en canon base
+          </div>
+<div class="bg-surface-container-high p-2 rounded text-primary font-semibold">
+            A cargo del inquilino (remarcador)
+          </div>
+</div>
+</div>
+<!-- Términos 14 a 19 (Acuerdos) -->
+<div class="term-row is-ok bg-surface-container-low p-3 rounded-lg space-y-2">
+<div class="flex items-center justify-between">
+<span class="font-body-sm text-body-sm font-semibold text-on-surface">14. Electricidad (CNFL)</span>
+<span class="px-2 py-0.5 rounded bg-surface-container text-primary font-label-sm text-label-sm font-bold">ACUERDO</span>
+</div>
+<div class="grid grid-cols-2 gap-2 text-body-sm text-on-surface">
+<div class="bg-surface-container p-2 rounded">Medidor directo inquilino</div>
+<div class="bg-surface-container p-2 rounded">Medidor directo inquilino</div>
+</div>
+</div>
+<div class="term-row is-ok bg-surface-container-low p-3 rounded-lg space-y-2">
+<div class="flex items-center justify-between">
+<span class="font-body-sm text-body-sm font-semibold text-on-surface">15. Internet Fibra Óptica</span>
+<span class="px-2 py-0.5 rounded bg-surface-container text-primary font-label-sm text-label-sm font-bold">ACUERDO</span>
+</div>
+<div class="grid grid-cols-2 gap-2 text-body-sm text-on-surface">
+<div class="bg-surface-container p-2 rounded">300 Mbps bonificado</div>
+<div class="bg-surface-container p-2 rounded">300 Mbps bonificado</div>
+</div>
+</div>
+<div class="term-row is-ok bg-surface-container-low p-3 rounded-lg space-y-2">
+<div class="flex items-center justify-between">
+<span class="font-body-sm text-body-sm font-semibold text-on-surface">16. Televisión por Cable</span>
+<span class="px-2 py-0.5 rounded bg-surface-container text-primary font-label-sm text-label-sm font-bold">ACUERDO</span>
+</div>
+<div class="grid grid-cols-2 gap-2 text-body-sm text-on-surface">
+<div class="bg-surface-container p-2 rounded">No requerido</div>
+<div class="bg-surface-container p-2 rounded">No provisto</div>
+</div>
+</div>
+<div class="term-row is-ok bg-surface-container-low p-3 rounded-lg space-y-2">
+<div class="flex items-center justify-between">
+<span class="font-body-sm text-body-sm font-semibold text-on-surface">17. Suministro de Gas para Cocina</span>
+<span class="px-2 py-0.5 rounded bg-surface-container text-primary font-label-sm text-label-sm font-bold">ACUERDO</span>
+</div>
+<div class="grid grid-cols-2 gap-2 text-body-sm text-on-surface">
+<div class="bg-surface-container p-2 rounded">Tanque individual GLP</div>
+<div class="bg-surface-container p-2 rounded">Tanque individual GLP</div>
+</div>
+</div>
+<div class="term-row is-ok bg-surface-container-low p-3 rounded-lg space-y-2">
+<div class="flex items-center justify-between">
+<span class="font-body-sm text-body-sm font-semibold text-on-surface">18. Cuota Municipal de Desechos</span>
+<span class="px-2 py-0.5 rounded bg-surface-container text-primary font-label-sm text-label-sm font-bold">ACUERDO</span>
+</div>
+<div class="grid grid-cols-2 gap-2 text-body-sm text-on-surface">
+<div class="bg-surface-container p-2 rounded">Incluida en canon</div>
+<div class="bg-surface-container p-2 rounded">Incluida en canon</div>
+</div>
+</div>
+<div class="term-row is-ok bg-surface-container-low p-3 rounded-lg space-y-2">
+<div class="flex items-center justify-between">
+<span class="font-body-sm text-body-sm font-semibold text-on-surface">19. Cuota Condominal (HOA)</span>
+<span class="px-2 py-0.5 rounded bg-surface-container text-primary font-label-sm text-label-sm font-bold">ACUERDO</span>
+</div>
+<div class="grid grid-cols-2 gap-2 text-body-sm text-on-surface">
+<div class="bg-surface-container p-2 rounded">₡65,000 (Propietario)</div>
+<div class="bg-surface-container p-2 rounded">₡65,000 (Propietario)</div>
+</div>
+</div>
+</div>
+<!-- GRUPO 5: MODIFICACIONES & CONVIVENCIA -->
+<div class="group-wrapper space-y-2" data-group="5">
+<div class="flex items-center justify-between bg-surface-container px-3 py-2 rounded-lg">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[18px]">handyman</span>
+<span class="font-headline-sm text-headline-sm text-on-surface">5. Modificaciones &amp; Convivencia</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">6 términos</span>
+</div>
+<!-- Términos 20 a 23 (OK) -->
+<div class="term-row is-ok bg-surface-container-low p-3 rounded-lg space-y-2">
+<div class="flex items-center justify-between">
+<span class="font-body-sm text-body-sm font-semibold text-on-surface">20. Fijación de Cuadros y Taladro</span>
+<span class="px-2 py-0.5 rounded bg-surface-container text-primary font-label-sm text-label-sm font-bold">ACUERDO</span>
+</div>
+<div class="grid grid-cols-2 gap-2 text-body-sm text-on-surface">
+<div class="bg-surface-container p-2 rounded">Permitido (resane final)</div>
+<div class="bg-surface-container p-2 rounded">Permitido (resane final)</div>
+</div>
+</div>
+<div class="term-row is-ok bg-surface-container-low p-3 rounded-lg space-y-2">
+<div class="flex items-center justify-between">
+<span class="font-body-sm text-body-sm font-semibold text-on-surface">21. Pintura de Paredes Interiores</span>
+<span class="px-2 py-0.5 rounded bg-surface-container text-primary font-label-sm text-label-sm font-bold">ACUERDO</span>
+</div>
+<div class="grid grid-cols-2 gap-2 text-body-sm text-on-surface">
+<div class="bg-surface-container p-2 rounded">Neutral acordado</div>
+<div class="bg-surface-container p-2 rounded">Blanco humo estándar</div>
+</div>
+</div>
+<div class="term-row is-ok bg-surface-container-low p-3 rounded-lg space-y-2">
+<div class="flex items-center justify-between">
+<span class="font-body-sm text-body-sm font-semibold text-on-surface">22. Modificaciones Estructurales</span>
+<span class="px-2 py-0.5 rounded bg-surface-container text-primary font-label-sm text-label-sm font-bold">ACUERDO</span>
+</div>
+<div class="grid grid-cols-2 gap-2 text-body-sm text-on-surface">
+<div class="bg-surface-container p-2 rounded">Prohibidas</div>
+<div class="bg-surface-container p-2 rounded">Prohibidas</div>
+</div>
+</div>
+<div class="term-row is-ok bg-surface-container-low p-3 rounded-lg space-y-2">
+<div class="flex items-center justify-between">
+<span class="font-body-sm text-body-sm font-semibold text-on-surface">23. Régimen de Silencio Condominal</span>
+<span class="px-2 py-0.5 rounded bg-surface-container text-primary font-label-sm text-label-sm font-bold">ACUERDO</span>
+</div>
+<div class="grid grid-cols-2 gap-2 text-body-sm text-on-surface">
+<div class="bg-surface-container p-2 rounded">10:00 PM - 7:00 AM</div>
+<div class="bg-surface-container p-2 rounded">10:00 PM - 7:00 AM</div>
+</div>
+</div>
+<!-- Término 24: A/C Mantenimiento (DIFF) -->
+<div class="term-row is-diff bg-surface-container-low p-3 rounded-lg space-y-2">
+<div class="flex items-center justify-between">
+<span class="font-body-sm text-body-sm font-semibold text-on-surface">24. Mantenimiento Preventivo A/C</span>
+<span class="px-2 py-0.5 rounded bg-surface-variant text-secondary font-label-sm text-label-sm font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">change_circle</span> DIFF
+          </span>
+</div>
+<div class="grid grid-cols-2 gap-2 text-body-sm">
+<div class="bg-surface-container p-2 rounded text-on-surface">
+            Costo compartido 50% / 50%
+          </div>
+<div class="bg-surface-container-high p-2 rounded text-primary font-semibold">
+            100% Inquilino (anual)
+          </div>
+</div>
+</div>
+<!-- Término 25: Calentador (OK) -->
+<div class="term-row is-ok bg-surface-container-low p-3 rounded-lg space-y-2">
+<div class="flex items-center justify-between">
+<span class="font-body-sm text-body-sm font-semibold text-on-surface">25. Inspección Calentador de Agua</span>
+<span class="px-2 py-0.5 rounded bg-surface-container text-primary font-label-sm text-label-sm font-bold">ACUERDO</span>
+</div>
+<div class="grid grid-cols-2 gap-2 text-body-sm text-on-surface">
+<div class="bg-surface-container p-2 rounded">Certificado en SOP-04</div>
+<div class="bg-surface-container p-2 rounded">Certificado en SOP-04</div>
+</div>
+</div>
+</div>
+<!-- GRUPO 6: USOS, SUBARRIENDO & CESIÓN -->
+<div class="group-wrapper space-y-2" data-group="6">
+<div class="flex items-center justify-between bg-surface-container px-3 py-2 rounded-lg">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[18px]">domain</span>
+<span class="font-headline-sm text-headline-sm text-on-surface">6. Usos, Subarriendo &amp; Cesión</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">4 términos</span>
+</div>
+<!-- Término 26: Teletrabajo (OK) -->
+<div class="term-row is-ok bg-surface-container-low p-3 rounded-lg space-y-2">
+<div class="flex items-center justify-between">
+<span class="font-body-sm text-body-sm font-semibold text-on-surface">26. Teletrabajo y Home Office</span>
+<span class="px-2 py-0.5 rounded bg-surface-container text-primary font-label-sm text-label-sm font-bold">ACUERDO</span>
+</div>
+<div class="grid grid-cols-2 gap-2 text-body-sm text-on-surface">
+<div class="bg-surface-container p-2 rounded">Sin afluencia pública</div>
+<div class="bg-surface-container p-2 rounded">Sin afluencia pública</div>
+</div>
+</div>
+<!-- Término 27: Subarriendo cochera (DIFF) -->
+<div class="term-row is-diff bg-surface-container-low p-3 rounded-lg space-y-2">
+<div class="flex items-center justify-between">
+<span class="font-body-sm text-body-sm font-semibold text-on-surface">27. Cesión / Subarriendo de Cochera</span>
+<span class="px-2 py-0.5 rounded bg-surface-variant text-secondary font-label-sm text-label-sm font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">change_circle</span> DIFF
+          </span>
+</div>
+<div class="grid grid-cols-2 gap-2 text-body-sm">
+<div class="bg-surface-container p-2 rounded text-on-surface">
+            Permitido a condómino interno
+          </div>
+<div class="bg-surface-container-high p-2 rounded text-primary font-semibold">
+            Estrictamente Prohibido
+          </div>
+</div>
+</div>
+<!-- Término 28 y 29 (OK) -->
+<div class="term-row is-ok bg-surface-container-low p-3 rounded-lg space-y-2">
+<div class="flex items-center justify-between">
+<span class="font-body-sm text-body-sm font-semibold text-on-surface">28. Subarriendo Total / Airbnb</span>
+<span class="px-2 py-0.5 rounded bg-surface-container text-primary font-label-sm text-label-sm font-bold">ACUERDO</span>
+</div>
+<div class="grid grid-cols-2 gap-2 text-body-sm text-on-surface">
+<div class="bg-surface-container p-2 rounded">Prohibición Absoluta</div>
+<div class="bg-surface-container p-2 rounded">Prohibición Absoluta</div>
+</div>
+</div>
+<div class="term-row is-ok bg-surface-container-low p-3 rounded-lg space-y-2">
+<div class="flex items-center justify-between">
+<span class="font-body-sm text-body-sm font-semibold text-on-surface">29. Cesión Contractual de Posición</span>
+<span class="px-2 py-0.5 rounded bg-surface-container text-primary font-label-sm text-label-sm font-bold">ACUERDO</span>
+</div>
+<div class="grid grid-cols-2 gap-2 text-body-sm text-on-surface">
+<div class="bg-surface-container p-2 rounded">Con aval previo escrito</div>
+<div class="bg-surface-container p-2 rounded">Con aval previo escrito</div>
+</div>
+</div>
+</div>
+<!-- GRUPO 7: CLÁUSULAS NO NEGOCIABLES / FIDUCIARIAS -->
+<div class="group-wrapper space-y-2" data-group="7">
+<div class="flex items-center justify-between bg-surface-container px-3 py-2 rounded-lg">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[18px]">verified</span>
+<span class="font-headline-sm text-headline-sm text-on-surface">7. Cláusulas Fiduciarias Obligatorias</span>
+</div>
+<span class="font-label-sm text-label-sm text-primary font-bold">5 fijas SOP</span>
+</div>
+<!-- Términos 30 a 34 -->
+<div class="term-row is-ok bg-surface-container-low p-3 rounded-lg space-y-1">
+<div class="flex items-center justify-between">
+<span class="font-body-sm text-body-sm font-semibold text-on-surface">30. Destino de Uso Exclusivo</span>
+<span class="font-legal-code text-legal-code text-primary">SOP 4.1</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant block">Habitacional unifamiliar privado no comercial.</span>
+</div>
+<div class="term-row is-ok bg-surface-container-low p-3 rounded-lg space-y-1">
+<div class="flex items-center justify-between">
+<span class="font-body-sm text-body-sm font-semibold text-on-surface">31. Fideicomiso Escrow Segregado</span>
+<span class="font-legal-code text-legal-code text-primary">SOP 4.2</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant block">Custodia neutral del depósito bancario en entidad fiduciaria calificada BCCR.</span>
+</div>
+<div class="term-row is-ok bg-surface-container-low p-3 rounded-lg space-y-1">
+<div class="flex items-center justify-between">
+<span class="font-body-sm text-body-sm font-semibold text-on-surface">32. Cláusula Compromisoria Arbitral</span>
+<span class="font-legal-code text-legal-code text-primary">SOP 4.3</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant block">Centro de Conciliación y Arbitraje de la Cámara de Comercio de Costa Rica.</span>
+</div>
+<div class="term-row is-ok bg-surface-container-low p-3 rounded-lg space-y-1">
+<div class="flex items-center justify-between">
+<span class="font-body-sm text-body-sm font-semibold text-on-surface">33. Fe de Fechas y Validez Digital</span>
+<span class="font-legal-code text-legal-code text-primary">SOP 4.4</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant block">Firma electrónica avanzada BCCR respaldada con estampa de tiempo UTC-6.</span>
+</div>
+<div class="term-row is-ok bg-surface-container-low p-3 rounded-lg space-y-1">
+<div class="flex items-center justify-between">
+<span class="font-body-sm text-body-sm font-semibold text-on-surface">34. Entrega Pericial Condicionante</span>
+<span class="font-legal-code text-legal-code text-primary">SOP 4.5</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant block">El primer desembolso fiduciario exige acta fotográfica y firma de inventario.</span>
+</div>
+</div>
+</div>
+<!-- FIXED FLOATING ACTION PANEL (STATE-DRIVEN HAB-26) -->
+<div class="bg-surface-container-low p-space-md rounded-xl shadow-2xl flex flex-col gap-3">
+<div class="flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Canon acordado final:</span>
+<span class="font-financial-md text-financial-md text-primary font-bold">₡495,000 / mes</span>
+</div>
+<div class="text-right">
+<span class="font-label-sm text-label-sm text-secondary font-medium">4 diferencias pendientes</span>
+<span class="font-legal-code text-legal-code text-on-surface-variant block">Aceptas o contrapropones</span>
+</div>
+</div>
+<!-- Botones Primario & Secundario -->
+<div class="flex flex-col sm:flex-row gap-2">
+<button class="flex-1 h-12 rounded-lg bg-surface-container-high text-on-surface font-headline-sm text-headline-sm font-semibold flex items-center justify-center gap-2 transition-all active:scale-[0.98]" type="button">
+<span class="material-symbols-outlined text-[20px] text-secondary">tune</span>
+<span>Contraproponer R4</span>
+</button>
+<button class="flex-1 h-12 rounded-lg bg-primary text-on-primary font-headline-sm text-headline-sm font-bold flex items-center justify-center gap-2 shadow-lg transition-all active:scale-[0.98]" type="button">
+<span class="material-symbols-outlined text-[20px]">verified</span>
+<span>Aceptar Términos</span>
+</button>
+</div>
+<!-- Enlaces secundarios de escape y descarga -->
+<div class="flex items-center justify-between pt-1 px-1">
+<a class="font-body-sm text-body-sm text-error font-medium flex items-center gap-1 hover:underline" href="#">
+<span class="material-symbols-outlined text-[15px]">cancel</span>
+        Desistir de oferta
+      </a>
+<a class="font-body-sm text-body-sm text-secondary font-medium flex items-center gap-1 hover:underline" href="#">
+<span class="material-symbols-outlined text-[15px]">download</span>
+        Exportar PR PDF
+      </a>
+</div>
+</div>
+</div>
+<script>
+  function filterTerms(mode) {
+    const allRows = document.querySelectorAll('.term-row');
+    const btnAll = document.getElementById('btn-all');
+    const btnDiff = document.getElementById('btn-diff');
+    const btnOk = document.getElementById('btn-ok');
+
+    // Reset styles
+    [btnAll, btnDiff, btnOk].forEach(b => {
+      b.classList.remove('bg-surface-container', 'text-primary');
+      b.classList.add('text-on-surface-variant');
+    });
+
+    if (mode === 'all') {
+      btnAll.classList.add('bg-surface-container', 'text-primary');
+      btnAll.classList.remove('text-on-surface-variant');
+      allRows.forEach(r => r.classList.remove('hidden'));
+    } else if (mode === 'diff') {
+      btnDiff.classList.add('bg-surface-container', 'text-primary');
+      btnDiff.classList.remove('text-on-surface-variant');
+      allRows.forEach(r => {
+        if (r.classList.contains('is-diff')) {
+          r.classList.remove('hidden');
+        } else {
+          r.classList.add('hidden');
+        }
+      });
+    } else if (mode === 'ok') {
+      btnOk.classList.add('bg-surface-container', 'text-primary');
+      btnOk.classList.remove('text-on-surface-variant');
+      allRows.forEach(r => {
+        if (r.classList.contains('is-ok')) {
+          r.classList.remove('hidden');
+        } else {
+          r.classList.add('hidden');
+        }
+      });
+    }
+
+    // Toggle group header visibility if all children hidden
+    document.querySelectorAll('.group-wrapper').forEach(grp => {
+      const visibleChildren = grp.querySelectorAll('.term-row:not(.hidden)');
+      if (visibleChildren.length === 0) {
+        grp.classList.add('hidden');
+      } else {
+        grp.classList.remove('hidden');
+      }
+    });
+  }
+</script></main><nav class="fixed bottom-0 w-full z-50 pb-safe bg-surface-container-low/85 backdrop-blur-xl shadow-[0_-4px_24px_rgba(0,0,0,0.45)]" data-active-classes="text-primary font-label-md"><div class="flex justify-around items-center h-16 px-space-xs"><a class="flex flex-col items-center justify-center gap-0.5 w-14 h-14 text-on-surface-variant hover:text-primary transition-all relative group" data-path="inicio" href="#"><span class="material-symbols-outlined text-[24px]">home</span><span class="font-label-sm text-label-sm tracking-tight">Inicio</span><span class="w-1.5 h-1.5 rounded-full bg-primary-container opacity-0 group-hover:opacity-100 transition-opacity"></span></a><a class="flex flex-col items-center justify-center gap-0.5 w-14 h-14 text-on-surface-variant hover:text-primary transition-all relative group" data-path="buscar" href="#"><span class="material-symbols-outlined text-[24px]">explore</span><span class="font-label-sm text-label-sm tracking-tight">Buscar</span><span class="w-1.5 h-1.5 rounded-full bg-primary-container opacity-0 group-hover:opacity-100 transition-opacity"></span></a><a aria-current="page" class="flex flex-col items-center justify-center gap-0.5 w-14 h-14 transition-all relative group text-primary font-label-md" data-path="negociaciones" href="#"><div class="relative flex items-center justify-center"><span class="material-symbols-outlined text-[24px]">handshake</span><span class="absolute -top-1 -right-2 px-1 min-w-[14px] h-[14px] flex items-center justify-center font-label-sm text-[9px] rounded-full bg-primary-container text-on-primary font-bold">1</span></div><span class="font-label-sm text-label-sm tracking-tight">Pactos</span><span class="w-1.5 h-1.5 rounded-full bg-primary-container opacity-0 group-hover:opacity-100 transition-opacity"></span></a><a class="flex flex-col items-center justify-center gap-0.5 w-14 h-14 text-on-surface-variant hover:text-primary transition-all relative group" data-path="contratos" href="#"><span class="material-symbols-outlined text-[24px]">verified_user</span><span class="font-label-sm text-label-sm tracking-tight">Contratos</span><span class="w-1.5 h-1.5 rounded-full bg-primary-container opacity-0 group-hover:opacity-100 transition-opacity"></span></a><a class="flex flex-col items-center justify-center gap-0.5 w-14 h-14 text-on-surface-variant hover:text-primary transition-all relative group" data-path="perfil" href="#"><span class="material-symbols-outlined text-[24px]">shield_person</span><span class="font-label-sm text-label-sm tracking-tight">Perfil</span><span class="w-1.5 h-1.5 rounded-full bg-primary-container opacity-0 group-hover:opacity-100 transition-opacity"></span></a></div></nav></body></html>
