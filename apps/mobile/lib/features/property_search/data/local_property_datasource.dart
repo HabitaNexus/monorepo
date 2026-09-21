@@ -166,6 +166,17 @@ class LocalPropertyDatasource {
         return false;
       }
 
+      // Filtro de baños
+      if (property.bathrooms < filter.minBathrooms) return false;
+
+      // Filtro de cochera (parkingSpots: 0=cualquiera, 1/2 = requiere)
+      if (filter.parkingSpots > 0) {
+        final hasParking = property.features['parking'] == true;
+        if (!hasParking) return false;
+        // Demo: 2 cocheras solo si área >100m2 o precio alto (proxy)
+        if (filter.parkingSpots == 2 && property.areaM2 < 100) return false;
+      }
+
       // Filtro de mascotas
       if (filter.petPolicy != PetType.none &&
           property.petPolicy == PetType.none) {

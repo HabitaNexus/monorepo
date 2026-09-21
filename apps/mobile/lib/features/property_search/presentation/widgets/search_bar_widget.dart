@@ -49,8 +49,13 @@ class _SearchBarWidgetState extends ConsumerState<SearchBarWidget> {
         ? 'Cualquier'
         : '${filter.minBedrooms}–${filter.maxBedrooms} hab';
     final petsLabel = filter.petPolicy == PetType.none ? 'Sin filtro' : filter.petPolicy.label;
+    final bathLabel = filter.bathroomsLabel;
+    final parkingLabel = filter.parkingLabel;
 
-    final compactSummary = '$whereLabel · $priceLabel · $roomsLabel';
+    final compactParts = [whereLabel, priceLabel, roomsLabel];
+    if (filter.minBathrooms != 1) compactParts.add(bathLabel);
+    if (filter.parkingSpots != 0) compactParts.add(parkingLabel);
+    final compactSummary = compactParts.join(' · ');
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -72,6 +77,14 @@ class _SearchBarWidgetState extends ConsumerState<SearchBarWidget> {
           onRoomsTap: () {
             _expand();
             _showRoomsSheet(filter);
+          },
+          onBathTap: () {
+            _expand();
+            _showBathSheet(filter);
+          },
+          onParkingTap: () {
+            _expand();
+            _showParkingSheet(filter);
           },
           onPetsTap: () {
             _expand();
@@ -155,6 +168,20 @@ class _SearchBarWidgetState extends ConsumerState<SearchBarWidget> {
                       label: roomsLabel,
                       selected: !(filter.minBedrooms == 1 && filter.maxBedrooms == 5),
                       onTap: () => _showRoomsSheet(filter),
+                    ),
+                    const SizedBox(width: 8),
+                    _QuickPill(
+                      icon: Icons.bathtub_outlined,
+                      label: bathLabel,
+                      selected: filter.minBathrooms != 1,
+                      onTap: () => _showBathSheet(filter),
+                    ),
+                    const SizedBox(width: 8),
+                    _QuickPill(
+                      icon: Icons.directions_car_outlined,
+                      label: parkingLabel,
+                      selected: filter.parkingSpots != 0,
+                      onTap: () => _showParkingSheet(filter),
                     ),
                     const SizedBox(width: 8),
                     _QuickPill(
@@ -255,6 +282,34 @@ class _SearchBarWidgetState extends ConsumerState<SearchBarWidget> {
         ),
       );
 
+  void _showBathSheet(PropertyFilter f) => showModalBottomSheet(
+        context: context,
+        backgroundColor: Theme.of(context).colorScheme.surfaceContainerLow,
+        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+        builder: (_) => _BathSheet(
+          selected: f.minBathrooms,
+          onSelected: (v) {
+            Navigator.pop(context);
+            ref.read(propertyFilterProvider.notifier).state = f.copyWith(minBathrooms: v);
+            widget.onSearch?.call();
+          },
+        ),
+      );
+
+  void _showParkingSheet(PropertyFilter f) => showModalBottomSheet(
+        context: context,
+        backgroundColor: Theme.of(context).colorScheme.surfaceContainerLow,
+        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+        builder: (_) => _ParkingSheet(
+          selected: f.parkingSpots,
+          onSelected: (v) {
+            Navigator.pop(context);
+            ref.read(propertyFilterProvider.notifier).state = f.copyWith(parkingSpots: v);
+            widget.onSearch?.call();
+          },
+        ),
+      );
+
   void _showPetsSheet(PropertyFilter f) => showModalBottomSheet(
         context: context,
         backgroundColor: Theme.of(context).colorScheme.surfaceContainerLow,
@@ -280,6 +335,8 @@ class _AirbnbPill extends StatelessWidget {
   final VoidCallback onWhereTap;
   final VoidCallback onPriceTap;
   final VoidCallback onRoomsTap;
+  final VoidCallback onBathTap;
+  final VoidCallback onParkingTap;
   final VoidCallback onPetsTap;
   final VoidCallback onSearch;
   final VoidCallback onClose;
@@ -291,6 +348,8 @@ class _AirbnbPill extends StatelessWidget {
     required this.onWhereTap,
     required this.onPriceTap,
     required this.onRoomsTap,
+    required this.onBathTap,
+    required this.onParkingTap,
     required this.onPetsTap,
     required this.onSearch,
     required this.onClose,
@@ -345,18 +404,26 @@ class _AirbnbPill extends StatelessWidget {
         ),
       );
     }
-    return Row(
-      children: [
-        _PillSegment(label: 'Dónde', value: where, icon: Icons.public, onTap: onWhereTap, colors: c),
-        _VDiv(color: c.outlineVariant),
-        _PillSegment(label: 'Precio', value: price, icon: Icons.payments_outlined, onTap: onPriceTap, colors: c),
-        _VDiv(color: c.outlineVariant),
-        _PillSegment(label: 'Habitaciones', value: rooms, icon: Icons.bed_outlined, onTap: onRoomsTap, colors: c),
-        _VDiv(color: c.outlineVariant),
-        _PillSegment(label: 'Mascotas', value: pets, icon: Icons.pets_outlined, onTap: onPetsTap, colors: c),
-        Padding(padding: const EdgeInsets.symmetric(horizontal: 4), child: IconButton(onPressed: onClose, icon: Icon(Icons.close, size: 18, color: c.onSurfaceVariant))),
-        Padding(padding: const EdgeInsets.all(6), child: _SearchFab(onTap: onSearch, colors: c)),
-      ],
+    // Expanded: scroll horizontal para 6 filtros (global)
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: [
+          _PillSegment(label: 'Dónde', value: where, icon: Icons.public, onTap: onWhereTap, colors: c),
+          _VDiv(color: c.outlineVariant),
+          _PillSegment(label: 'Precio', value: price, icon: Icons.payments_outlined, onTap: onPriceTap, colors: c),
+          _VDiv(color: c.outlineVariant),
+          _PillSegment(label: 'Habitaciones', value: rooms, icon: Icons.bed_outlined, onTap: onRoomsTap, colors: c),
+          _VDiv(color: c.outlineVariant),
+          _PillSegment(label: 'Baños', value: filter.bathroomsLabel, icon: Icons.bathtub_outlined, onTap: onBathTap, colors: c),
+          _VDiv(color: c.outlineVariant),
+          _PillSegment(label: 'Cochera', value: filter.parkingLabel, icon: Icons.directions_car_outlined, onTap: onParkingTap, colors: c),
+          _VDiv(color: c.outlineVariant),
+          _PillSegment(label: 'Mascotas', value: pets, icon: Icons.pets_outlined, onTap: onPetsTap, colors: c),
+          Padding(padding: const EdgeInsets.symmetric(horizontal: 4), child: IconButton(onPressed: onClose, icon: Icon(Icons.close, size: 18, color: c.onSurfaceVariant))),
+          Padding(padding: const EdgeInsets.all(6), child: _SearchFab(onTap: onSearch, colors: c)),
+        ],
+      ),
     );
   }
 
@@ -652,6 +719,70 @@ class _Step extends StatelessWidget{
         IconButton.filledTonal(onPressed:onInc, icon: const Icon(Icons.add, size:16)),
       ])
     ]));
+  }
+}
+
+class _BathSheet extends StatelessWidget {
+  final int selected; final ValueChanged<int> onSelected;
+  const _BathSheet({required this.selected, required this.onSelected});
+  @override
+  Widget build(BuildContext context) {
+    final c = Theme.of(context).colorScheme;
+    final opts = [1, 2, 3];
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
+        child: Column(mainAxisSize: MainAxisSize.min, children: [
+          Container(width: 36, height: 4, decoration: BoxDecoration(color: c.outlineVariant, borderRadius: BorderRadius.circular(2))),
+          const SizedBox(height: 12),
+          Row(children: [Icon(Icons.bathtub_outlined, size: 18, color: c.primary), const SizedBox(width: 8), Text('Baños', style: Theme.of(context).textTheme.titleMedium?.copyWith(color: c.onSurface, fontWeight: FontWeight.w700))]),
+          const SizedBox(height: 12),
+          ...opts.map((v) => Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: Material(
+                  color: selected == v ? c.primaryContainer.withValues(alpha: 0.25) : c.surfaceContainer,
+                  borderRadius: BorderRadius.circular(12),
+                  child: InkWell(
+                    onTap: () => onSelected(v),
+                    borderRadius: BorderRadius.circular(12),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                      child: Row(children: [
+                        Icon(Icons.bathtub_outlined, size: 18, color: selected == v ? c.primary : c.onSurfaceVariant),
+                        const SizedBox(width: 10),
+                        Expanded(child: Text(v == 1 ? '1+ baño (cualquier)' : '$v+ baños', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: c.onSurface))),
+                        Icon(selected == v ? Icons.check_circle : Icons.circle_outlined, size: 20, color: selected == v ? c.primary : c.onSurfaceVariant),
+                      ]),
+                    ),
+                  ),
+                ),
+              )),
+        ]),
+      ),
+    );
+  }
+}
+
+class _ParkingSheet extends StatelessWidget {
+  final int selected; final ValueChanged<int> onSelected;
+  const _ParkingSheet({required this.selected, required this.onSelected});
+  @override
+  Widget build(BuildContext context) {
+    final c = Theme.of(context).colorScheme;
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
+        child: Column(mainAxisSize: MainAxisSize.min, children: [
+          Container(width: 36, height: 4, decoration: BoxDecoration(color: c.outlineVariant, borderRadius: BorderRadius.circular(2))),
+          const SizedBox(height: 12),
+          Row(children: [Icon(Icons.directions_car_outlined, size: 18, color: c.primary), const SizedBox(width: 8), Text('Cochera', style: Theme.of(context).textTheme.titleMedium?.copyWith(color: c.onSurface, fontWeight: FontWeight.w700))]),
+          const SizedBox(height: 12),
+          _SheetTile(title: 'Cualquier', subtitle: 'Sin filtro de parqueo', selected: selected == 0, onTap: () => onSelected(0)),
+          _SheetTile(title: '1 cochera', subtitle: 'Al menos 1 espacio', selected: selected == 1, onTap: () => onSelected(1)),
+          _SheetTile(title: '2 cocheras', subtitle: 'Ideal casas / condominio', selected: selected == 2, onTap: () => onSelected(2)),
+        ]),
+      ),
+    );
   }
 }
 
