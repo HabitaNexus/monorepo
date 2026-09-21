@@ -6,6 +6,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../providers/property_search_providers.dart';
 import '../widgets/search_bar_widget.dart';
@@ -20,6 +21,7 @@ class PropertySearchPage extends ConsumerStatefulWidget {
 }
 
 class _PropertySearchPageState extends ConsumerState<PropertySearchPage> {
+  int _navIndex = 1;
   bool _showResults = false;
 
   @override
@@ -40,7 +42,12 @@ class _PropertySearchPageState extends ConsumerState<PropertySearchPage> {
           // Barra de búsqueda
           Padding(
             padding: const EdgeInsets.all(16),
-            child: SearchBarWidget(),
+            child: SearchBarWidget(
+              onSearch: () {
+                setState(() => _showResults = true);
+                ref.invalidate(searchResultsProvider);
+              },
+            ),
           ),
 
           // Estadísticas de búsqueda (se muestran cuando hay resultados)
@@ -181,6 +188,37 @@ class _PropertySearchPageState extends ConsumerState<PropertySearchPage> {
 
           // Barra de comparación (se muestra cuando hay selecciones)
           if (comparison.isNotEmpty) const ComparisonWidget(),
+        ],
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _navIndex,
+        onTap: (i) {
+          switch (i) {
+            case 0:
+              context.go('/');
+              break;
+            case 1:
+              // Already on search
+              break;
+            case 2:
+              context.go('/negociacion');
+              break;
+            case 3:
+              // context.go('/contratos');
+              break;
+          }
+          setState(() => _navIndex = i);
+        },
+        items: const [
+          BottomNavigationBarItem(
+              icon: Icon(Icons.home_outlined), label: 'Inicio'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.explore_outlined), label: 'Buscar'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.handshake_outlined), label: 'Pactos'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.verified_user_outlined),
+              label: 'Contratos'),
         ],
       ),
     );

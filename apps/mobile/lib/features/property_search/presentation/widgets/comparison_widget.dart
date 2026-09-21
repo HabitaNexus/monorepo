@@ -15,81 +15,85 @@ class ComparisonWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
+    final colors = theme.colorScheme;
     final comparison = ref.watch(comparisonProvider);
 
     if (comparison.isEmpty) {
       return const SizedBox.shrink();
     }
 
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: theme.colorScheme.primaryContainer.withValues(alpha: 0.3),
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+    return Card(
+      margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+      elevation: 2,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
       ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          // Header
-          Row(
-            children: [
-              Icon(
-                Icons.compare_arrows,
-                color: theme.colorScheme.primary,
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Text(
-                  'Comparar (${comparison.length}/${ComparisonNotifier.maxComparison})',
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    color: theme.colorScheme.primary,
-                    fontWeight: FontWeight.bold,
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Header
+            Row(
+              children: [
+                Icon(
+                  Icons.compare_arrows,
+                  color: colors.primary,
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    'Comparar (${comparison.length}/${ComparisonNotifier.maxComparison})',
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      color: colors.primary,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
-              ),
-              TextButton(
+                TextButton(
+                  onPressed: () {
+                    ref.read(comparisonProvider.notifier).clearComparison();
+                  },
+                  child: const Text('Limpiar'),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+
+            // Chips de propiedades seleccionadas
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: comparison.map((id) {
+                return Chip(
+                  label: Text(id),
+                  deleteIcon: const Icon(Icons.close, size: 16),
+                  onDeleted: () {
+                    ref.read(comparisonProvider.notifier).toggleComparison(id);
+                  },
+                );
+              }).toList(),
+            ),
+
+            // Botón de comparar
+            if (comparison.length >= 2) ...[
+              const SizedBox(height: 16),
+              FilledButton.icon(
                 onPressed: () {
-                  ref.read(comparisonProvider.notifier).clearComparison();
+                  // Navegar a pantalla de comparación
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const ComparisonPage(),
+                    ),
+                  );
                 },
-                child: const Text('Limpiar'),
+                icon: const Icon(Icons.compare_arrows),
+                label: const Text('Comparar propiedades'),
               ),
             ],
-          ),
-          const SizedBox(height: 8),
-
-          // Chips de propiedades seleccionadas
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: comparison.map((id) {
-              return Chip(
-                label: Text(id),
-                deleteIcon: const Icon(Icons.close, size: 16),
-                onDeleted: () {
-                  ref.read(comparisonProvider.notifier).toggleComparison(id);
-                },
-              );
-            }).toList(),
-          ),
-
-          // Botón de comparar
-          if (comparison.length >= 2) ...[
-            const SizedBox(height: 16),
-            FilledButton.icon(
-              onPressed: () {
-                // Navegar a pantalla de comparación
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => const ComparisonPage(),
-                  ),
-                );
-              },
-              icon: const Icon(Icons.compare_arrows),
-              label: const Text('Comparar propiedades'),
-            ),
           ],
-        ],
+        ),
       ),
     );
   }

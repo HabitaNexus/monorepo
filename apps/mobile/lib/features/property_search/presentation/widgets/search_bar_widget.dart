@@ -11,7 +11,9 @@ import '../../domain/property_filter.dart';
 import '../providers/property_search_providers.dart';
 
 class SearchBarWidget extends ConsumerStatefulWidget {
-  const SearchBarWidget({super.key});
+  final VoidCallback? onSearch;
+
+  const SearchBarWidget({super.key, this.onSearch});
 
   @override
   ConsumerState<SearchBarWidget> createState() => _SearchBarWidgetState();
@@ -34,7 +36,8 @@ class _SearchBarWidgetState extends ConsumerState<SearchBarWidget> {
     final filter = ref.watch(propertyFilterProvider);
 
     return Card(
-      elevation: _isExpanded ? 4 : 2,
+      margin: EdgeInsets.zero,
+      elevation: 2,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
       ),
@@ -66,6 +69,7 @@ class _SearchBarWidgetState extends ConsumerState<SearchBarWidget> {
                     : null,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide.none,
                 ),
                 filled: true,
                 fillColor: colors.surfaceContainerLow,
@@ -146,7 +150,8 @@ class _SearchBarWidgetState extends ConsumerState<SearchBarWidget> {
         onSelected: (province) {
           ref.read(propertyFilterProvider.notifier).state =
               filter.copyWith(province: province);
-          Navigator.pop(context);
+          setState(() => _isExpanded = false);
+          widget.onSearch?.call();
         },
       ),
     );
@@ -160,6 +165,8 @@ class _SearchBarWidgetState extends ConsumerState<SearchBarWidget> {
         onChanged: (range) {
           ref.read(propertyFilterProvider.notifier).state =
               filter.copyWith(budgetRange: range);
+          setState(() => _isExpanded = false);
+          widget.onSearch?.call();
         },
       ),
     );
@@ -174,6 +181,8 @@ class _SearchBarWidgetState extends ConsumerState<SearchBarWidget> {
         onChanged: (min, max) {
           ref.read(propertyFilterProvider.notifier).state =
               filter.copyWith(minBedrooms: min, maxBedrooms: max);
+          setState(() => _isExpanded = false);
+          widget.onSearch?.call();
         },
       ),
     );
@@ -187,7 +196,8 @@ class _SearchBarWidgetState extends ConsumerState<SearchBarWidget> {
         onSelected: (policy) {
           ref.read(propertyFilterProvider.notifier).state =
               filter.copyWith(petPolicy: policy);
-          Navigator.pop(context);
+          setState(() => _isExpanded = false);
+          widget.onSearch?.call();
         },
       ),
     );
