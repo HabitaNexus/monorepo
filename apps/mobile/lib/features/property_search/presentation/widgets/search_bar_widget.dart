@@ -20,10 +20,17 @@ class SearchBarWidget extends ConsumerStatefulWidget {
 
 class _SearchBarWidgetState extends ConsumerState<SearchBarWidget> {
   final TextEditingController _controller = TextEditingController();
+  bool _expanded = false;
   @override
   void dispose() {
     _controller.dispose();
     super.dispose();
+  }
+
+  void _expand() => setState(() => _expanded = true);
+  void _collapseAndSearch() {
+    setState(() => _expanded = false);
+    widget.onSearch?.call();
   }
 
   @override
@@ -48,113 +55,153 @@ class _SearchBarWidgetState extends ConsumerState<SearchBarWidget> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        // ── Pill Airbnb (global) ──
+        // ── Pill Airbnb (global) — toque expande opciones ──
         _AirbnbPill(
           compactSummary: compactSummary,
           filter: filter,
-          onWhereTap: () => _showLocationSheet(filter),
-          onPriceTap: () => _showBudgetSheet(filter),
-          onRoomsTap: () => _showRoomsSheet(filter),
-          onPetsTap: () => _showPetsSheet(filter),
+          expanded: _expanded,
+          onPillTap: _expand,
+          onWhereTap: () {
+            _expand();
+            _showLocationSheet(filter);
+          },
+          onPriceTap: () {
+            _expand();
+            _showBudgetSheet(filter);
+          },
+          onRoomsTap: () {
+            _expand();
+            _showRoomsSheet(filter);
+          },
+          onPetsTap: () {
+            _expand();
+            _showPetsSheet(filter);
+          },
           onSearch: () {
             if (_controller.text != filter.searchQuery) {
               ref.read(propertyFilterProvider.notifier).state =
                   filter.copyWith(searchQuery: _controller.text);
             }
-            widget.onSearch?.call();
+            _collapseAndSearch();
           },
+          onClose: () => setState(() => _expanded = false),
         ),
-        const SizedBox(height: 12),
-        // ── Texto libre (opcional, estilo Airbnb "búsqueda flexible") ──
-        TextField(
-          controller: _controller,
-          style: TextStyle(color: colors.onSurface),
-          onChanged: (v) => ref.read(propertyFilterProvider.notifier).state =
-              filter.copyWith(searchQuery: v),
-          onSubmitted: (_) => widget.onSearch?.call(),
-          decoration: InputDecoration(
-            hintText: 'Busca por barrio, distrito o palabra clave…',
-            hintStyle: TextStyle(color: colors.onSurfaceVariant.withValues(alpha: 0.7)),
-            prefixIcon: Icon(Icons.search, color: colors.onSurfaceVariant, size: 20),
-            suffixIcon: filter.searchQuery.isNotEmpty
-                ? IconButton(
-                    icon: Icon(Icons.clear, size: 18, color: colors.onSurfaceVariant),
-                    onPressed: () {
-                      _controller.clear();
-                      ref.read(propertyFilterProvider.notifier).state =
-                          filter.copyWith(searchQuery: '');
-                    },
-                  )
-                : null,
-            filled: true,
-            fillColor: isDark ? colors.surfaceContainer : colors.surfaceContainerLow,
-            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(24),
-              borderSide: BorderSide(color: colors.outlineVariant.withValues(alpha: 0.5)),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(24),
-              borderSide: BorderSide(color: colors.outlineVariant.withValues(alpha: 0.5)),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(24),
-              borderSide: BorderSide(color: colors.primary, width: 1.5),
-            ),
-          ),
-        ),
-        const SizedBox(height: 10),
-        // ── Chips rápidos (Airbnb categories pill row) ──
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
+        // ── Opciones aparecen solo al tocar el buscador (Airbnb) ──
+        AnimatedCrossFade(
+          firstChild: const SizedBox.shrink(),
+          secondChild: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              _QuickPill(
-                icon: Icons.public,
-                label: 'Global',
-                selected: filter.province == null,
-                onTap: () => _showLocationSheet(filter),
-              ),
-              const SizedBox(width: 8),
-              _QuickPill(
-                icon: Icons.account_balance_wallet_outlined,
-                label: priceLabel,
-                selected: filter.budgetRange != const RangeValues(100000, 500000),
-                onTap: () => _showBudgetSheet(filter),
-              ),
-              const SizedBox(width: 8),
-              _QuickPill(
-                icon: Icons.bed_outlined,
-                label: roomsLabel,
-                selected: !(filter.minBedrooms == 1 && filter.maxBedrooms == 5),
-                onTap: () => _showRoomsSheet(filter),
-              ),
-              const SizedBox(width: 8),
-              _QuickPill(
-                icon: Icons.pets_outlined,
-                label: petsLabel,
-                selected: filter.petPolicy != PetType.none,
-                onTap: () => _showPetsSheet(filter),
-              ),
-              if (filter.activeFilterCount > 0) ...[
-                const SizedBox(width: 8),
-                TextButton.icon(
-                  onPressed: () {
-                    ref.read(propertyFilterProvider.notifier).state = const PropertyFilter();
-                    _controller.clear();
-                    widget.onSearch?.call();
-                  },
-                  icon: const Icon(Icons.restart_alt, size: 16),
-                  label: const Text('Limpiar'),
-                  style: TextButton.styleFrom(
-                    foregroundColor: colors.primary,
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
-                    visualDensity: VisualDensity.compact,
+              const SizedBox(height: 12),
+              TextField(
+                controller: _controller,
+                style: TextStyle(color: colors.onSurface),
+                autofocus: _expanded,
+                onChanged: (v) => ref.read(propertyFilterProvider.notifier).state =
+                    filter.copyWith(searchQuery: v),
+                onSubmitted: (_) => _collapseAndSearch(),
+                decoration: InputDecoration(
+                  hintText: 'Busca por barrio, distrito o palabra clave…',
+                  hintStyle: TextStyle(color: colors.onSurfaceVariant.withValues(alpha: 0.7)),
+                  prefixIcon: Icon(Icons.search, color: colors.onSurfaceVariant, size: 20),
+                  suffixIcon: filter.searchQuery.isNotEmpty
+                      ? IconButton(
+                          icon: Icon(Icons.clear, size: 18, color: colors.onSurfaceVariant),
+                          onPressed: () {
+                            _controller.clear();
+                            ref.read(propertyFilterProvider.notifier).state =
+                                filter.copyWith(searchQuery: '');
+                          },
+                        )
+                      : null,
+                  filled: true,
+                  fillColor: isDark ? colors.surfaceContainer : colors.surfaceContainerLow,
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(24),
+                    borderSide: BorderSide(color: colors.outlineVariant.withValues(alpha: 0.5)),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(24),
+                    borderSide: BorderSide(color: colors.outlineVariant.withValues(alpha: 0.5)),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(24),
+                    borderSide: BorderSide(color: colors.primary, width: 1.5),
                   ),
                 ),
-              ],
+              ),
+              const SizedBox(height: 10),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    _QuickPill(
+                      icon: Icons.public,
+                      label: 'Global',
+                      selected: filter.province == null,
+                      onTap: () => _showLocationSheet(filter),
+                    ),
+                    const SizedBox(width: 8),
+                    _QuickPill(
+                      icon: Icons.account_balance_wallet_outlined,
+                      label: priceLabel,
+                      selected: filter.budgetRange != const RangeValues(100000, 500000),
+                      onTap: () => _showBudgetSheet(filter),
+                    ),
+                    const SizedBox(width: 8),
+                    _QuickPill(
+                      icon: Icons.bed_outlined,
+                      label: roomsLabel,
+                      selected: !(filter.minBedrooms == 1 && filter.maxBedrooms == 5),
+                      onTap: () => _showRoomsSheet(filter),
+                    ),
+                    const SizedBox(width: 8),
+                    _QuickPill(
+                      icon: Icons.pets_outlined,
+                      label: petsLabel,
+                      selected: filter.petPolicy != PetType.none,
+                      onTap: () => _showPetsSheet(filter),
+                    ),
+                    if (filter.activeFilterCount > 0) ...[
+                      const SizedBox(width: 8),
+                      TextButton.icon(
+                        onPressed: () {
+                          ref.read(propertyFilterProvider.notifier).state = const PropertyFilter();
+                          _controller.clear();
+                          widget.onSearch?.call();
+                        },
+                        icon: const Icon(Icons.restart_alt, size: 16),
+                        label: const Text('Limpiar'),
+                        style: TextButton.styleFrom(
+                          foregroundColor: colors.primary,
+                          padding: const EdgeInsets.symmetric(horizontal: 12),
+                          visualDensity: VisualDensity.compact,
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+              const SizedBox(height: 8),
+              Align(
+                alignment: Alignment.centerRight,
+                child: FilledButton.icon(
+                  onPressed: _collapseAndSearch,
+                  icon: const Icon(Icons.search, size: 16),
+                  label: const Text('Buscar'),
+                  style: FilledButton.styleFrom(
+                    backgroundColor: colors.primary,
+                    foregroundColor: colors.onPrimary,
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                  ),
+                ),
+              ),
             ],
           ),
+          crossFadeState: _expanded ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+          duration: const Duration(milliseconds: 220),
         ),
       ],
     );
@@ -224,22 +271,29 @@ class _SearchBarWidgetState extends ConsumerState<SearchBarWidget> {
 }
 
 /// Pill Airbnb principal — 1 línea en mobile, 4 segmentos en ≥600px.
+/// Tocar expande: collapsed muestra pill compacta; expanded muestra segmentos + close.
 class _AirbnbPill extends StatelessWidget {
   final String compactSummary;
   final PropertyFilter filter;
+  final bool expanded;
+  final VoidCallback onPillTap;
   final VoidCallback onWhereTap;
   final VoidCallback onPriceTap;
   final VoidCallback onRoomsTap;
   final VoidCallback onPetsTap;
   final VoidCallback onSearch;
+  final VoidCallback onClose;
   const _AirbnbPill({
     required this.compactSummary,
     required this.filter,
+    required this.expanded,
+    required this.onPillTap,
     required this.onWhereTap,
     required this.onPriceTap,
     required this.onRoomsTap,
     required this.onPetsTap,
     required this.onSearch,
+    required this.onClose,
   });
 
   @override
@@ -269,6 +323,28 @@ class _AirbnbPill extends StatelessWidget {
         ? 'Agregar'
         : '${filter.minBedrooms}–${filter.maxBedrooms}';
     final pets = filter.petPolicy == PetType.none ? 'Agregar' : filter.petPolicy.label;
+    // Collapsed en desktop: pill única tipo Airbnb; expanded: 4 segmentos
+    if (!expanded) {
+      return InkWell(
+        onTap: onPillTap,
+        borderRadius: BorderRadius.circular(32),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
+          child: Row(children: [
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(color: c.surfaceContainerHigh, shape: BoxShape.circle),
+              child: Icon(Icons.search, size: 18, color: c.onSurfaceVariant),
+            ),
+            const SizedBox(width: 10),
+            Expanded(child: Text(compactSummary, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 13, color: c.onSurfaceVariant))),
+            const SizedBox(width: 8),
+            _SearchFab(onTap: onSearch, colors: c),
+          ]),
+        ),
+      );
+    }
     return Row(
       children: [
         _PillSegment(label: 'Dónde', value: where, icon: Icons.public, onTap: onWhereTap, colors: c),
@@ -278,17 +354,15 @@ class _AirbnbPill extends StatelessWidget {
         _PillSegment(label: 'Habitaciones', value: rooms, icon: Icons.bed_outlined, onTap: onRoomsTap, colors: c),
         _VDiv(color: c.outlineVariant),
         _PillSegment(label: 'Mascotas', value: pets, icon: Icons.pets_outlined, onTap: onPetsTap, colors: c),
-        Padding(
-          padding: const EdgeInsets.all(6),
-          child: _SearchFab(onTap: onSearch, colors: c),
-        ),
+        Padding(padding: const EdgeInsets.symmetric(horizontal: 4), child: IconButton(onPressed: onClose, icon: Icon(Icons.close, size: 18, color: c.onSurfaceVariant))),
+        Padding(padding: const EdgeInsets.all(6), child: _SearchFab(onTap: onSearch, colors: c)),
       ],
     );
   }
 
   Widget _compactLayout(ColorScheme c) {
     return InkWell(
-      onTap: onWhereTap,
+      onTap: expanded ? onClose : onPillTap,
       borderRadius: BorderRadius.circular(32),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
@@ -298,17 +372,17 @@ class _AirbnbPill extends StatelessWidget {
               width: 40,
               height: 40,
               decoration: BoxDecoration(color: c.surfaceContainerHigh, shape: BoxShape.circle),
-              child: Icon(Icons.search, size: 18, color: c.onSurfaceVariant),
+              child: Icon(expanded ? Icons.close : Icons.search, size: 18, color: c.onSurfaceVariant),
             ),
             const SizedBox(width: 10),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('¿A dónde vas?',
+                  Text(expanded ? 'Filtros' : '¿A dónde vas?',
                       style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: c.onSurface)),
                   const SizedBox(height: 1),
-                  Text(compactSummary,
+                  Text(expanded ? 'Toca para ocultar' : compactSummary,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(fontSize: 12, color: c.onSurfaceVariant)),
