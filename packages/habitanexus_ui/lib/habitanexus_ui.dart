@@ -5,9 +5,22 @@
 /// y cada uno nace con su story en `apps/widgetbook`.
 library;
 
-// Theme
+// ---------------------------------------------------------------------------
+// Theme — tokens M3 del design system (HAB-20)
+// ---------------------------------------------------------------------------
 export 'src/theme/app_theme.dart';
 
-// Atoms — (vacío: ver README.md)
-// Molecules — (vacío)
-// Organisms — (vacío)
+// ---------------------------------------------------------------------------
+// Models — view-models puros de presentación (sin equatable ni DTOs)
+// ---------------------------------------------------------------------------
+export 'src/models/nearby_space.dart';
+
+// ---------------------------------------------------------------------------
+// Atoms — piezas mínimas sin estado ([atoms])
+// ---------------------------------------------------------------------------
+export 'src/atoms/space_type_icon.dart';
+
+// ---------------------------------------------------------------------------
+// Molecules — composición de átomos ([molecules])
+// ---------------------------------------------------------------------------
+export 'src/molecules/space_card.dart';
