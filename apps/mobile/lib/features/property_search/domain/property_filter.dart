@@ -40,6 +40,7 @@ class PropertyFilter {
   final int maxBedrooms; // 1..8 (8 = 8+)
   final int minBathrooms;
   final int parkingSpots;
+  final ResidenceType residenceType;
   final PetType petPolicy;
   final String searchQuery;
 
@@ -53,6 +54,7 @@ class PropertyFilter {
     this.maxBedrooms = kDefaultMaxBedrooms,
     this.minBathrooms = 1,
     this.parkingSpots = 0,
+    this.residenceType = ResidenceType.any,
     this.petPolicy = PetType.none,
     this.searchQuery = '',
   });
@@ -75,6 +77,7 @@ class PropertyFilter {
     int? maxBedrooms,
     int? minBathrooms,
     int? parkingSpots,
+    ResidenceType? residenceType,
     PetType? petPolicy,
     String? searchQuery,
     bool clearCountry = false,
@@ -92,6 +95,7 @@ class PropertyFilter {
       maxBedrooms: maxBedrooms ?? this.maxBedrooms,
       minBathrooms: minBathrooms ?? this.minBathrooms,
       parkingSpots: parkingSpots ?? this.parkingSpots,
+      residenceType: residenceType ?? this.residenceType,
       petPolicy: petPolicy ?? this.petPolicy,
       searchQuery: searchQuery ?? this.searchQuery,
     );
@@ -104,13 +108,13 @@ class PropertyFilter {
       'currency': 'USD',
       if (countryCode != null) 'country': countryCode,
       if (region != null) 'region': region,
-      // compat
       if (province != null) 'province': province!.name,
       if (canton != null) 'canton': canton,
       'bedrooms_min': minBedrooms,
       'bedrooms_max': maxBedrooms,
       'bathrooms_min': minBathrooms,
       if (parkingSpots > 0) 'parking_spots': parkingSpots,
+      if (residenceType != ResidenceType.any) 'residence_type': residenceType.name,
       'pet_policy': petPolicy.name,
       if (searchQuery.isNotEmpty) 'q': searchQuery,
     };
@@ -126,6 +130,7 @@ class PropertyFilter {
       maxBedrooms == kDefaultMaxBedrooms &&
       minBathrooms == 1 &&
       parkingSpots == 0 &&
+      residenceType == ResidenceType.any &&
       petPolicy == PetType.none &&
       searchQuery.isEmpty;
 
@@ -139,6 +144,7 @@ class PropertyFilter {
     if (minBedrooms != 1 || maxBedrooms != kDefaultMaxBedrooms) count++;
     if (minBathrooms != 1) count++;
     if (parkingSpots != 0) count++;
+    if (residenceType != ResidenceType.any) count++;
     if (petPolicy != PetType.none) count++;
     if (searchQuery.isNotEmpty) count++;
     return count;

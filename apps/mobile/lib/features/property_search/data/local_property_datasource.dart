@@ -22,6 +22,7 @@ abstract final class DemoProperties {
       bedrooms: 2,
       bathrooms: 2,
       areaM2: 85,
+      residenceType: ResidenceType.apartment,
       petPolicy: PetType.dogs,
       verificationStatus: VerificationStatus.verified,
       createdAt: DateTime.now().subtract(const Duration(days: 3)),
@@ -40,6 +41,7 @@ abstract final class DemoProperties {
       bedrooms: 4,
       bathrooms: 3,
       areaM2: 180,
+      residenceType: ResidenceType.house,
       petPolicy: PetType.any,
       verificationStatus: VerificationStatus.verified,
       createdAt: DateTime.now().subtract(const Duration(days: 1)),
@@ -58,6 +60,7 @@ abstract final class DemoProperties {
       bedrooms: 1,
       bathrooms: 1,
       areaM2: 55,
+      residenceType: ResidenceType.loft,
       petPolicy: PetType.cats,
       verificationStatus: VerificationStatus.verified,
       createdAt: DateTime.now().subtract(const Duration(days: 5)),
@@ -76,6 +79,7 @@ abstract final class DemoProperties {
       bedrooms: 5,
       bathrooms: 4,
       areaM2: 250,
+      residenceType: ResidenceType.penthouse,
       petPolicy: PetType.any,
       verificationStatus: VerificationStatus.pending,
       createdAt: DateTime.now().subtract(const Duration(hours: 12)),
@@ -94,6 +98,7 @@ abstract final class DemoProperties {
       bedrooms: 6,
       bathrooms: 4,
       areaM2: 220,
+      residenceType: ResidenceType.studio,
       petPolicy: PetType.none,
       verificationStatus: VerificationStatus.verified,
       createdAt: DateTime.now().subtract(const Duration(days: 7)),
@@ -112,13 +117,13 @@ abstract final class DemoProperties {
       bedrooms: 3,
       bathrooms: 2,
       areaM2: 140,
+      residenceType: ResidenceType.house,
       petPolicy: PetType.dogs,
       verificationStatus: VerificationStatus.verified,
       createdAt: DateTime.now().subtract(const Duration(days: 2)),
       imageUrl: 'https://via.placeholder.com/400x300/00BCD4/FFFFFF?text=Casa+Cartago',
       features: {'parking': true, 'gym': false, 'pool': false},
     ),
-    // Globales extra para demo habitaciones amplias
     Property(
       id: 'prop-007',
       title: 'Villa 8 hab — Guanacaste',
@@ -131,10 +136,49 @@ abstract final class DemoProperties {
       bedrooms: 8,
       bathrooms: 5,
       areaM2: 420,
+      residenceType: ResidenceType.villa,
       petPolicy: PetType.any,
       verificationStatus: VerificationStatus.verified,
       createdAt: DateTime.now().subtract(const Duration(days: 4)),
       imageUrl: 'https://via.placeholder.com/400x300/009688/FFFFFF?text=Villa+8hab',
+      features: {'parking': true, 'gym': true, 'pool': true},
+    ),
+    Property(
+      id: 'prop-008',
+      title: 'Cabaña Bosque — Cartago',
+      address: 'Tierra Blanca, Cartago, CR',
+      province: 'Cartago',
+      canton: 'Cartago',
+      latitude: 9.85,
+      longitude: -83.92,
+      priceMonthly: 1100,
+      bedrooms: 3,
+      bathrooms: 2,
+      areaM2: 95,
+      residenceType: ResidenceType.cabin,
+      petPolicy: PetType.any,
+      verificationStatus: VerificationStatus.verified,
+      createdAt: DateTime.now().subtract(const Duration(days: 6)),
+      imageUrl: 'https://via.placeholder.com/400x300/795548/FFFFFF?text=Caba%C3%B1a+Bosque',
+      features: {'parking': true, 'gym': false, 'pool': false},
+    ),
+    Property(
+      id: 'prop-009',
+      title: 'Condominio Sabana — Rohrmoser',
+      address: 'Sabana Norte, San José, CR',
+      province: 'San José',
+      canton: 'San José',
+      latitude: 9.935,
+      longitude: -84.09,
+      priceMonthly: 1600,
+      bedrooms: 2,
+      bathrooms: 2,
+      areaM2: 90,
+      residenceType: ResidenceType.condo,
+      petPolicy: PetType.smallPets,
+      verificationStatus: VerificationStatus.verified,
+      createdAt: DateTime.now().subtract(const Duration(days: 2)),
+      imageUrl: 'https://via.placeholder.com/400x300/607D8B/FFFFFF?text=Condominio+Sabana',
       features: {'parking': true, 'gym': true, 'pool': true},
     ),
   ];
@@ -197,6 +241,12 @@ class LocalPropertyDatasource {
         if (!hasParking) return false;
         // Demo: 2 cocheras solo si área >100m2 o precio alto (proxy)
         if (filter.parkingSpots == 2 && property.areaM2 < 100) return false;
+      }
+
+      // Filtro residencia
+      if (filter.residenceType != ResidenceType.any &&
+          property.residenceType != filter.residenceType) {
+        return false;
       }
 
       // Filtro de mascotas

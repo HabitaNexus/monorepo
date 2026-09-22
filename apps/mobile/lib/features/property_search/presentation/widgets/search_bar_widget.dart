@@ -53,8 +53,10 @@ class _SearchBarWidgetState extends ConsumerState<SearchBarWidget> {
     final petsLabel = filter.petPolicy == PetType.none ? 'Sin filtro' : filter.petPolicy.label;
     final bathLabel = filter.bathroomsLabel;
     final parkingLabel = filter.parkingLabel;
+    final residenceLabel = filter.residenceType == ResidenceType.any ? 'Cualquier' : filter.residenceType.label;
 
     final compactParts = [whereLabel, priceLabel, roomsLabel];
+    if (filter.residenceType != ResidenceType.any) compactParts.add(residenceLabel);
     if (filter.minBathrooms != 1) compactParts.add(bathLabel);
     if (filter.parkingSpots != 0) compactParts.add(parkingLabel);
     final compactSummary = compactParts.join(' · ');
@@ -79,6 +81,10 @@ class _SearchBarWidgetState extends ConsumerState<SearchBarWidget> {
           onRoomsTap: () {
             _expand();
             _showRoomsSheet(filter);
+          },
+          onResidenceTap: () {
+            _expand();
+            _showResidenceSheet(filter);
           },
           onBathTap: () {
             _expand();
@@ -170,6 +176,13 @@ class _SearchBarWidgetState extends ConsumerState<SearchBarWidget> {
                       label: roomsLabel,
                       selected: !(filter.minBedrooms == 1 && filter.maxBedrooms == PropertyFilter.kDefaultMaxBedrooms),
                       onTap: () => _showRoomsSheet(filter),
+                    ),
+                    const SizedBox(width: 8),
+                    _QuickPill(
+                      icon: Icons.home_outlined,
+                      label: residenceLabel,
+                      selected: filter.residenceType != ResidenceType.any,
+                      onTap: () => _showResidenceSheet(filter),
                     ),
                     const SizedBox(width: 8),
                     _QuickPill(
@@ -294,6 +307,20 @@ class _SearchBarWidgetState extends ConsumerState<SearchBarWidget> {
         ),
       );
 
+  void _showResidenceSheet(PropertyFilter f) => showModalBottomSheet(
+        context: context,
+        backgroundColor: Theme.of(context).colorScheme.surfaceContainerLow,
+        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+        builder: (_) => _ResidenceSheet(
+          selected: f.residenceType,
+          onSelected: (v) {
+            Navigator.pop(context);
+            ref.read(propertyFilterProvider.notifier).state = f.copyWith(residenceType: v);
+            widget.onSearch?.call();
+          },
+        ),
+      );
+
   void _showBathSheet(PropertyFilter f) => showModalBottomSheet(
         context: context,
         backgroundColor: Theme.of(context).colorScheme.surfaceContainerLow,
@@ -346,6 +373,7 @@ class _AirbnbPill extends StatelessWidget {
   final VoidCallback onPillTap;
   final VoidCallback onWhereTap;
   final VoidCallback onPriceTap;
+  final VoidCallback onResidenceTap;
   final VoidCallback onRoomsTap;
   final VoidCallback onBathTap;
   final VoidCallback onParkingTap;
@@ -359,6 +387,7 @@ class _AirbnbPill extends StatelessWidget {
     required this.onPillTap,
     required this.onWhereTap,
     required this.onPriceTap,
+    required this.onResidenceTap,
     required this.onRoomsTap,
     required this.onBathTap,
     required this.onParkingTap,
@@ -389,9 +418,10 @@ class _AirbnbPill extends StatelessWidget {
     final where = filter.locationLabel;
     final isDefaultBudget = filter.budgetRange == PropertyFilter.kDefaultBudget;
     final price = isDefaultBudget ? 'Cualquier precio' : '\$${filter.budgetRange.start.round()} – \$${filter.budgetRange.end.round()}';
-    final rooms = filter.minBedrooms == 1 && filter.maxBedrooms == 5
+    final rooms = filter.minBedrooms == 1 && filter.maxBedrooms == PropertyFilter.kDefaultMaxBedrooms
         ? 'Agregar'
-        : '${filter.minBedrooms}–${filter.maxBedrooms}';
+        : '${filter.minBedrooms}–${filter.maxBedrooms == 8 ? '8+' : filter.maxBedrooms}';
+    final residence = filter.residenceType == ResidenceType.any ? 'Agregar' : filter.residenceType.label;
     final pets = filter.petPolicy == PetType.none ? 'Agregar' : filter.petPolicy.label;
     // Collapsed en desktop: pill única tipo Airbnb; expanded: 4 segmentos
     if (!expanded) {
@@ -415,7 +445,7 @@ class _AirbnbPill extends StatelessWidget {
         ),
       );
     }
-    // Expanded: scroll horizontal para 6 filtros (global)
+    // Expanded: scroll horizontal para 7 filtros (global + residencia)
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Row(
@@ -423,6 +453,8 @@ class _AirbnbPill extends StatelessWidget {
           _PillSegment(label: 'Dónde', value: where, icon: Icons.public, onTap: onWhereTap, colors: c),
           _VDiv(color: c.outlineVariant),
           _PillSegment(label: 'Precio', value: price, icon: Icons.payments_outlined, onTap: onPriceTap, colors: c),
+          _VDiv(color: c.outlineVariant),
+          _PillSegment(label: 'Residencia', value: residence, icon: Icons.home_outlined, onTap: onResidenceTap, colors: c),
           _VDiv(color: c.outlineVariant),
           _PillSegment(label: 'Habitaciones', value: rooms, icon: Icons.bed_outlined, onTap: onRoomsTap, colors: c),
           _VDiv(color: c.outlineVariant),
@@ -899,6 +931,64 @@ class _ParkingSheet extends StatelessWidget {
         ]),
       ),
     );
+  }
+}
+
+class _ResidenceSheet extends StatelessWidget {
+  final ResidenceType selected; final ValueChanged<ResidenceType> onSelected;
+  const _ResidenceSheet({required this.selected, required this.onSelected});
+  @override
+  Widget build(BuildContext context) {
+    final c = Theme.of(context).colorScheme;
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
+        child: Column(mainAxisSize: MainAxisSize.min, children: [
+          Container(width: 36, height: 4, decoration: BoxDecoration(color: c.outlineVariant, borderRadius: BorderRadius.circular(2))),
+          const SizedBox(height: 12),
+          Row(children: [Icon(Icons.home_outlined, size: 18, color: c.primary), const SizedBox(width: 8), Text('Residencia', style: Theme.of(context).textTheme.titleMedium?.copyWith(color: c.onSurface, fontWeight: FontWeight.w700)), const Spacer(), Container(padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4), decoration: BoxDecoration(color: c.surfaceContainerHigh, borderRadius: BorderRadius.circular(8)), child: Text('Global', style: TextStyle(fontSize: 11, color: c.onSurfaceVariant)))]),
+          const SizedBox(height: 12),
+          Flexible(
+            child: SingleChildScrollView(
+              child: Column(children: ResidenceType.values.map((r) => Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: Material(
+                  color: selected == r ? c.primaryContainer.withValues(alpha: 0.25) : c.surfaceContainer,
+                  borderRadius: BorderRadius.circular(12),
+                  child: InkWell(
+                    onTap: () => onSelected(r),
+                    borderRadius: BorderRadius.circular(12),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                      child: Row(children: [
+                        Icon(r.icon, size: 18, color: selected == r ? c.primary : c.onSurfaceVariant),
+                        const SizedBox(width: 10),
+                        Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [Text(r.label, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: c.onSurface)), Text(_residenceSubtitle(r), style: TextStyle(fontSize: 11, color: c.onSurfaceVariant))])),
+                        Icon(selected == r ? Icons.check_circle : Icons.circle_outlined, size: 20, color: selected == r ? c.primary : c.onSurfaceVariant),
+                      ]),
+                    ),
+                  ),
+                ),
+              )).toList()),
+            ),
+          ),
+        ]),
+      ),
+    );
+  }
+  String _residenceSubtitle(ResidenceType r) {
+    switch (r) {
+      case ResidenceType.any: return 'Sin filtro — ver todo';
+      case ResidenceType.apartment: return 'Edificio, 1–4 hab';
+      case ResidenceType.house: return 'Unifamiliar, jardín';
+      case ResidenceType.cabin: return 'Bosque / montaña';
+      case ResidenceType.loft: return 'Industrial, abierto';
+      case ResidenceType.studio: return 'Monoambiente / coliving';
+      case ResidenceType.penthouse: return 'Último piso, premium';
+      case ResidenceType.villa: return 'Lujo, 5+ hab, piscina';
+      case ResidenceType.condo: return 'Condominio, amenidades';
+      case ResidenceType.room: return 'Habitación privada';
+    }
   }
 }
 

@@ -17,6 +17,24 @@ enum PetType {
   final String label;
 }
 
+/// Tipo de residencia — global
+enum ResidenceType {
+  any('Cualquier', Icons.home_outlined),
+  apartment('Apartamento', Icons.apartment),
+  house('Casa', Icons.house_outlined),
+  cabin('Cabaña', Icons.cabin_outlined),
+  loft('Loft', Icons.view_quilt_outlined),
+  studio('Estudio', Icons.single_bed_outlined),
+  penthouse('Penthouse', Icons.location_city),
+  villa('Villa', Icons.villa_outlined),
+  condo('Condominio', Icons.domain_outlined),
+  room('Habitación', Icons.bed_outlined);
+
+  const ResidenceType(this.label, this.icon);
+  final String label;
+  final IconData icon;
+}
+
 /// Estado de verificación de la propiedad
 enum VerificationStatus {
   pending('Pendiente'),
@@ -41,6 +59,7 @@ class Property {
   final int bedrooms;
   final int bathrooms;
   final double areaM2;
+  final ResidenceType residenceType;
   final PetType petPolicy;
   final VerificationStatus verificationStatus;
   final DateTime createdAt;
@@ -60,6 +79,7 @@ class Property {
     required this.bedrooms,
     required this.bathrooms,
     required this.areaM2,
+    this.residenceType = ResidenceType.apartment,
     this.petPolicy = PetType.none,
     this.verificationStatus = VerificationStatus.pending,
     required this.createdAt,
