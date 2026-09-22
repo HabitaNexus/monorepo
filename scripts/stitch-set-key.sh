@@ -15,7 +15,11 @@ elif [ -n "${1:-}" ]; then
   mkdir -p "$(dirname "$KEY_FILE")"
   printf '%s' "$KEY" > "$KEY_FILE"
   chmod 600 "$KEY_FILE"
-  echo "guardada en $KEY_FILE"
+  # Fingerprint SHA256: verifica identidad sin exponer el secreto.
+  # (El hash NO reemplaza el guardado: es unidireccional y la API exige el token raw.)
+  printf '%s' "$KEY" | sha256sum | awk '{print $1}' > "$KEY_FILE.sha256"
+  chmod 600 "$KEY_FILE.sha256"
+  echo "guardada en $KEY_FILE (600) | sha256: $(cat "$KEY_FILE.sha256")"
 else
   echo "Uso: $0 <STITCH_API_KEY> | $0 --check"; exit 1
 fi
