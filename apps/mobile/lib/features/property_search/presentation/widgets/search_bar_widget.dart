@@ -257,18 +257,24 @@ class _SearchBarWidgetState extends ConsumerState<SearchBarWidget> {
         builder: (_) => _GlobalLocationSheet(
           initialCountry: f.countryCode,
           initialRegion: f.region,
-          onSelected: (country, region) {
+          initialCity: f.city,
+          onSelected: (country, region, city) {
             Navigator.pop(context);
             if (country != null) {
-              // Persiste país elegido (si no logueado, se preguntará solo 1 vez)
               ref.read(userCountryProvider.notifier).setCountry(country);
             }
             if (country == null) {
               ref.read(propertyFilterProvider.notifier).state =
-                  f.copyWith(clearCountry: true, clearRegion: true, clearProvince: true);
+                  f.copyWith(clearCountry: true, clearRegion: true, clearCity: true, clearProvince: true);
             } else {
-              ref.read(propertyFilterProvider.notifier).state =
-                  f.copyWith(countryCode: country, region: region, clearRegion: region == null, clearProvince: true);
+              ref.read(propertyFilterProvider.notifier).state = f.copyWith(
+                countryCode: country,
+                region: region,
+                city: city,
+                clearRegion: region == null,
+                clearCity: city == null,
+                clearProvince: true,
+              );
             }
             widget.onSearch?.call();
           },
@@ -603,24 +609,26 @@ class _QuickPill extends StatelessWidget {
 
 // ── Sheets ──────────────────────────────────────────────────────────
 
-/// Global: país real (restcountries) + regiones reales (countriesnow) con buscador en el mismo cosito.
-/// Si no logueado, pregunta país. Detecta país por login vía userCountryProvider.
+/// Global: país → estado → ciudad/barrio (específico). Buscador en el mismo cosito.
 class _GlobalLocationSheet extends ConsumerStatefulWidget {
   final String? initialCountry;
   final String? initialRegion;
-  final void Function(String? countryCode, String? region) onSelected;
-  const _GlobalLocationSheet({required this.initialCountry, required this.initialRegion, required this.onSelected});
+  final String? initialCity;
+  final void Function(String? countryCode, String? region, String? city) onSelected;
+  const _GlobalLocationSheet({required this.initialCountry, required this.initialRegion, this.initialCity, required this.onSelected});
   @override
   ConsumerState<_GlobalLocationSheet> createState() => _GlobalLocationSheetState();
 }
 class _GlobalLocationSheetState extends ConsumerState<_GlobalLocationSheet> {
   String _q = '';
+  String _cityQ = '';
   String? _pickedCountry;
+  String? _pickedRegion;
   @override
   void initState() {
     super.initState();
     _pickedCountry = widget.initialCountry;
-    // Auto-detecta país por login si no hay filtro y hay userCountry
+    _pickedRegion = widget.initialRegion;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final userCountry = ref.read(userCountryProvider);
       if (_pickedCountry == null && userCountry != null) {
@@ -673,7 +681,7 @@ class _GlobalLocationSheetState extends ConsumerState<_GlobalLocationSheet> {
           ),
           const SizedBox(height: 12),
           if (_pickedCountry == null) ...[
-            _SheetTile(title: 'Cualquier lugar — Global', subtitle: 'Ver todo el mundo', selected: widget.initialCountry == null && widget.initialRegion == null, onTap: () => widget.onSelected(null, null)),
+            _SheetTile(title: 'Cualquier lugar — Global', subtitle: 'Ver todo el mundo', selected: widget.initialCountry == null && widget.initialRegion == null, onTap: () => widget.onSelected(null, null, null)),
             const SizedBox(height: 4),
             Flexible(
               child: countriesAsync.when(
@@ -694,7 +702,7 @@ class _GlobalLocationSheetState extends ConsumerState<_GlobalLocationSheet> {
                 error: (e, _) => Column(children: searchCountries(_q).map((co) => _SheetTile(title: '${co.flag} ${co.name}', subtitle: '${co.code} · offline', selected: false, onTap: () => setState(() => _pickedCountry = co.code))).toList()),
               ),
             ),
-          ] else ...[
+          ] else if (_pickedRegion == null) ...[
             Row(children: [
               TextButton.icon(onPressed: () => setState(() { _pickedCountry = null; _q = ''; }), icon: const Icon(Icons.arrow_back, size: 16), label: const Text('Cambiar país')),
               const Spacer(),
@@ -703,7 +711,7 @@ class _GlobalLocationSheetState extends ConsumerState<_GlobalLocationSheet> {
                 GlobalCountry? picked;
                 if (list != null) { for (final cc in list) { if (cc.code == _pickedCountry) { picked = cc; break; } } }
                 picked ??= countryByCode(_pickedCountry!);
-                return TextButton(onPressed: () => widget.onSelected(_pickedCountry, null), child: Text('Todo ${picked.name}', style: TextStyle(color: c.primary)));
+                return TextButton(onPressed: () => widget.onSelected(_pickedCountry, null, null), child: Text('Todo ${picked.name}', style: TextStyle(color: c.primary)));
               }),
             ]),
             Flexible(
@@ -716,14 +724,63 @@ class _GlobalLocationSheetState extends ConsumerState<_GlobalLocationSheet> {
                 return regionsAsync.when(
                   data: (regions) => SingleChildScrollView(
                     child: Column(children: [
-                      _SheetTile(title: 'Todo ${picked!.name}', subtitle: 'Sin filtrar por región', selected: widget.initialCountry == _pickedCountry && widget.initialRegion == null, onTap: () => widget.onSelected(_pickedCountry, null)),
-                      ...regions.map((r) => _SheetTile(title: r, subtitle: picked!.name, selected: widget.initialCountry == _pickedCountry && widget.initialRegion == r, onTap: () => widget.onSelected(_pickedCountry, r))),
+                      _SheetTile(title: 'Todo ${picked!.name}', subtitle: 'Sin filtrar por región', selected: widget.initialCountry == _pickedCountry && widget.initialRegion == null && widget.initialCity == null, onTap: () => widget.onSelected(_pickedCountry, null, null)),
+                      ...regions.map((r) => _SheetTile(title: r, subtitle: 'Ver ciudades/barrios en $r', selected: widget.initialCountry == _pickedCountry && widget.initialRegion == r && widget.initialCity == null, onTap: () => setState(() => _pickedRegion = r))),
                     ]),
                   ),
                   loading: () => const Padding(padding: EdgeInsets.all(16), child: Center(child: CircularProgressIndicator())),
                   error: (e, _) => SingleChildScrollView(child: Column(children: [
-                    _SheetTile(title: 'Todo ${picked!.name}', subtitle: 'Sin filtrar', selected: widget.initialCountry == _pickedCountry && widget.initialRegion == null, onTap: () => widget.onSelected(_pickedCountry, null)),
-                    ...picked!.regions.map((r) => _SheetTile(title: r, subtitle: picked!.name, selected: widget.initialCountry == _pickedCountry && widget.initialRegion == r, onTap: () => widget.onSelected(_pickedCountry, r))),
+                    _SheetTile(title: 'Todo ${picked!.name}', subtitle: 'Sin filtrar', selected: widget.initialCountry == _pickedCountry && widget.initialRegion == null, onTap: () => widget.onSelected(_pickedCountry, null, null)),
+                    ...picked!.regions.map((r) => _SheetTile(title: r, subtitle: picked!.name, selected: widget.initialCountry == _pickedCountry && widget.initialRegion == r, onTap: () => setState(() => _pickedRegion = r))),
+                  ])),
+                );
+              }),
+            ),
+          ] else ...[
+            // Nivel 3: Ciudad/barrio específico para región
+            Row(children: [
+              TextButton.icon(onPressed: () => setState(() => _pickedRegion = null), icon: const Icon(Icons.arrow_back, size: 16), label: Text('$_pickedRegion')),
+              const Spacer(),
+              TextButton(onPressed: () => widget.onSelected(_pickedCountry, _pickedRegion, null), child: Text('Toda $_pickedRegion', style: TextStyle(color: c.primary))),
+            ]),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: TextField(
+                onChanged: (v) => setState(() => _cityQ = v),
+                decoration: InputDecoration(
+                  hintText: 'Busca ciudad/barrio…',
+                  prefixIcon: const Icon(Icons.location_city, size: 16),
+                  filled: true,
+                  fillColor: c.surfaceContainer,
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide(color: c.outlineVariant.withValues(alpha: 0.5))),
+                ),
+              ),
+            ),
+            Flexible(
+              child: Consumer(builder: (context, ref, _) {
+                final citiesAsync = ref.watch(countryCitiesProvider((countryCode: _pickedCountry!, state: _pickedRegion!)));
+                return citiesAsync.when(
+                  data: (cities) {
+                    final q = _cityQ.trim().toLowerCase();
+                    final filtered = q.isEmpty ? cities : cities.where((cc) => cc.toLowerCase().contains(q)).toList();
+                    if (filtered.isEmpty) {
+                      return Column(children: [
+                        _SheetTile(title: 'Toda $_pickedRegion', subtitle: 'Sin filtrar por ciudad', selected: widget.initialCity == null, onTap: () => widget.onSelected(_pickedCountry, _pickedRegion, null)),
+                        Padding(padding: const EdgeInsets.all(16), child: Text(cities.isEmpty ? 'Sin ciudades registradas — usa "Toda $_pickedRegion"' : 'Sin resultados', style: TextStyle(color: c.onSurfaceVariant))),
+                      ]);
+                    }
+                    return SingleChildScrollView(
+                      child: Column(children: [
+                        _SheetTile(title: 'Toda $_pickedRegion', subtitle: 'Sin filtrar por ciudad/barrio', selected: widget.initialCountry == _pickedCountry && widget.initialRegion == _pickedRegion && widget.initialCity == null, onTap: () => widget.onSelected(_pickedCountry, _pickedRegion, null)),
+                        ...filtered.take(50).map((city) => _SheetTile(title: city, subtitle: '$_pickedRegion, $_pickedCountry', selected: widget.initialCity == city, onTap: () => widget.onSelected(_pickedCountry, _pickedRegion, city))),
+                      ]),
+                    );
+                  },
+                  loading: () => const Padding(padding: EdgeInsets.all(16), child: Center(child: CircularProgressIndicator())),
+                  error: (e, _) => SingleChildScrollView(child: Column(children: [
+                    _SheetTile(title: 'Toda $_pickedRegion', subtitle: 'Sin filtrar', selected: widget.initialCity == null, onTap: () => widget.onSelected(_pickedCountry, _pickedRegion, null)),
+                    Text('Ciudades no disponibles offline — elige "Toda $_pickedRegion"', style: TextStyle(fontSize: 11, color: c.onSurfaceVariant)),
                   ])),
                 );
               }),

@@ -53,6 +53,8 @@ class Property {
   final String address;
   final String province;
   final String canton;
+  final String? city; // Ciudad/barrio específico (global)
+  final String countryCode; // ISO2 para filtro global
   final double latitude;
   final double longitude;
   final int priceMonthly;
@@ -73,6 +75,8 @@ class Property {
     required this.address,
     required this.province,
     required this.canton,
+    this.city,
+    this.countryCode = 'CR',
     required this.latitude,
     required this.longitude,
     required this.priceMonthly,

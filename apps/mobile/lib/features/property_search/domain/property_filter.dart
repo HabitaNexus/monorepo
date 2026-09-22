@@ -32,6 +32,7 @@ class PropertyFilter {
   final RangeValues budgetRange; // USD
   final String? countryCode; // ISO2, e.g. US, CR. null = global / cualquiera
   final String? region; // Estado / provincia dentro del país
+  final String? city; // Ciudad / distrito / barrio específico
   // Compat CR deprecated
   final CostaRicaProvince? province;
   final String? canton;
@@ -48,6 +49,7 @@ class PropertyFilter {
     this.budgetRange = kDefaultBudget,
     this.countryCode,
     this.region,
+    this.city,
     this.province,
     this.canton,
     this.minBedrooms = 1,
@@ -63,14 +65,17 @@ class PropertyFilter {
   String get locationLabel {
     if (countryCode == null) return 'Cualquier lugar';
     final c = countryByCode(countryCode!);
+    if (city != null) return '${c.flag} $city, $region, ${c.name}';
     if (region == null) return '${c.flag} ${c.name}';
     return '${c.flag} $region, ${c.name}';
   }
+  String get cityLabel => city ?? 'Cualquier ciudad';
 
   PropertyFilter copyWith({
     RangeValues? budgetRange,
     String? countryCode,
     String? region,
+    String? city,
     CostaRicaProvince? province,
     String? canton,
     int? minBedrooms,
@@ -82,6 +87,7 @@ class PropertyFilter {
     String? searchQuery,
     bool clearCountry = false,
     bool clearRegion = false,
+    bool clearCity = false,
     bool clearProvince = false,
     bool clearCanton = false,
   }) {
@@ -89,6 +95,7 @@ class PropertyFilter {
       budgetRange: budgetRange ?? this.budgetRange,
       countryCode: clearCountry ? null : (countryCode ?? this.countryCode),
       region: clearRegion ? null : (region ?? this.region),
+      city: clearCity ? null : (city ?? this.city),
       province: clearProvince ? null : (province ?? this.province),
       canton: clearCanton ? null : (canton ?? this.canton),
       minBedrooms: minBedrooms ?? this.minBedrooms,
@@ -108,6 +115,7 @@ class PropertyFilter {
       'currency': 'USD',
       if (countryCode != null) 'country': countryCode,
       if (region != null) 'region': region,
+      if (city != null) 'city': city,
       if (province != null) 'province': province!.name,
       if (canton != null) 'canton': canton,
       'bedrooms_min': minBedrooms,
@@ -124,6 +132,7 @@ class PropertyFilter {
       budgetRange == kDefaultBudget &&
       countryCode == null &&
       region == null &&
+      city == null &&
       province == null &&
       canton == null &&
       minBedrooms == 1 &&
@@ -139,6 +148,7 @@ class PropertyFilter {
     if (budgetRange != kDefaultBudget) count++;
     if (countryCode != null) count++;
     if (region != null) count++;
+    if (city != null) count++;
     if (province != null) count++;
     if (canton != null) count++;
     if (minBedrooms != 1 || maxBedrooms != kDefaultMaxBedrooms) count++;

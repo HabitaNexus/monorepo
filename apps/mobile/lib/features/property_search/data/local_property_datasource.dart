@@ -16,6 +16,8 @@ abstract final class DemoProperties {
       address: 'Calle 42, Rohrmoser, San José, CR',
       province: 'San José',
       canton: 'San José',
+      city: 'Rohrmoser',
+      countryCode: 'CR',
       latitude: 9.9321,
       longitude: -84.0456,
       priceMonthly: 1200,
@@ -32,9 +34,11 @@ abstract final class DemoProperties {
     Property(
       id: 'prop-002',
       title: 'Casa Familiar Escazú',
-      address: 'Avenida 2, Escazú, San José, CR',
+      address: 'Avenida 2, Escazú Centro, Escazú, CR',
       province: 'San José',
       canton: 'Escazú',
+      city: 'Escazú Centro',
+      countryCode: 'CR',
       latitude: 9.9214,
       longitude: -84.1387,
       priceMonthly: 1850,
@@ -54,6 +58,8 @@ abstract final class DemoProperties {
       address: 'Contiguo a Multiplaza, Santa Ana, CR',
       province: 'San José',
       canton: 'Santa Ana',
+      city: 'Pozos',
+      countryCode: 'CR',
       latitude: 9.9345,
       longitude: -84.1834,
       priceMonthly: 950,
@@ -73,6 +79,8 @@ abstract final class DemoProperties {
       address: 'Ruta 27, Torrealba, San José, CR',
       province: 'San José',
       canton: 'San José',
+      city: 'Sabana Norte',
+      countryCode: 'CR',
       latitude: 9.9156,
       longitude: -84.0823,
       priceMonthly: 2800,
@@ -92,6 +100,8 @@ abstract final class DemoProperties {
       address: 'Avenida Central, Alajuela Centro, CR',
       province: 'Alajuela',
       canton: 'Alajuela',
+      city: 'Alajuela Centro',
+      countryCode: 'CR',
       latitude: 10.0164,
       longitude: -84.2158,
       priceMonthly: 750,
@@ -111,6 +121,8 @@ abstract final class DemoProperties {
       address: 'Barrio Ayarco, Cartago, CR',
       province: 'Cartago',
       canton: 'Cartago',
+      city: 'San Francisco',
+      countryCode: 'CR',
       latitude: 9.8649,
       longitude: -83.9188,
       priceMonthly: 1350,
@@ -127,9 +139,11 @@ abstract final class DemoProperties {
     Property(
       id: 'prop-007',
       title: 'Villa 8 hab — Guanacaste',
-      address: 'Playa Hermosa, Guanacaste, CR',
+      address: 'Playa Hermosa, Carrillo, Guanacaste, CR',
       province: 'Guanacaste',
       canton: 'Carrillo',
+      city: 'Playa Hermosa',
+      countryCode: 'CR',
       latitude: 10.59,
       longitude: -85.69,
       priceMonthly: 3500,
@@ -145,10 +159,12 @@ abstract final class DemoProperties {
     ),
     Property(
       id: 'prop-008',
-      title: 'Cabaña Bosque — Cartago',
+      title: 'Cabaña Bosque — Tierra Blanca',
       address: 'Tierra Blanca, Cartago, CR',
       province: 'Cartago',
       canton: 'Cartago',
+      city: 'Tierra Blanca',
+      countryCode: 'CR',
       latitude: 9.85,
       longitude: -83.92,
       priceMonthly: 1100,
@@ -168,6 +184,8 @@ abstract final class DemoProperties {
       address: 'Sabana Norte, San José, CR',
       province: 'San José',
       canton: 'San José',
+      city: 'Sabana Norte',
+      countryCode: 'CR',
       latitude: 9.935,
       longitude: -84.09,
       priceMonthly: 1600,
@@ -212,16 +230,11 @@ class LocalPropertyDatasource {
         return false;
       }
 
-      // Filtro global por país/región (nuevo) + compat CR
+      // Filtro global por país/región/ciudad (específico)
       if (filter.countryCode != null) {
-        // Demo: mapea país a properties (CR->San José/Cartago/Alajuela, US->ninguna para demo -> oculta)
-        // Por ahora solo CR tiene datos demo; otros países devuelven vacío (simula sin inventario)
-        if (filter.countryCode != 'CR') {
-          // Simula global: si pide US/MX/etc sin datos demo, no filtra (muestra todo) hasta que haya backend
-        }
-        if (filter.region != null && property.province != filter.region && property.canton != filter.region) {
-          return false;
-        }
+        if (property.countryCode != filter.countryCode) return false;
+        if (filter.region != null && property.province != filter.region) return false;
+        if (filter.city != null && property.city != filter.city) return false;
       }
       if (filter.province != null && property.province != filter.province!.label) return false;
       if (filter.canton != null && property.canton != filter.canton) return false;

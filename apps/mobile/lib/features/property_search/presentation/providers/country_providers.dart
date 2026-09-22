@@ -51,14 +51,21 @@ class UserCountryNotifier extends StateNotifier<String?> {
 
 /// Regiones reales para un país (countriesnow). Usa nombre inglés del país.
 final countryRegionsProvider = FutureProvider.family<List<String>, String>((ref, countryCode) async {
-  // Busca nombre inglés via API o curado
   final countries = await ref.watch(globalCountriesRealProvider.future);
   final country = countries.firstWhere((c) => c.code == countryCode, orElse: () => countryByCode(countryCode));
-  // Si el curado ya tiene regiones, úsalas como fallback inmediato
   final curatedRegions = country.regions;
   final svc = ref.watch(countryServiceProvider);
-  // Intenta fetch real (countriesnow usa nombre inglés; restcountries name ya es inglés)
   final real = await svc.fetchStates(countryCode, country.name);
   if (real != null && real.isNotEmpty) return real;
   return curatedRegions;
+});
+
+/// Ciudades reales para país+estado (countriesnow).
+final countryCitiesProvider = FutureProvider.family<List<String>, ({String countryCode, String state})>((ref, args) async {
+  final countries = await ref.watch(globalCountriesRealProvider.future);
+  final country = countries.firstWhere((c) => c.code == args.countryCode, orElse: () => countryByCode(args.countryCode));
+  final svc = ref.watch(countryServiceProvider);
+  final real = await svc.fetchCities(country.name, args.state);
+  if (real != null && real.isNotEmpty) return real;
+  return [];
 });
