@@ -24,3 +24,8 @@ export 'src/atoms/space_type_icon.dart';
 // Molecules — composición de átomos ([molecules])
 // ---------------------------------------------------------------------------
 export 'src/molecules/space_card.dart';
+
+// ---------------------------------------------------------------------------
+// Organisms — bloques de pantalla ([organisms])
+// ---------------------------------------------------------------------------
+export 'src/organisms/nearby_coworkings.dart';
