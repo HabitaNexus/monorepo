@@ -1,6 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+
+import '../features/negotiation/presentation/pages/negotiation_detail_page.dart';
+import '../features/negotiations/presentation/pages/digital_signature_page.dart';
+import '../features/property_search/presentation/pages/property_search_page.dart';
 
 final goRouterProvider = Provider<GoRouter>((ref) {
   return GoRouter(
@@ -9,8 +12,29 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/',
         name: 'home',
-        builder: (context, state) => const Scaffold(
-          body: Center(child: Text('HabitaNexus')),
+        builder: (context, state) => const PropertySearchPage(),
+      ),
+      GoRoute(
+        path: '/contrato',
+        name: 'contrato',
+        builder: (context, state) => const DigitalSignaturePage(),
+      ),
+      GoRoute(
+        path: '/firma-digital',
+        name: 'firma-digital',
+        redirect: (context, state) => '/contrato',
+      ),
+      GoRoute(
+        path: '/negociacion',
+        name: 'negociacion',
+        builder: (context, state) =>
+            const NegotiationDetailPage(),
+      ),
+      GoRoute(
+        path: '/negociacion/:id',
+        name: 'negociacion-detalle',
+        builder: (context, state) => NegotiationDetailPage(
+          negotiationId: state.pathParameters['id'],
         ),
       ),
     ],

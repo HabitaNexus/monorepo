@@ -22,8 +22,9 @@ class HabitaNexusApp extends ConsumerWidget {
     return MaterialApp.router(
       routerConfig: router,
       title: 'HabitaNexus',
-      theme: AppTheme.lightTheme,
+      theme: AppTheme.darkTheme,
       darkTheme: AppTheme.darkTheme,
+      themeMode: ThemeMode.dark,
       debugShowCheckedModeBanner: false,
     );
   }
