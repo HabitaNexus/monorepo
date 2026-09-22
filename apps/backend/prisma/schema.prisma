@@ -1,0 +1,52 @@
+// Prisma schema — HAB-26 motor de estados de negociación.
+//
+// Los términos viajan como JSON versionado (columna `terms`); el resumen
+// pactado se congela en `summary` al aceptar. El audit es append-only:
+// la app solo inserta en `transition_audits` (sin updates/deletes en código).
+// `attemptId` UNIQUE da idempotencia a nivel DB ante reintentos.
+
+generator client {
+  provider     = "prisma-client"
+  output       = "../generated/prisma"
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Negotiation {
+  id               String   @id @db.Uuid
+  listingId        String   @map("listing_id") @db.Uuid
+  tenantId         String   @map("tenant_id")
+  ownerId          String   @map("owner_id")
+  status           String
+  round            Int
+  deadline         DateTime @db.Timestamptz(6)
+  terms            Json
+  summary          Json?
+  tenantConfirmed  Boolean  @default(false) @map("tenant_confirmed")
+  ownerConfirmed   Boolean  @default(false) @map("owner_confirmed")
+  closeReason      String?  @map("close_reason")
+  createdAt        DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt        DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  audits           TransitionAudit[]
+
+  @@index([status, deadline])
+  @@map("negotiations")
+}
+
+model TransitionAudit {
+  id            String      @id @db.Uuid
+  negotiationId String      @map("negotiation_id") @db.Uuid
+  negotiation   Negotiation @relation(fields: [negotiationId], references: [id], onDelete: Restrict)
+  actor         String
+  at            DateTime    @db.Timestamptz(6)
+  from          String
+  to            String
+  round         Int
+  attemptId     String      @unique @map("attempt_id") @db.Uuid
+
+  @@index([negotiationId])
+  @@map("transition_audits")
+}
