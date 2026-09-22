@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../data/demo_negotiation.dart';
 import '../../data/terms_mapping.dart';
@@ -143,7 +144,12 @@ class NegotiationBody extends ConsumerWidget {
     await ref.read(negotiationControllerProvider(negotiationId).notifier).accept();
     if (!context.mounted) return;
     final err = ref.read(negotiationControllerProvider(negotiationId)).error;
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(err == null ? 'Términos aceptados.' : 'No se pudo aceptar: $err')));
+    if (err != null) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('No se pudo aceptar: $err')));
+      return;
+    }
+    // Acuerdo aceptado -> Contrato (firma).
+    context.go('/contrato');
   }
 
   Future<void> _onReject(BuildContext context, WidgetRef ref) async {
@@ -161,7 +167,12 @@ class NegotiationBody extends ConsumerWidget {
     await ref.read(negotiationControllerProvider(negotiationId).notifier).reject(reason);
     if (!context.mounted) return;
     final err = ref.read(negotiationControllerProvider(negotiationId)).error;
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(err == null ? 'Oferta desistida.' : 'No se pudo desistir: $err')));
+    if (err != null) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('No se pudo desistir: $err')));
+      return;
+    }
+    // Desistimiento -> home (barra de navegación).
+    context.go('/');
   }
 }
 
