@@ -7,9 +7,8 @@ con la misma taxonomía Atomic Design que el widgetbook canónico de altrupets:
 lib/
   main.dart                  # Widgetbook app + tab Showcase del design system
   use_cases/
-    atoms/                   # (vacío — ver Gap abajo)
-    molecules/               # (vacío)
-    organisms/               # (vacío)
+    atoms/space_type_icon_use_case.dart
+    organisms/nearby_coworkings_use_case.dart  # Default/Loading/Error
   showcase/
     design_system_showcase.dart  # ColorScheme M3 desde seed #1A5276
 ```
@@ -22,19 +21,16 @@ dart run build_runner build --delete-conflicting-outputs
 flutter run -d chrome
 ```
 
-## Gap: HabitaNexus aún no tiene widgets compartidos commiteados
+## Estado: primeras stories (HAB-20)
 
-En `develop` no existe ningún widget público reutilizable: `payments` es solo
-lógica y la UI de `coworking` está en curso sin commitear (trae `SpaceTypeIcon`
-y `NearbyCoworkingsWidget`; sus stories ya quedaron diseñadas en
-`lib/use_cases/README.md`). Pasos naturales:
+`SpaceTypeIcon` (atom) y `NearbyCoworkings` (organism, estados
+Default/Loading/Error) viven en `habitanexus_ui` y sus stories solo importan
+el package — sin `habitanexus_mobile`. Pasos naturales:
 
-1. Al commitear la feature coworking, agregar las dos stories diseñadas.
-2. Promover los widgets privados de las pages (`_CoworkingCard`, `_Tag`,
+1. Promover los widgets privados de las pages (`_CoworkingCard`, `_Tag`,
    `_PartnershipBadge`, `_AmenityChip`, `_InfoRow`) a
-   `lib/core/widgets/{atoms,molecules,organisms}/` (o a un package
-   `habitanexus_ui`), cada uno naciendo con su story.
-3. El theme es un `ColorScheme.fromSeed` mínimo — cuando se incorporen design
+   `habitanexus_ui` en `src/{atoms,molecules}/`, cada uno naciendo con su story.
+2. El theme es un `ColorScheme.fromSeed` mínimo — cuando se incorporen design
    tokens (estilo style-dictionary de altrupets/vertivo), extender el Showcase.
 
 ## Convención

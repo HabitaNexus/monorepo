@@ -11,14 +11,8 @@ dependencies:
     sdk: flutter
   widgetbook_annotation: ^3.10.0
   widgetbook: ^3.21.0
-  flutter_riverpod: ^2.4.9
   habitanexus_ui:
     path: ../../packages/habitanexus_ui
-  # TEMPORAL hasta migración HAB-20: las stories de properties aún muestran
-  # widgets que viven en la app (ver NearbyCoworkingsWidget). Al migrarlos a
-  # src/{atoms,molecules,organisms}/, eliminar este dep.
-  habitanexus_mobile:
-    path: ../mobile
 
 dev_dependencies:
   flutter_test:
