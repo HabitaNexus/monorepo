@@ -1,0 +1,37 @@
+{
+  "mcp": {
+    "servers": {
+      "linear": {
+        "type": "remote",
+        "url": "https://mcp.linear.app/mcp"
+      },
+      "slack": {
+        "type": "remote",
+        "url": "https://mcp.slack.com/mcp",
+        "oauth": {
+          "client_id": "{env:SLACK_CLIENT_ID}",
+          "client_secret": "{env:SLACK_CLIENT_SECRET}",
+          "callback_port": 19876,
+          "redirect_uri": "http://127.0.0.1:19876/callback",
+          "scope": "search:read.public search:read.private search:read.files channels:history channels:read groups:history groups:read im:history im:read mpim:history mpim:read mpim:write im:write chat:write users:read users:read.email reactions:write files:read files:write emoji:read channels:write groups:write canvases:read canvases:write lists:read lists:write"
+        }
+      },
+      "chrome-devtools": {
+        "type": "local",
+        "command": [
+          "/home/mirandax/.local/node-v22/bin/chrome-devtools-mcp",
+          "--executablePath",
+          "/home/mirandax/.cache/puppeteer/chrome/linux-153.0.8010.47/chrome-linux64/chrome",
+          "--chromeArg=--no-sandbox",
+          "--chromeArg=--disable-dev-shm-usage",
+          "--logFile",
+          "/tmp/chrome-devtools-mcp.log"
+        ]
+      },
+      "context7": {
+        "type": "remote",
+        "url": "https://mcp.context7.com/mcp"
+      }
+    }
+}
+}
