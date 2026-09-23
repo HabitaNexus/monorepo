@@ -1,0 +1,38 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: habitanexus
+  namespace: argocd
+spec:
+  description: HabitaNexus — monorepo de alquiler residencial
+  sourceRepos:
+    - 'https://github.com/HabitaNexus/monorepo.git'
+  destinations:
+    - namespace: 'dev'
+      server: https://kubernetes.default.svc
+    - namespace: 'staging'
+      server: https://kubernetes.default.svc
+    - namespace: 'prod'
+      server: https://kubernetes.default.svc
+  clusterResourceWhitelist:
+    - group: ''
+      kind: Namespace
+  namespaceResourceWhitelist:
+    - group: 'apps'
+      kind: Deployment
+    - group: ''
+      kind: Service
+    - group: ''
+      kind: ConfigMap
+    - group: 'networking.k8s.io'
+      kind: Ingress
+  roles:
+    - name: developer
+      description: Developers can sync dev/staging apps
+      policies:
+        - p, proj:habitanexus:developer, applications, sync, habitanexus/*, allow
+        - p, proj:habitanexus:developer, applications, get, habitanexus/*, allow
+    - name: admin
+      description: Admin access
+      policies:
+        - p, proj:habitanexus:admin, applications, *, habitanexus/*, allow

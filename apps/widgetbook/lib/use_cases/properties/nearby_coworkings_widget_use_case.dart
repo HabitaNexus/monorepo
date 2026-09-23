@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:widgetbook_annotation/widgetbook_annotation.dart' as widgetbook;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:habitanexus_mobile/features/properties/domain/entities/workspace_nearby.dart';
+import 'package:habitanexus_mobile/features/properties/domain/repositories/workspace_nearby_repository.dart';
 import 'package:habitanexus_mobile/features/properties/presentation/widgets/nearby_coworkings_widget.dart';
 import 'package:habitanexus_mobile/features/properties/presentation/providers/coworking_nearby_provider.dart';
 

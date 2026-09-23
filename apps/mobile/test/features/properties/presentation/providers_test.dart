@@ -1,6 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:habitanexus_mobile/features/properties/domain/entities/workspace_nearby.dart';
 import 'package:habitanexus_mobile/features/properties/domain/repositories/workspace_nearby_repository.dart';
 import 'package:habitanexus_mobile/features/properties/presentation/providers/coworking_nearby_provider.dart';
