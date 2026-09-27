@@ -16,3 +16,6 @@ configMapGenerator:
       - LOG_LEVEL=debug
       - API_TIMEOUT=30000
       - NODE_ENV=development
+  - name: hacienda-sidecar-config
+    literals:
+      - HACIENDA_ENVIRONMENT=sandbox

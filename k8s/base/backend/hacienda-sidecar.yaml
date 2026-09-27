@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hacienda-sidecar
+  labels:
+    app: hacienda-sidecar
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hacienda-sidecar
+  template:
+    metadata:
+      labels:
+        app: hacienda-sidecar
+    spec:
+      containers:
+        - name: hacienda-sidecar
+          image: ghcr.io/habitanexus/monorepo/hacienda-sidecar:latest
+          ports:
+            - name: grpc
+              containerPort: 50051
+          env:
+            - name: HACIENDA_ENVIRONMENT
+              valueFrom:
+                configMapKeyRef:
+                  name: hacienda-sidecar-config
+                  key: HACIENDA_ENVIRONMENT
+            - name: HACIENDA_ID_TYPE
+              valueFrom:
+                secretKeyRef:
+                  name: hacienda-credentials
+                  key: HACIENDA_ID_TYPE
+            - name: HACIENDA_ID_NUMBER
+              valueFrom:
+                secretKeyRef:
+                  name: hacienda-credentials
+                  key: HACIENDA_ID_NUMBER
+            - name: HACIENDA_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: hacienda-credentials
+                  key: HACIENDA_PASSWORD
+          readinessProbe:
+            grpc:
+              port: 50051
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: 50051
+            initialDelaySeconds: 10
+            periodSeconds: 20
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "256Mi"
+              cpu: "250m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hacienda-sidecar
+spec:
+  selector:
+    app: hacienda-sidecar
+  ports:
+    - name: grpc
+      protocol: TCP
+      port: 50051
+      targetPort: 50051
+  type: ClusterIP
