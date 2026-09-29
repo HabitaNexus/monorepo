@@ -9,8 +9,10 @@ import '../features/properties/presentation/pages/property_detail_page.dart';
 /// nunca se commitearon y rompían `flutter build` en develop.
 /// El producto real (HAB-15/HAB-27) reemplaza estos placeholders.
 final goRouterProvider = Provider<GoRouter>((ref) {
+  // Home = pantalla de negociación de HAB-27 (Naidelyn): sin id muestra
+  // la demo local del diseño Stitch; con ?id= carga del backend HAB-26.
   return GoRouter(
-    initialLocation: '/',
+    initialLocation: '/negociacion',
     routes: [
       GoRoute(
         path: '/',
