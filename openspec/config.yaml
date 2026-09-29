@@ -33,7 +33,7 @@ operations:
   apply:
     guidance:
       - Antes de implementar, verificar que la rama parte de origin/develop al día.
-      - Backend: tsc 0 errores + jest verde. Mobile: flutter analyze (app completa) + flutter test.
+      - "Backend: tsc 0 errores + jest verde. Mobile: flutter analyze (app completa) + flutter test."
   archive:
     guidance:
       - Sincronizar specs a openspec/specs/ antes de archivar (ver /opsx-sync).
