@@ -1,0 +1,132 @@
+{
+  "meta": {
+    "type": "storyboard",
+    "profile": "storyboard",
+    "variant": "narrative",
+    "title": "Storyboard: Jose Penaranda — Propietario que adopta HabitaNexus",
+    "created": "2026-04-12",
+    "updated": "2026-04-12",
+    "version": 1
+  },
+  "persona": {
+    "name": "Jose Penaranda",
+    "age": 65,
+    "role": "Propietario pensionado / Ebanista retirado de la CCSS",
+    "location": "San Rafael de Heredia, Costa Rica",
+    "avatar_emoji": "👴",
+    "primary_pain": "Inquilinos le danan las propiedades (paredes, sanitarios, tuberias, puertas, llavines) y no tiene forma de probar el estado inicial porque nunca documento con fotos fechadas ni acta de entrega. Las fotos que tiene son recicladas de publicaciones viejas en grupos de Facebook.",
+    "context": "Pensionado de 65 anos con 40 anos de experiencia en la CCSS. Ebanista de oficio. Tiene 2 propiedades en alquiler en San Rafael de Heredia. Casado, sin hijos. Su esposa padece hipertension y diabetes — el ruido de inquilinos le afecta la presion. Usa pickup para ir a las propiedades. Publica con letrero fisico y referidos por WhatsApp, no usa Facebook ni plataformas digitales."
+  },
+  "phases": [
+    {
+      "id": "scene-1",
+      "label": "Escena 1: Contexto",
+      "icon": "🎬",
+      "scene_description": "Jose esta en una de sus propiedades en San Rafael de Heredia haciendo la ronda del mes. El contrato informal (un papel que le hizo un conocido) se vence en 3 meses. Mientras inspecciona, nota que los inquilinos actuales le taponearon las tuberias del desague y hay una fuga en el bano. El llavin de la puerta principal esta forzado. Su esposa lo acompana y se le sube la presion por el estres. Jose le dice al inquilino que repare, pero el inquilino le responde que 'eso ya estaba asi cuando llegue'. Jose busca las fotos que tiene en el celular pero son fotos recicladas de hace meses que usaba para publicar en los grupos de Facebook de Guarari y Milpa de Heredia — no reflejan el estado real del inmueble cuando se firmo el contrato. No tiene forma de probar nada.",
+      "scene_setting": "Sabado a las 5pm, en la propiedad de alquiler en San Rafael de Heredia. Ya no hay ferreterias abiertas para buscar repuestos de fontaneria. Su esposa le insistio en ir a revisar.",
+      "scene_dialogue": "Jose piensa: 'Diay, y ahora de donde saco un fontanero un sabado a esta hora? Ya me gaste lo de las puertas y este mae me dejo todo hecho lena...' Su esposa le dice: 'Jose, tranquilo, no se me vaya a enfermar usted tambien por estos carajillos...'",
+      "scene_mood": "Enojado y frustrado",
+      "emotion": {
+        "level": 2,
+        "emoji": "😤",
+        "label": "Frustrado"
+      }
+    },
+    {
+      "id": "scene-2",
+      "label": "Escena 2: Problema",
+      "icon": "😰",
+      "scene_description": "Jose esta en su casa. Su esposa tuvo que tomarse la pastilla de la presion despues de la visita a la propiedad. Jose revisa el contrato informal — el papel que le hizo un conocido — y se da cuenta de que no tiene clausula de inspeccion, no tiene acta de entrega, no tiene fotos fechadas, y el deposito que le pidio al inquilino fue en efectivo sin recibo. El hermano de Jose lo llama por telefono y le cuenta que a el le paso lo mismo con un inquilino que le arranco las puertas. Jose le dice: 'Y que hizo usted?' El hermano le responde: 'Nada, mae, que iba a hacer? No tenia como probar nada.' Jose decide que cuando se venza el contrato en 3 meses, no va a renovar — pero esta vez quiere hacer las cosas bien.",
+      "scene_setting": "Domingo por la manana, tomando cafe en la cocina con su esposa en su casa de San Rafael.",
+      "scene_dialogue": "El hermano le dice por telefono: 'Mae, a mi un sobrino me dijo que hay una aplicacion nueva para eso de los alquileres, que le hace contrato y todo. Busque en el play store.' Jose piensa: 'Yo ya estoy viejo para esas varas de tecnologia... pero asi como estoy, no puedo seguir.'",
+      "scene_mood": "Abrumado",
+      "emotion": {
+        "level": 1,
+        "emoji": "😰",
+        "label": "Abrumado"
+      }
+    },
+    {
+      "id": "scene-3",
+      "label": "Escena 3: Busqueda",
+      "icon": "🔎",
+      "scene_description": "Jose le pide a su esposa que le ayude a buscar en el celular lo que le dijo el hermano. Ella busca 'aplicacion alquileres Costa Rica' en el Play Store. Encuentran varias opciones pero la mayoria son para buscar alquiler como inquilino, no para publicar como propietario. Jose se frustra con el celular — la letra es muy pequena y las apps le piden crear cuenta con correo electronico que casi no usa. Su esposa le dice: 'Espera, aqui hay una que dice que le hace el contrato a uno y le guardan el deposito.'",
+      "scene_setting": "Domingo despues de almuerzo, en la sala con el celular de su esposa.",
+      "scene_dialogue": "Su esposa le dice: 'Vea Jose, esta dice HabitaNexus — negociacion digital de contratos, deposito protegido, inspeccion con fotos. Eso es lo que usted necesita.' Jose dice: 'Y eso no sera una estafa? Yo lo que quiero es algo que me proteja, no meterme en mas problemas.' Su esposa: 'Pues peor no puede estar. Descarguela a ver.'",
+      "scene_mood": "Esceptico pero curioso",
+      "emotion": {
+        "level": 2,
+        "emoji": "🤨",
+        "label": "Esceptico"
+      }
+    },
+    {
+      "id": "scene-4",
+      "label": "Escena 4: Descubrimiento",
+      "icon": "💡",
+      "scene_description": "Jose y su esposa abren HabitaNexus. El flujo de registro le pide la cedula y se la valida con SINPE. 'Mira, ya sabe quien soy', le dice a su esposa. Empieza a registrar la propiedad y ve que le pide fotos de cada espacio con dimensiones, el tipo de piso, el sistema de agua caliente, si permite mascotas, bebes, huespedes temporales — todo desglosado. Jose piensa: 'Esto es lo que yo deberia haberle puesto al inquilino desde el principio.' Cuando llega a la parte del video tour, su esposa le graba un recorrido con el celular. Pero lo que mas le llama la atencion es que la app le dice que el deposito lo guarda un tercero, no el — y que al inicio del contrato se levanta un acta de entrega con fotos que ninguna de las dos partes puede modificar despues.",
+      "scene_setting": "Lunes por la manana. Jose se levanta temprano, agarra la pickup y va a la propiedad con el celular de su esposa (que tiene mejor camara). Va solo porque ella se queda descansando. Es la primera vez que va a la propiedad con la intencion de documentarla, no de repararla.",
+      "scene_dialogue": "Jose piensa mientras graba el recorrido: 'Si yo hubiera tenido esto hace dos anos, ese mae no me sale con que ya estaba asi. Aqui queda todo grabado.' Le manda un audio de WhatsApp a su hermano: 'Mae, descargue esa vara que se llama HabitaNexus. Aqui le piden a uno foto de todo y hasta le guardan la plata del deposito. Cuando se le venza el contrato a usted, metalo por aqui.'",
+      "scene_mood": "Sorprendido positivamente",
+      "emotion": {
+        "level": 3,
+        "emoji": "😮",
+        "label": "Sorprendido"
+      }
+    },
+    {
+      "id": "scene-5",
+      "label": "Escena 5: Solucion",
+      "icon": "✨",
+      "scene_description": "Pasaron los 3 meses. El inquilino problematico se fue. Jose contrato un fontanero para arreglar las tuberias y el mismo reparo las puertas y llavines. La propiedad ya esta publicada en HabitaNexus con todas las fotos, el video tour, las dimensiones de cada cuarto, y las condiciones claras: no se permiten modificaciones sin autorizacion, inspeccion mensual, y restricciones de ruido por la salud de su esposa que vive al lado. Le llega una propuesta de una inquilina joven — Mery, analista de ciberseguridad. Ella propone C280,000 al mes, 3 anos de contrato, tiene un gato. Jose revisa la propuesta en la app: ve el perfil verificado de Mery, sus calificaciones de contratos anteriores, y puede contraproponer. Acepta todo menos el gato — contrapropone 'gato solo interior'. Mery acepta. Antes de firmar, la app agenda la inspeccion inicial: ambos van a la propiedad, la app genera el acta de entrega con fotos de cada espacio, estado de pisos, paredes, llavines, sanitario, tuberias — todo con fecha, hora y firma digital de ambos.",
+      "scene_setting": "Entre semana por la tarde, Jose revisa la propuesta desde su casa. La inspeccion inicial es el sabado siguiente en la propiedad.",
+      "scene_dialogue": "Jose le muestra la app a su esposa en la cocina: 'Vea, esta muchacha tiene buenas calificaciones y trabaja en computacion. Dice que tiene un gato pero yo le puse que solo adentro. Ella acepto.' Su esposa: 'Y el deposito?' Jose: 'No lo toco yo ni lo toca ella. Lo guarda la aplicacion y solo se suelta al final con las fotos del acta. Si me dana algo, queda documentado desde hoy.' Su esposa: 'Diay, hasta que por fin!' El sabado en la inspeccion, Mery le dice: 'Don Jose, que bueno que todo queda con fotos. Asi los dos estamos tranquilos.'",
+      "scene_mood": "Tranquilo",
+      "emotion": {
+        "level": 4,
+        "emoji": "😌",
+        "label": "Tranquilo"
+      }
+    },
+    {
+      "id": "scene-6",
+      "label": "Escena 6: Resultado",
+      "icon": "🎉",
+      "scene_description": "Un mes despues de que Mery se mudo. Jose hace su primera inspeccion mensual a traves de la app — agenda la visita, Mery confirma, y cuando llega todo esta en orden. El gato esta adentro como se pacto. Jose registra en la app 'sin hallazgos' con fotos. De regreso a su casa, su esposa le pregunta como esta la propiedad. Jose le dice que todo bien, la muchacha es ordenada. Y si algun dia hay un problema, ahora si queda todo registrado. Su esposa le dice que llame al hermano para que deje de sufrir con el otro inquilino. Esa noche Jose le manda al hermano el link de HabitaNexus por WhatsApp — el mismo canal por donde siempre ha manejado sus alquileres, pero esta vez para referirlo a algo que si lo protege.",
+      "scene_setting": "Sabado por la manana — inspeccion en la propiedad, luego de regreso en su casa por la tarde.",
+      "scene_dialogue": "Jose piensa mientras maneja la pickup de regreso: 'Cuarenta anos trabajando en la CCSS y nunca pense que un telefono me iba a resolver lo de los alquileres.' Su esposa al verlo llegar tranquilo: 'Y? Como esta la propiedad?' Jose: 'Todo en orden. La muchacha hasta me ofrecio cafe.'",
+      "scene_mood": "Satisfecho",
+      "emotion": {
+        "level": 5,
+        "emoji": "😊",
+        "label": "Satisfecho"
+      }
+    }
+  ],
+  "analysis": {
+    "pain_points": [
+      "Sin acta de entrega ni fotos fechadas, es palabra contra palabra cuando hay danos",
+      "Fotos recicladas de publicaciones viejas no sirven como evidencia del estado real al inicio del contrato",
+      "Contratos informales (papel de un conocido) no incluyen clausulas de inspeccion ni deposito documentado",
+      "Deposito en efectivo sin recibo — imposible probar que se pago o reclamar al final",
+      "Propietarios mayores con poca experiencia digital necesitan un flujo simple y guiado",
+      "La esposa de Jose padece hipertension — el estres de los inquilinos problematicos le afecta la salud directamente"
+    ],
+    "moments_of_truth": [
+      {
+        "phase": "scene-2",
+        "description": "Jose se da cuenta de que su hermano tampoco pudo probar nada. El problema es sistemico, no personal. Decide que la proxima vez va a hacer las cosas bien."
+      },
+      {
+        "phase": "scene-4",
+        "description": "Jose descubre que la app genera un acta de entrega con fotos inmutables. Entiende que esto es exactamente lo que le falto. Envia audio al hermano recomendando la app."
+      },
+      {
+        "phase": "scene-5",
+        "description": "La inspeccion inicial con Mery genera evidencia fotografica con fecha, hora y firma digital. Por primera vez, Jose tiene un contrato que lo protege desde el dia uno."
+      }
+    ],
+    "recommended_next_map": "customer-journey-map",
+    "central_message": "Con un contrato claro y evidencia desde el dia uno, la tecnologia no reemplaza la experiencia de Don Jose — le da las herramientas que siempre le faltaron."
+  }
+}
