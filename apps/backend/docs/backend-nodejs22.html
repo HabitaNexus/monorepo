@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HabitaNexus Backend — Node.js 22 · Diagrama de componentes UML</title>
+<style>
+  body { margin: 0; background: #fff; font-family: Arial, Helvetica, sans-serif; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 12px; }
+  svg { width: 100%; height: auto; display: block; }
+  .face  { fill: #fafafa; stroke: #222; stroke-width: 1.8; }
+  .top   { fill: #e3e3e3; stroke: #222; stroke-width: 1.8; }
+  .side  { fill: #c9c9c9; stroke: #222; stroke-width: 1.8; }
+  .box   { fill: #ffffff; stroke: #222; stroke-width: 1.8; }
+  .stereo { font-size: 14px; fill: #333; text-anchor: middle; }
+  .name   { font-size: 18px; fill: #111; text-anchor: middle; }
+  .comp   { font-size: 15px; fill: #111; text-anchor: middle; }
+  .detail { font-size: 11.5px; fill: #444; text-anchor: middle; }
+  .cls    { font-size: 13px; font-weight: bold; fill: #111; text-anchor: middle; }
+  .attr   { font-size: 11px; fill: #111; }
+  .lbl    { font-size: 12.5px; font-style: italic; fill: #111; text-anchor: middle; paint-order: stroke; stroke: #fafafa; stroke-width: 5px; }
+  .note { font-size: 13px; fill: #333; text-anchor: middle; }
+  .dep { fill: none; stroke: #222; stroke-width: 1.6; stroke-dasharray: 7 4; }
+  .sol { fill: none; stroke: #222; stroke-width: 1.6; }
+  .dia { fill: #222; stroke: #222; stroke-width: 1.4; }
+  h1 { font-size: 20px; margin: 6px 0 2px; color: #111; }
+  p.sub { font-size: 13px; color: #444; margin: 0 0 8px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>Node.js 22 — Diagrama de componentes UML</h1>
+<p class="sub">HAB-13 · apps/backend · «register», «route», composición e interfaces requerida/provista (lollipop + socket).</p>
+<svg viewBox="0 0 1040 780" role="img" aria-label="Diagrama de componentes UML de la seccion Node.js 22">
+  <defs>
+    <marker id="openArr" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0.5,0.5 L9,5 L0.5,9.5" fill="none" stroke="#222" stroke-width="1.6"></path>
+    </marker>
+  </defs>
+
+  <polygon class="top" points="60,90 84,66 1004,66 980,90"></polygon>
+  <polygon class="side" points="980,90 1004,66 1004,686 980,710"></polygon>
+  <rect class="face" x="60" y="90" width="920" height="620"></rect>
+  <text class="stereo" x="520" y="128">«execution environment»</text>
+  <text class="name" x="520" y="150">Node.js 22 · detalle UML</text>
+
+  <!-- Row 1 components -->
+  <g>
+    <rect class="box" x="100" y="200" width="210" height="110"></rect>
+    <rect class="box" x="90" y="212" width="15" height="10"></rect>
+    <rect class="box" x="90" y="226" width="15" height="10"></rect>
+    <text class="stereo" x="205" y="236">«component»</text>
+    <text class="comp" x="205" y="260">HTTP Adapter</text>
+    <text class="detail" x="205" y="282">main.ts · Express :3000</text>
+  </g>
+  <g>
+    <rect class="box" x="350" y="200" width="210" height="110"></rect>
+    <rect class="box" x="340" y="212" width="15" height="10"></rect>
+    <rect class="box" x="340" y="226" width="15" height="10"></rect>
+    <text class="stereo" x="455" y="236">«component»</text>
+    <text class="comp" x="455" y="260">PropertyModule</text>
+    <text class="detail" x="455" y="282">property.module.ts</text>
+  </g>
+  <g>
+    <rect class="box" x="600" y="200" width="210" height="110"></rect>
+    <rect class="box" x="590" y="212" width="15" height="10"></rect>
+    <rect class="box" x="590" y="226" width="15" height="10"></rect>
+    <text class="stereo" x="705" y="236">«component»</text>
+    <text class="comp" x="705" y="260">AppModule</text>
+    <text class="detail" x="705" y="282">app.module.ts · raíz</text>
+  </g>
+
+  <!-- Domain Entities with classes -->
+  <g>
+    <rect class="box" x="100" y="350" width="330" height="320"></rect>
+    <rect class="box" x="90" y="362" width="15" height="10"></rect>
+    <rect class="box" x="90" y="376" width="15" height="10"></rect>
+    <text class="stereo" x="265" y="374">«component»</text>
+    <text class="comp" x="265" y="394">Domain Entities</text>
+    <g>
+      <rect class="box" x="120" y="404" width="290" height="92"></rect>
+      <text class="cls" x="265" y="424">Property</text>
+      <line class="sol" x1="120" y1="432" x2="410" y2="432"></line>
+      <text class="attr" x="130" y="448">+ id: string</text>
+      <text class="attr" x="130" y="464">+ ownerId: string</text>
+      <text class="attr" x="130" y="480">+ propertyType: PropertyType</text>
+    </g>
+    <g>
+      <rect class="box" x="120" y="502" width="290" height="76"></rect>
+      <text class="cls" x="265" y="522">Listing</text>
+      <line class="sol" x1="120" y1="530" x2="410" y2="530"></line>
+      <text class="attr" x="130" y="546">+ monthlyRent: number</text>
+      <text class="attr" x="130" y="562">+ status: ListingStatus</text>
+    </g>
+    <g>
+      <rect class="box" x="120" y="584" width="290" height="76"></rect>
+      <text class="cls" x="265" y="604">RoomSpace</text>
+      <line class="sol" x1="120" y1="612" x2="410" y2="612"></line>
+      <text class="attr" x="130" y="628">+ lengthM × widthM: number</text>
+      <text class="attr" x="130" y="644">+ areaM2: number (derivado)</text>
+    </g>
+  </g>
+
+  <!-- Repository Ports with provided interface -->
+  <g>
+    <rect class="box" x="480" y="360" width="330" height="170"></rect>
+    <rect class="box" x="470" y="372" width="15" height="10"></rect>
+    <rect class="box" x="470" y="386" width="15" height="10"></rect>
+    <text class="stereo" x="645" y="392">«component»</text>
+    <text class="comp" x="645" y="414">Repository Ports</text>
+    <text class="detail" x="645" y="438">IPropertyRepository</text>
+    <text class="detail" x="645" y="456">IListingRepository</text>
+    <text class="detail" x="645" y="478">interfaces · las implementa infra</text>
+  </g>
+
+  <!-- UML relationships -->
+  <line class="dep" x1="310" y1="255" x2="342" y2="255" marker-end="url(#openArr)"></line>
+  <text class="lbl" x="326" y="243">«route»</text>
+
+  <line class="dep" x1="600" y1="255" x2="568" y2="255" marker-end="url(#openArr)"></line>
+  <text class="lbl" x="584" y="243">«register»</text>
+
+  <polygon class="dia" points="400,310 392,322 400,334 408,322"></polygon>
+  <line class="sol" x1="400" y1="334" x2="391" y2="350"></line>
+  <text class="lbl" x="424" y="346">«owns»</text>
+
+  <line class="sol" x1="520" y1="310" x2="452" y2="450"></line>
+  <circle class="box" cx="452" cy="450" r="10"></circle>
+  <path class="sol" d="M 436,441 A 16 16 0 0 1 468,459"></path>
+  <line class="sol" x1="462" y1="450" x2="480" y2="450"></line>
+  <text class="lbl" x="512" y="392">«assembly»</text>
+
+  <text class="note" x="520" y="692">Composición PropertyModule ◆ Domain Entities · dependencia invertida vía puertos · JSON snake_case</text>
+</svg>
+</div>
+</body>
+</html>
