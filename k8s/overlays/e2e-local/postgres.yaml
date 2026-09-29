@@ -32,7 +32,17 @@ spec:
         - name: POSTGRES_PASSWORD
           value: habitanexus
         - name: POSTGRES_DB
-          value: habitanexus
+          # pg_cron solo permite CREATE EXTENSION en la DB `postgres`
+          # (cron.database_name); la migración 0001 lo anticipa.
+          value: postgres
+      volumeMounts:
+        - name: pg-init
+          mountPath: /docker-entrypoint-initdb.d/00roles.sql
+          subPath: 00roles.sql
+  volumes:
+    - name: pg-init
+      configMap:
+        name: pg-init-roles
 ---
 apiVersion: v1
 kind: Service

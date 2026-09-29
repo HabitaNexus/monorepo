@@ -10,6 +10,11 @@ resources:
   - ../../base/backend
   - postgres.yaml
 
+configMapGenerator:
+  - name: pg-init-roles
+    files:
+      - 00roles.sql=init-00roles.sql
+
 images:
   - name: ghcr.io/habitanexus/monorepo/backend
     newName: habitanexus-backend
@@ -32,7 +37,7 @@ patches:
                 imagePullPolicy: Never
                 env:
                   - name: DATABASE_URL
-                    value: postgresql://postgres:habitanexus@postgres:5432/habitanexus?schema=public
+                    value: postgresql://postgres:habitanexus@postgres:5432/postgres?schema=public
                   - name: PORT
                     value: '3000'
                   - name: CRON_SECRET
