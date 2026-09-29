@@ -1,5 +1,9 @@
 # RCA: Postgres E2E-LOCAL en minikube (imagen `supabase/postgres`)
 
+> **Clasificación: INTERNO** — vive en `docs/internal/` (Diátaxis privado),
+> nunca entra al `nav` de `docs/site/mkdocs.yml`. Sin credenciales literales
+> ni IPs internas (ver `docs/internal/README.md`).
+
 Fecha: 2026-09-29 · Overlay: `k8s/overlays/e2e-local` · Gate de PR #44.
 
 La imagen `supabase/postgres:15.8.1.060` se eligió porque la migración
@@ -22,7 +26,7 @@ users `postgres/root/ubuntu → postgres`. El entrypoint corre
 
 ## 2. `POSTGRES_PORT=tcp://…` rompe `migrate.sh` → `enableServiceLinks: false`
 
-**Síntoma:** `psql: error: invalid integer value "tcp://10.100.26.119:5432"
+**Síntoma:** `psql: error: invalid integer value "tcp://<cluster-ip>:5432"
 for connection option "port"`.
 
 **Causa:** Kubernetes inyecta por defecto variables legacy estilo Docker-links
