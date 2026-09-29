@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: e2e
+  labels:
+    environment: e2e
+---
+# Postgres E2E para apps/backend (HAB-26): imagen supabase/postgres con
+# pg_cron + pg_net, requeridos por la migración 0001_negotiation_engine.
+# Derivado de apps/backend/docs/postgres-dev.yaml (sin hostPort).
+apiVersion: v1
+kind: Pod
+metadata:
+  name: postgres
+  labels:
+    app: postgres
+spec:
+  containers:
+    - name: postgres
+      image: supabase/postgres:15.8.1.060
+      ports:
+        - containerPort: 5432
+      env:
+        - name: POSTGRES_USER
+          value: habitanexus
+        - name: POSTGRES_PASSWORD
+          value: habitanexus
+        - name: POSTGRES_DB
+          value: habitanexus
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres
+spec:
+  selector:
+    app: postgres
+  ports:
+    - port: 5432
+      targetPort: 5432
