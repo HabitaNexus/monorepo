@@ -1,32 +1,39 @@
 schema: spec-driven
 
-# Project context (optional)
-# This is shown to AI when creating artifacts.
-# Add your tech stack, conventions, style guides, domain knowledge, etc.
-# Example:
-#   context: |
-#     Tech stack: TypeScript, React, Node.js
-#     We use conventional commits
-#     Domain: e-commerce platform
+# Contexto del proyecto HabitaNexus (inyectado en todos los artefactos).
+# Idioma de artefactos: español.
+context: |
+  Monorepo HabitaNexus (marketplace de alquiler a largo plazo, Costa Rica).
+  Idioma de trabajo y de artefactos: español.
+  Stack: Flutter (apps/mobile, Riverpod + go_router) + NestJS 12 + SWC +
+  Prisma 7 + PostgreSQL (apps/backend, TypeScript 7, module NodeNext con
+  imports relativos con sufijo .js) + Kustomize/ArgoCD (k8s/).
+  GitFlow: develop (default) → staging → main + tag. Rama de integración
+  diaria: develop. Convención de ramas: feature/HAB-XXX-slug, fix/...,
+  chore/... Los PRs citan el issue Linear (HAB-N) en título y cuerpo.
+  Documentación Diátaxis en dos árboles: docs/site/content (pública, MkDocs)
+  y docs/internal (privada, nunca en el nav público).
+  Estándares de ingeniería en docs/process/engineering-standards.md
+  (DSMS/IFS/CPS, PRDS, BrS, QT4L): todo cambio de comportamiento lleva
+  QA traceability (four layers) en tasks.md.
 
-# Per-artifact rules (optional)
-# Add custom rules for specific artifacts.
-# Example:
-#   rules:
-#     proposal:
-#       - Keep proposals under 500 words
-#       - Always include a "Non-goals" section
-#     tasks:
-#       - Break tasks into chunks of max 2 hours
+rules:
+  proposal:
+    - Incluir sección de límites de alcance (qué queda fuera).
+    - Citar el issue Linear HAB-N si existe.
+  specs:
+    - Contrato mobile↔backend en snake_case; verificar paridad si toca entidades.
+  design:
+    - Si toca k8s/, declarar overlay afectado (dev/staging/prod/e2e-local).
+  tasks:
+    - Todo cambio de comportamiento incluye QA traceability (four layers).
+    - Marcar con [ ] cada tarea; el plan de pruebas va en el PR, no aquí.
 
-# Per-operation guidance (optional)
-# Add advisory guidance for how apply and archive work should be conducted.
-# This is separate from artifact rules above.
-# Example:
-#   operations:
-#     apply:
-#       guidance:
-#         - Keep test summaries concise
-#     archive:
-#       guidance:
-#         - Summarize the archive outcome before finishing
+operations:
+  apply:
+    guidance:
+      - Antes de implementar, verificar que la rama parte de origin/develop al día.
+      - Backend: tsc 0 errores + jest verde. Mobile: flutter analyze (app completa) + flutter test.
+  archive:
+    guidance:
+      - Sincronizar specs a openspec/specs/ antes de archivar (ver /opsx-sync).
