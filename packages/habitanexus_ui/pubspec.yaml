@@ -1,6 +1,6 @@
 name: habitanexus_ui
-description: "Shared HabitaNexus UI package — Atomic Design widgets y tema M3."
-version: 0.1.0
+description: "HabitaNexus brand package — tokens.json + typed accessors over shared_ui_core (flutter_shared_ui)."
+version: 0.2.0
 publish_to: 'none'
 
 environment:
@@ -9,6 +9,11 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  shared_ui_core:
+    git:
+      url: https://github.com/chimeranext/flutter_shared_ui
+      ref: main
+      path: packages/shared_ui_core
 
 dev_dependencies:
   flutter_test:
@@ -17,3 +22,5 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/style_dictionary/tokens.json
