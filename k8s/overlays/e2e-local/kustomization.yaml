@@ -1,0 +1,44 @@
+# Overlay E2E-LOCAL (minikube, QA gate): backend con imagen local + Postgres efímero.
+# Uso: kubectl apply -k k8s/overlays/e2e-local
+# Gate de QA antes de mergear remediaciones a develop.
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: e2e
+
+resources:
+  - ../../base/backend
+  - postgres.yaml
+
+configMapGenerator:
+  - name: pg-init-roles
+    files:
+      - 00roles.sql=init-00roles.sql
+
+images:
+  - name: ghcr.io/habitanexus/monorepo/backend
+    newName: habitanexus-backend
+    newTag: e2e
+
+patches:
+  - target:
+      kind: Deployment
+      name: backend
+    patch: |-
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: backend
+      spec:
+        template:
+          spec:
+            containers:
+              - name: backend
+                imagePullPolicy: Never
+                env:
+                  - name: DATABASE_URL
+                    value: postgresql://postgres:habitanexus@postgres:5432/postgres?schema=public
+                  - name: PORT
+                    value: '3000'
+                  - name: CRON_SECRET
+                    value: e2e-secret
