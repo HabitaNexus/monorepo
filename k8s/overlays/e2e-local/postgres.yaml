@@ -15,14 +15,20 @@ metadata:
   labels:
     app: postgres
 spec:
+  # Evita que k8s inyecte POSTGRES_* (POSTGRES_PORT=tcp://...) que rompe
+  # el migrate.sh de la imagen supabase/postgres.
+  enableServiceLinks: false
   containers:
     - name: postgres
       image: supabase/postgres:15.8.1.060
       ports:
         - containerPort: 5432
       env:
+        # Nota: supabase/postgres solo mapea los OS users postgres/root/ubuntu
+        # en pg_ident (supabase_map); POSTGRES_USER distinto rompe su init
+        # (peer auth). El rol se llama postgres; la DB de la app es habitanexus.
         - name: POSTGRES_USER
-          value: habitanexus
+          value: postgres
         - name: POSTGRES_PASSWORD
           value: habitanexus
         - name: POSTGRES_DB
