@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import '../../../domain/entities/payment/payment_request.dart';
-import '../../../domain/entities/payment/payment_result.dart';
+import '../../domain/entities/payment_request.dart';
+import '../../domain/entities/payment_result.dart';
 import 'payment_provider.dart';
 
 /// Implementación específica para ONVO Pay

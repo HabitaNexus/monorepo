@@ -1,7 +1,7 @@
-import '../../domain/entities/payment/payment_request.dart';
-import '../../domain/entities/payment/payment_result.dart';
+import '../../domain/entities/payment_request.dart';
+import '../../domain/entities/payment_result.dart';
 import '../../domain/repositories/payment_repository.dart';
-import '../../core/services/payment_router.dart';
+import '../../domain/usecases/payment_router.dart';
 
 /// Implementación del repositorio de pagos
 /// Utiliza PaymentRouter para seleccionar automáticamente el proveedor correcto
