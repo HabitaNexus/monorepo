@@ -338,8 +338,8 @@ e2e-local-smoke: ## health + ready + propose/counter con shape completo
 	echo "$$R" | python3 -c "import json,sys; d=json.load(sys.stdin); assert d['terms']['terms']['renta_mensual']==500000, d; print(' propose-shape-ok')"; \
 	pkill -f "port-forward svc/backend" || true
 
-e2e-local-apk: ## flutter build apk --debug
-	@cd $(MOBILE_DIR) && flutter build apk --debug
+e2e-local-apk: ## flutter build apk --debug (BACKEND_URL al túnel adb)
+	@cd $(MOBILE_DIR) && flutter build apk --debug --dart-define BACKEND_URL=http://localhost:3000
 
 e2e-local-install: ## adb install del APK debug en el dispositivo conectado
 	@adb install -r $(MOBILE_DIR)/build/app/outputs/flutter-apk/app-debug.apk
