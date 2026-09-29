@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../core/theme/app_theme.dart';
-import '../providers/coworking_nearby_provider.dart';
+import 'package:go_router/go_router.dart';
 import '../widgets/nearby_coworkings_widget.dart';
 
 /// Página de detalle de una propiedad.
@@ -37,6 +36,14 @@ class _PropertyDetailPageState extends ConsumerState<PropertyDetailPage> {
       appBar: AppBar(
         title: Text(widget.propertyName),
         centerTitle: true,
+        actions: [
+          // Demo HAB-27: acceso a la pantalla de firma importada de Stitch.
+          IconButton(
+            tooltip: 'Firma digital',
+            icon: const Icon(Icons.draw),
+            onPressed: () => context.push('/firma-digital'),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
