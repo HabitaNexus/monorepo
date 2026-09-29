@@ -21,7 +21,10 @@ import {
   reject,
   type NegotiationDeps,
 } from '../../application/index.js';
-import { NegotiationNotFound } from '../../application/negotiation-repository.js';
+import {
+  NegotiationNotFound,
+  type NegotiationRecord,
+} from '../../application/negotiation-repository.js';
 import type { NegotiationRepository } from '../../application/negotiation-repository.js';
 import { NEGOTIATION_REPOSITORY } from '../../negotiation.tokens.js';
 import {
@@ -45,15 +48,32 @@ export class NegotiationController {
     return { repository: this.repository, clock: CLOCK };
   }
 
+  /**
+   * Shape de respuesta único para mutaciones y GET (HAB-26/HAB-27):
+   * `{...negotiation, terms, summary}`. El cliente Flutter
+   * (`NegotiationDto.fromJson`) lee `terms.terms` y `summary.terms`;
+   * devolver solo `.negotiation` dejaba `currentTerms` vacío tras
+   * contraproponer/aceptar.
+   */
+  private toResponse(record: NegotiationRecord) {
+    return {
+      ...record.negotiation,
+      terms: record.terms,
+      summary: record.summary,
+    };
+  }
+
   @Post()
   async propose(@Body() dto: ProposeDto) {
-    return (await propose(this.deps, dto)).negotiation;
+    return this.toResponse(await propose(this.deps, dto));
   }
 
   @Post(':id/counter')
   async counter(@Param('id') id: string, @Body() dto: CounterProposeDto) {
     try {
-      return (await counterPropose(this.deps, { ...dto, id })).negotiation;
+      return this.toResponse(
+        await counterPropose(this.deps, { ...dto, id }),
+      );
     } catch (error) {
       this.rethrow(error);
     }
@@ -62,7 +82,7 @@ export class NegotiationController {
   @Post(':id/accept')
   async accept(@Param('id') id: string, @Body() dto: AcceptDto) {
     try {
-      return (await accept(this.deps, { ...dto, id })).negotiation;
+      return this.toResponse(await accept(this.deps, { ...dto, id }));
     } catch (error) {
       this.rethrow(error);
     }
@@ -71,7 +91,7 @@ export class NegotiationController {
   @Post(':id/reject')
   async reject(@Param('id') id: string, @Body() dto: RejectDto) {
     try {
-      return (await reject(this.deps, { ...dto, id })).negotiation;
+      return this.toResponse(await reject(this.deps, { ...dto, id }));
     } catch (error) {
       this.rethrow(error);
     }
@@ -80,7 +100,9 @@ export class NegotiationController {
   @Post(':id/confirm-summary')
   async confirm(@Param('id') id: string, @Body() dto: ConfirmSummaryDto) {
     try {
-      return (await confirmSummary(this.deps, { ...dto, id })).negotiation;
+      return this.toResponse(
+        await confirmSummary(this.deps, { ...dto, id }),
+      );
     } catch (error) {
       this.rethrow(error);
     }
