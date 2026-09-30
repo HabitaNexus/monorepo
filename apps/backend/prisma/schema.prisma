@@ -50,3 +50,43 @@ model TransitionAudit {
   @@index([negotiationId])
   @@map("transition_audits")
 }
+
+// HAB-46: libro de renta de capital inmobiliario.
+// Sin token OIDC y sin payload de TRIBU-CR. event_id y (owner_id, period)
+// son únicos para que un reintento no duplique el pago ni la declaración.
+
+model SignedRentalContract {
+  contractId String   @id @map("contract_id")
+  ownerId    String   @map("owner_id")
+  signedAt   DateTime @map("signed_at") @db.Timestamptz(6)
+
+  @@map("signed_rental_contracts")
+}
+
+model RentalIncomePayment {
+  eventId    String   @id @map("event_id")
+  contractId String   @map("contract_id")
+  ownerId    String   @map("owner_id")
+  grossCrc   BigInt   @map("gross_crc")
+  paidAt     DateTime @map("paid_at") @db.Timestamptz(6)
+  period     String
+  included   Boolean
+
+  @@index([ownerId, period])
+  @@map("rental_income_payments")
+}
+
+model RentalIncomeDeclaration {
+  ownerId        String  @map("owner_id")
+  period         String
+  grossCrc       BigInt  @map("gross_crc")
+  taxableBaseCrc BigInt  @map("taxable_base_crc")
+  incomeTaxCrc   BigInt  @map("income_tax_crc")
+  ivaCrc         BigInt  @map("iva_crc")
+  status         String
+  late           Boolean @default(false)
+  notified       Boolean @default(false)
+
+  @@id([ownerId, period])
+  @@map("rental_income_declarations")
+}
