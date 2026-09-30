@@ -26,6 +26,7 @@ TIMEOUT ?= 900000
         dev-mobile-build-runner dev-mobile-clean \
         dev-b2g-start dev-b2g-stop \
         dev-admin-start dev-admin-stop \
+        dev-hacienda-idp-handshake \
         ci-mobile-build ci-mobile-test
 
 # ==========================================
@@ -111,6 +112,9 @@ help: ## Show this help
 	@echo "$(GREEN)DEV - Web B2G (Municipal Dashboard):$(NC)"
 	@echo "  $(YELLOW)dev-b2g-start$(NC)               Start B2G dev server"
 	@echo "  $(YELLOW)dev-b2g-stop$(NC)                Stop B2G dev server"
+	@echo ""
+	@echo "$(GREEN)DEV - Hacienda sidecar:$(NC)"
+	@echo "  $(YELLOW)dev-hacienda-idp-handshake$(NC)  IDP sandbox login (apps/hacienda-sidecar/.env)"
 	@echo ""
 	@echo "$(GREEN)CI:$(NC)"
 	@echo "  $(YELLOW)ci-mobile-build$(NC)             Build mobile APK"
@@ -322,6 +326,15 @@ dev-admin-start: ## Start Admin panel dev server
 
 dev-admin-stop: ## Stop Admin panel dev server
 	@echo "$(YELLOW)Admin panel not scaffolded yet.$(NC)"
+
+# ==========================================
+# DEV - Hacienda sidecar
+# ==========================================
+
+HACIENDA_SIDECAR_DIR = $(APPS_DIR)/hacienda-sidecar
+
+dev-hacienda-idp-handshake: ## Sandbox IDP login using apps/hacienda-sidecar/.env
+	@node $(HACIENDA_SIDECAR_DIR)/scripts/sandbox-handshake.mjs
 
 # ==========================================
 # CI
