@@ -181,6 +181,16 @@ Ver [docs/MCP_SETUP.md](./docs/MCP_SETUP.md) para configuración.
 - [Plantilla IEEE 830](docs/templates/IEEE_830_TEMPLATE.md) - Para especificaciones de requisitos
 - [Mapeo de Mejores Prácticas](skills/flutter/BEST_PRACTICES_MAPPING.md) - Prácticas por skill
 
+## Cursor Cloud specific instructions
+
+- Flutter stable está en `/opt/flutter` (`flutter` y `dart` en el PATH). Chrome es `/usr/local/bin/google-chrome`. Web y Linux desktop están habilitados. No hay emulador Android.
+- Postgres de desarrollo es el contenedor Docker `habitanexus-postgres` (`supabase/postgres:15.8.1.060`) porque la migración HAB-26 exige `pg_cron` y `pg_net`. Dockerd usa `fuse-overlayfs` con iptables desactivado. Usuario, clave y base: `habitanexus` en `localhost:5432`.
+- El entrypoint de esa imagen no crea la base (falla peer auth). Antes de migrar hay que crear los roles `supabase_admin` y `postgres`, la base `habitanexus`, y `cron.database_name=habitanexus`. Copiar `apps/backend/.env.example` a `apps/backend/.env`.
+- Backend: `cd apps/backend && npm ci && npm run prisma:generate && npm test && npm run build && npm start` (puerto 3000). `POST /negotiations` crea una negociación.
+- Widgetbook sí compila: `cd apps/widgetbook && flutter run -d web-server --web-hostname 127.0.0.1 --web-port 8080`.
+- `apps/mobile` no compila en `develop`: faltan `lib/config/demo_data.dart` y `lib/features/negotiations/presentation/pages/digital_signature_page.dart`. `flutter test` pasa los tests de properties y falla `test/widget_test.dart` por esos archivos.
+- `make dev-b2g-start` y `make dev-admin-start` no tienen aplicación. Minikube, ArgoCD y Terraform no hacen falta para el loop diario.
+
 ---
 
-**Última actualización:** Marzo 2026
+**Última actualización:** Octubre 2026
