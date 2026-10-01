@@ -70,7 +70,7 @@ Mount them from a dedicated Secret (for example `hacienda-credentials`) via `sec
 
 ### 5. Smoke test is local and refuses to run without credentials
 
-A script in `apps/hacienda-sidecar` starts the client against the configured environment and prints only success or a sanitized failure (no password, no token). If the three credential variables are unset, it exits non-zero with that reason. It is not a default CI job: CI does not have a `rut-stag` taxpayer.
+A script in `apps/hacienda-sidecar` performs the sandbox ROPC call and prints only success or a sanitized failure (no password, no token). If the credential variables are unset, it exits non-zero with that reason. It also writes `reports/idp-handshake.csv` using the column set of `newman-reporter-csv` (request, HTTP status, assertion names, counts) and never the optional body column. That column is the access token (`--reporter-csv-includeBody`). If the password, the IDP username, or the access token would be written, the script exits before creating the file. Newman is not a dependency of this package: the image build runs `npm ci`, and the Postman runtime does not belong in that lockfile. The CSV is the auditable artifact. The live call is not a default CI job: CI does not have a `rut-stag` taxpayer.
 
 ## Risks / Trade-offs
 

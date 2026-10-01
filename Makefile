@@ -114,7 +114,7 @@ help: ## Show this help
 	@echo "  $(YELLOW)dev-b2g-stop$(NC)                Stop B2G dev server"
 	@echo ""
 	@echo "$(GREEN)DEV - Hacienda sidecar:$(NC)"
-	@echo "  $(YELLOW)dev-hacienda-idp-handshake$(NC)  IDP sandbox login (apps/hacienda-sidecar/.env)"
+	@echo "  $(YELLOW)dev-hacienda-idp-handshake$(NC)  IDP sandbox login; CSV without token or password"
 	@echo ""
 	@echo "$(GREEN)CI:$(NC)"
 	@echo "  $(YELLOW)ci-mobile-build$(NC)             Build mobile APK"
@@ -333,7 +333,7 @@ dev-admin-stop: ## Stop Admin panel dev server
 
 HACIENDA_SIDECAR_DIR = $(APPS_DIR)/hacienda-sidecar
 
-dev-hacienda-idp-handshake: ## Sandbox IDP login using apps/hacienda-sidecar/.env
+dev-hacienda-idp-handshake: ## Sandbox IDP login; CSV report without token or password
 	@node $(HACIENDA_SIDECAR_DIR)/scripts/sandbox-handshake.mjs
 
 # ==========================================

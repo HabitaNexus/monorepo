@@ -27,5 +27,44 @@
 
 ## 6. Sandbox handshake
 
-- [x] 6.1 Add a smoke script that exits non-zero when the credential variables are unset and prints neither a password nor a token. Verify by running the script with those variables unset.
-- [ ] 6.2 Run the same script against Hacienda sandbox once `HACIENDA_ID_TYPE`, `HACIENDA_ID_NUMBER`, and `HACIENDA_PASSWORD` are supplied out of band for realm `rut-stag`. Verify a successful handshake status. This task stays blocked until those values exist; do not invent them.
+- [x] 6.1 Add a smoke script that exits non-zero when the credential variables are unset, prints neither a password nor a token, and writes `reports/idp-handshake.csv` without those secrets. Verify with `src/handshake-report.test.ts`.
+- [ ] 6.2 Run `make dev-hacienda-idp-handshake` against Hacienda sandbox once `HACIENDA_IDP_USERNAME` and `HACIENDA_PASSWORD` are supplied out of band for realm `rut-stag`. The command must print `handshake_ok` and the CSV must include `access_token_length_*` without the password or the token. Attach that CSV to the PR. This task stays blocked until those values exist; do not invent them.
+
+## QA traceability (four layers)
+
+SSOT: `docs/process/qa-traceability.md`
+
+| Capa | Artifacto |
+| --- | --- |
+| 1 — AC normativos | `specs/tribu-cr-adapter/spec.md` (este cambio) y Acceptance Criteria de HAB-45 |
+| 2 — QA manual de stage | No hay SOP de dominio. El chequeo manual es `make dev-hacienda-idp-handshake` contra sandbox, con el Secret fuera de git. Stage sigue en sandbox hasta que exista overlay de producción. |
+| 3 — Automatizada | `apps/hacienda-sidecar` `npm test` (JUnit en `reports/junit.xml`). CI: `.github/workflows/hacienda-sidecar.yml` |
+| 4 — Ronda HITL | `docs/qa/rounds/hacienda-oidc-2026-10-01/round.md` |
+
+### Mapeo scenario → verificación
+
+| Scenario de OpenSpec | Test automatizado | Manual (SOP / Kiwi) | Caso HITL ID | Storybook (solo UI) |
+| --- | --- | --- | --- | --- |
+| Successful sandbox handshake | `handshake report` → `writes a secret-free CSV when the token endpoint accepts the password` (fixture local). El handshake real contra `rut-stag` queda en 6.2 | `make dev-hacienda-idp-handshake` | HACIENDA-01 | — |
+| Rejected credentials | `hacienda auth grpc` → `reports failure and omits secrets when credentials are rejected` | — | HACIENDA-02 | — |
+| Token near expiry | `TokenGateway` → `returns the SDK token on a later fetch without a caller-supplied token` y `authenticates once when refresh fails and still takes no caller token`. La ventana de 30 s vive en `TokenManager` de `@dojocoding/hacienda-sdk` | — | HACIENDA-03 | — |
+| Missing password | `boot` → `does not listen when the password is missing`; `loadCredentials` → `fails closed when the password is missing`; `handshake report` → `records credentials_not_configured and does not call the identity provider` | script sin `.env` | HACIENDA-04 | — |
+| Sandbox configuration | `createHaciendaClient` → `sends sandbox authentication to the rut-stag identity provider`; `HAB-45 acceptance criteria` → overlay sandbox | `kubectl kustomize k8s/overlays/dev` | HACIENDA-05 | — |
+| Production configuration | `createHaciendaClient` → `sends production authentication to the rut identity provider` | No hay overlay de producción en este PR | HACIENDA-06 | — |
+
+### Acceptance Criteria de HAB-45
+
+| Criterio | Verificación en `npm test` | Resultado que falta fuera de CI |
+| --- | --- | --- |
+| `apps/hacienda-sidecar/` consume el paquete publicado, sin fork | `depends on the published SDK and does not fork hacienda-cr` (`@dojocoding/hacienda-sdk@0.3.0`; `@dojocoding/hacienda-cr` no existe en npm) | — |
+| OIDC contra Hacienda, sandbox parametrizable a producción | tests de `createHaciendaClient` (realm `rut-stag` / `rut`) | CSV del handshake sandbox (tarea 6.2) |
+| El token se renueva al expirar | tests de `TokenGateway`; la ventana de 30 s es del SDK | — |
+| Secretos por Secret de k8s, no hardcodeados | `injects taxpayer secrets from the Kubernetes secret...` y `package source` → `does not embed a credential literal` | Secret real creado fuera de banda |
+| Manifiestos kustomize desplegables por ArgoCD | el mismo test de secretos (base, overlays dev/staging, Applications `backend-dev` y `backend-staging`) | `kubectl kustomize` en la ronda |
+| Smoke de handshake sandbox exitoso | el CSV del fixture prueba el reporte; no llama a Hacienda | tarea 6.2 |
+
+### Handoff
+
+- [x] Casos manuales: `make dev-hacienda-idp-handshake` (no hay SOP aparte)
+- [x] Ronda HITL con `round.md` y esta tabla
+- [ ] CSV de sandbox real adjunto al PR (tarea 6.2, bloqueada sin credenciales)
