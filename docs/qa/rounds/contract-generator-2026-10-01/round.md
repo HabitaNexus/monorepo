@@ -2,7 +2,7 @@
 
 Fecha: 2026-10-01
 Dominio: contract-generator
-Automatizado en esta ronda: `cd apps/backend && npm test -- src/contract` y `npm test -- src/negotiation`
+Automatizado en esta ronda: `cd apps/backend && npm test -- --verbose`. Resultado guardado en `jest-2026-10-01.txt` (9 suites, 42 tests, todos en verde).
 
 El stage desplegado no se recorrió en esta sesión. Los pasos de abajo se ejecutan sobre el PDF del acuerdo de ejemplo (`exampleInput` en `apps/backend/src/contract/domain/example.ts`): renta 350000 CRC, depósito 350000, plazo 12 meses, inicio 2026-11-01, fin 2027-11-01, incremento 2, tope IPC 3.5, fecha de contrato 2026-10-15.
 

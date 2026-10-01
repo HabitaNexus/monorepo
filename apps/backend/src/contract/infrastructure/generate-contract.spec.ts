@@ -2,8 +2,10 @@ import { inflateSync } from 'node:zlib';
 import { generateContract } from '../application/generate-contract.js';
 import type { AgreementReader, AgreementSnapshot, PdfRenderer } from '../application/ports.js';
 import { sha256Hex } from '../application/hash.js';
+import { clauseTitles } from '../domain/clauses.js';
 import { exampleFacts, exampleInput, exampleTerms } from '../domain/example.js';
 import { GeneracionNoPermitida } from '../domain/errors.js';
+import { SHORT_TERM_NOTICE } from '../domain/policy.js';
 import { InMemoryContractDocumentStore } from './persistence/in-memory-contract-document-store.js';
 import { PdfLibRenderer } from './pdf/pdf-lib-renderer.js';
 
@@ -18,9 +20,9 @@ function decodeHexStrings(content: string): string {
   });
 }
 
-function inflatePdfText(bytes: Uint8Array): string {
+function visiblePdfText(bytes: Uint8Array): string {
   const raw = Buffer.from(bytes).toString('latin1');
-  return raw
+  const decoded = raw
     .split('stream\n')
     .slice(1)
     .map((part) => {
@@ -32,6 +34,12 @@ function inflatePdfText(bytes: Uint8Array): string {
       }
     })
     .join('\n');
+  const lines: string[] = [];
+  for (const match of decoded.matchAll(/Tm\n\s*(.*?) Tj/g)) {
+    const line = match[1] ?? '';
+    if (line.length > 0) lines.push(line);
+  }
+  return lines.join(' ');
 }
 
 class FakeAgreements implements AgreementReader {
@@ -84,9 +92,30 @@ describe('generateContract (HAB-31)', () => {
     const raw = Buffer.from(first.pdf).toString('latin1');
     expect(raw.startsWith('%PDF-')).toBe(true);
     expect(raw).not.toContain('CreationDate');
-    const text = inflatePdfText(first.pdf);
+    const text = visiblePdfText(first.pdf);
+    let cursor = 0;
+    for (const title of clauseTitles()) {
+      const at = text.indexOf(`${title}`, cursor);
+      expect(at).toBeGreaterThanOrEqual(0);
+      cursor = at + title.length;
+    }
     expect(text).toContain(first.reference);
-    expect(text).toContain('Objeto del contrato');
+    expect(text).toContain('Jose Mora');
+    expect(text).toContain('Ana Solis');
+    expect(text).toContain('folio real 123456-000');
+    expect(text).toContain('Barreal de Heredia');
+    expect(text).toContain('vivienda');
+    expect(text).toContain('350000');
+    expect(text).toContain('transferencia');
+    expect(text).toContain('12 meses');
+    expect(text).toContain('Heredia, Costa Rica');
+    expect(text).toContain('San Jose, Costa Rica');
+    expect(text).toContain('2026-10-15');
+    expect(text).toContain(SHORT_TERM_NOTICE);
+    expect(text).toContain('2 por ciento');
+    const stored = await firstStore.findByNegotiationId(negotiationId);
+    expect(stored?.sha256).toBe(first.sha256);
+    expect(stored?.pdf).toEqual(first.pdf);
   });
 
   it('no genera desde ACUERDO_ALCANZADO y no llama al renderer', async () => {
