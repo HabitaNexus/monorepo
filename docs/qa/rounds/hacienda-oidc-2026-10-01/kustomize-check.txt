@@ -1,0 +1,15 @@
+kubectl version --client
+Client Version: v1.37.1
+Kustomize Version: v5.8.1
+
+Command: kubectl kustomize k8s/overlays/dev
+HACIENDA_ENVIRONMENT: sandbox count = 1
+Ingress documents that mention port 50051 = 0
+Ingress backend service port = 80 (existing backend Ingress, not the sidecar)
+
+Command: kubectl kustomize k8s/overlays/staging
+HACIENDA_ENVIRONMENT: sandbox count = 1
+namespace: staging present = True
+Ingress documents that mention port 50051 = 0
+
+Dev Service hacienda-sidecar: ClusterIP port 50051 name grpc

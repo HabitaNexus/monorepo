@@ -1,0 +1,2 @@
+iteration,collectionName,requestName,method,url,status,code,responseTime,responseSize,executed,failed,skipped,totalAssertions,passedCount,failedCount,skippedCount
+1,hacienda-idp-handshake,ROPC token,POST,https://idp.comprobanteselectronicos.go.cr/auth/realms/rut-stag/protocol/openid-connect/token,OK,200,129,2397,"status_2xx,token_type_Bearer,expires_in_300,access_token_length_1510",,,4,4,0,0
