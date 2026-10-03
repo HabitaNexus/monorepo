@@ -28,7 +28,7 @@
 ## 6. Sandbox handshake
 
 - [x] 6.1 Add a smoke script that exits non-zero when the credential variables are unset, prints neither a password nor a token, and writes `reports/idp-handshake.csv` without those secrets. Verify with `src/handshake-report.test.ts`.
-- [ ] 6.2 Run `make dev-hacienda-idp-handshake` against Hacienda sandbox once `HACIENDA_IDP_USERNAME` and `HACIENDA_PASSWORD` are supplied out of band for realm `rut-stag`. The command must print `handshake_ok` and the CSV must include `access_token_length_*` without the password or the token. Attach that CSV to the PR. This task stays blocked until those values exist; do not invent them.
+- [x] 6.2 Run `make dev-hacienda-idp-handshake` against Hacienda sandbox once `HACIENDA_IDP_USERNAME` and `HACIENDA_PASSWORD` are supplied out of band for realm `rut-stag`. The command printed `handshake_ok` with `access_token_length=1510`, `expires_in=300`, and `token_type=Bearer`. The CSV is `docs/qa/rounds/hacienda-oidc-2026-10-01/idp-handshake-sandbox.csv` and contains neither the password nor the token.
 
 ## QA traceability (four layers)
 
@@ -45,7 +45,7 @@ SSOT: `docs/process/qa-traceability.md`
 
 | Scenario de OpenSpec | Test automatizado | Manual (SOP / Kiwi) | Caso HITL ID | Storybook (solo UI) |
 | --- | --- | --- | --- | --- |
-| Successful sandbox handshake | `handshake report` → `writes a secret-free CSV when the token endpoint accepts the password` (fixture local). El handshake real contra `rut-stag` queda en 6.2 | `make dev-hacienda-idp-handshake` | HACIENDA-01 | — |
+| Successful sandbox handshake | `handshake report` → `writes a secret-free CSV when the token endpoint accepts the password` (fixture local). Handshake real: `idp-handshake-sandbox.csv` (`handshake_ok`, `access_token_length_1510`) | `make dev-hacienda-idp-handshake` | HACIENDA-01 | — |
 | Rejected credentials | `hacienda auth grpc` → `reports failure and omits secrets when credentials are rejected` | — | HACIENDA-02 | — |
 | Token near expiry | `TokenGateway` → `returns the SDK token on a later fetch without a caller-supplied token` y `authenticates once when refresh fails and still takes no caller token`. La ventana de 30 s vive en `TokenManager` de `@dojocoding/hacienda-sdk` | — | HACIENDA-03 | — |
 | Missing password | `boot` → `does not listen when the password is missing`; `loadCredentials` → `fails closed when the password is missing`; `handshake report` → `records credentials_not_configured and does not call the identity provider` | script sin `.env` | HACIENDA-04 | — |
@@ -57,14 +57,14 @@ SSOT: `docs/process/qa-traceability.md`
 | Criterio | Verificación en `npm test` | Resultado que falta fuera de CI |
 | --- | --- | --- |
 | `apps/hacienda-sidecar/` consume el paquete publicado, sin fork | `depends on the published SDK and does not fork hacienda-cr` (`@dojocoding/hacienda-sdk@0.3.0`; `@dojocoding/hacienda-cr` no existe en npm) | — |
-| OIDC contra Hacienda, sandbox parametrizable a producción | tests de `createHaciendaClient` (realm `rut-stag` / `rut`) | CSV del handshake sandbox (tarea 6.2) |
+| OIDC contra Hacienda, sandbox parametrizable a producción | tests de `createHaciendaClient` (realm `rut-stag` / `rut`) | `idp-handshake-sandbox.csv` (tarea 6.2) |
 | El token se renueva al expirar | tests de `TokenGateway`; la ventana de 30 s es del SDK | — |
 | Secretos por Secret de k8s, no hardcodeados | `injects taxpayer secrets from the Kubernetes secret...` y `package source` → `does not embed a credential literal` | Secret real creado fuera de banda |
 | Manifiestos kustomize desplegables por ArgoCD | el mismo test de secretos (base, overlays dev/staging, Applications `backend-dev` y `backend-staging`) | `kubectl kustomize` en la ronda |
-| Smoke de handshake sandbox exitoso | el CSV del fixture prueba el reporte; no llama a Hacienda | tarea 6.2 |
+| Smoke de handshake sandbox exitoso | el CSV del fixture prueba el reporte | `idp-handshake-sandbox.csv`: HTTP 200, `access_token_length_1510` |
 
 ### Handoff
 
 - [x] Casos manuales: `make dev-hacienda-idp-handshake` (no hay SOP aparte)
 - [x] Ronda HITL con `round.md` y esta tabla
-- [ ] CSV de sandbox real adjunto al PR (tarea 6.2, bloqueada sin credenciales)
+- [x] CSV de sandbox real adjunto al PR (`idp-handshake-sandbox.csv`)
