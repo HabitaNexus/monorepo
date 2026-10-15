@@ -13,7 +13,7 @@
     "smoke": "node dist/smoke.js"
   },
   "dependencies": {
-    "@dojocoding/hacienda-sdk": "0.3.0",
+    "@dojocoding/hacienda-sdk": "0.4.1",
     "@grpc/grpc-js": "^1.13.4",
     "@grpc/proto-loader": "^0.7.15"
   },

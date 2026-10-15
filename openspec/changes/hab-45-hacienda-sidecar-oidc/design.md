@@ -4,7 +4,7 @@
 
 See proposal.md for why this change exists. On `develop`, `openspec/specs/tribu-cr-adapter/spec.md` names a "hacienda-cr gRPC sidecar" and does not name an npm package. `apps/hacienda-sidecar/` does not exist. `apps/backend/` does not exist either. `k8s/base/backend/` is a single HTTP Deployment (`backend`, port 3000, image `ghcr.io/habitanexus/monorepo/backend:latest`) plus a ClusterIP Service and an Ingress. ArgoCD `backend-dev` syncs `k8s/overlays/dev` from `develop`. `make dev-fallback-secret` creates a placeholder secret (`placeholder=true`) and does not carry Hacienda credentials.
 
-The published toolkit is `@dojocoding/hacienda-sdk` 0.3.0 from [DojoCodingLabs/hacienda-cr](https://github.com/DojoCodingLabs/hacienda-cr) (`packages/sdk`). `@dojocoding/hacienda-cr` is not an npm package (registry 404). The SDK is a TypeScript client (auth, XML, XAdES, HTTP), not a gRPC server. Aduanext's `hacienda-sidecar` is the topology reference: a TypeScript process speaking gRPC, in that repo on loopback port 50051. This repo does not contain aduanext's `libs/proto/hacienda.proto`.
+The published toolkit is `@dojocoding/hacienda-sdk` 0.4.1 from [DojoCodingLabs/hacienda-cr](https://github.com/DojoCodingLabs/hacienda-cr) (`packages/sdk`). `@dojocoding/hacienda-cr` is not an npm package (registry 404). The SDK is a TypeScript client (auth, XML, XAdES, HTTP), not a gRPC server. Aduanext's `hacienda-sidecar` is the topology reference: a TypeScript process speaking gRPC, in that repo on loopback port 50051. This repo does not contain aduanext's `libs/proto/hacienda.proto`.
 
 Hacienda authentication in the SDK is OAuth2 ROPC, not a confidential-client client secret. `TokenManager` caches the access token (~5 minutes), refreshes about 30 seconds before expiry, and keeps a refresh token for about 10 hours. `getAccessToken()` performs that refresh. Environment endpoints and public client ids are built in:
 
@@ -13,7 +13,7 @@ Hacienda authentication in the SDK is OAuth2 ROPC, not a confidential-client cli
 | sandbox | `rut-stag` | `api-stag` |
 | production | `rut` | `api-prod` |
 
-The constructor takes `environment` plus `credentials.idType`, `credentials.idNumber`, and `credentials.password`. Node.js 22+ is required.
+The constructor accepts `environment` plus `credentials.username` and `credentials.password`. SDK 0.4.1 preserves the full issued username, including hyphens and the environment domain (upstream [issue #37](https://github.com/DojoCodingLabs/hacienda-cr/issues/37), fixed in [PR #39](https://github.com/DojoCodingLabs/hacienda-cr/pull/39)). Identification-based credentials remain a legacy fallback. Node.js 22+ is required.
 
 ## Goals / Non-Goals
 
@@ -35,7 +35,7 @@ The constructor takes `environment` plus `credentials.idType`, `credentials.idNu
 
 ### 1. Depend on `@dojocoding/hacienda-sdk`, never `@dojocoding/hacienda-cr`
 
-Pin `apps/hacienda-sidecar` to `@dojocoding/hacienda-sdk` (0.3.0 at the time of this design). The GitHub repository stays the upstream source of truth; we do not vendor or fork it.
+Pin `apps/hacienda-sidecar` to `@dojocoding/hacienda-sdk` (0.4.1, including the fix for upstream issue #37). The GitHub repository stays the upstream source of truth; we do not vendor or fork it.
 
 Alternative considered: treat `@dojocoding/hacienda-cr` as the package name, as the Linear issue and the `main` copy of the living spec do. Rejected because that name 404s on the npm registry. The `develop` living spec does not name a package, so this design is the place that records the real one.
 
@@ -59,14 +59,14 @@ Alternative considered: a second container on the current `backend` Deployment. 
 
 ### 4. Secrets are a Kubernetes Secret, not git and not the placeholder
 
-Env vars, all required at startup:
+Runtime configuration:
 
 - `HACIENDA_ENVIRONMENT` — `sandbox` or `production` (non-secret, from the overlay ConfigMap)
-- `HACIENDA_ID_TYPE` — `01`, `02`, `03`, or `04`
-- `HACIENDA_ID_NUMBER`
-- `HACIENDA_PASSWORD`
+- `HACIENDA_IDP_USERNAME` — full issued IDP username, passed unchanged as SDK `credentials.username`
+- `HACIENDA_PASSWORD` — required IDP password
+- `HACIENDA_ID_TYPE` (`01`–`04`) and `HACIENDA_ID_NUMBER` — legacy fallback, required only when `HACIENDA_IDP_USERNAME` is absent. In issued-username mode these fields are not used for authentication. Taxpayer identity for future invoice operations remains separate.
 
-Mount them from a dedicated Secret (for example `hacienda-credentials`) via `secretKeyRef`. If the password is missing, the process exits before it listens; it does not use a default. Do not extend `make dev-fallback-secret` with real values, and do not commit a Secret manifest that contains them. An example manifest may list the keys with empty placeholders. Infisical is the intended injector when that operator is wired; this repo does not wire it today, so creating the Secret out of band is the supported path.
+The username and legacy identification keys are optional secret references so either credential mode can be configured; runtime validation requires a usable mode and rejects an explicitly empty or whitespace-bearing username without falling back. Mount credentials from a dedicated Secret (for example `hacienda-credentials`) via `secretKeyRef`. If the password is missing, the process exits before it listens; it does not use a default. Do not extend `make dev-fallback-secret` with real values, and do not commit a Secret manifest that contains them. An example manifest may list the keys with empty placeholders. Infisical is the intended injector when that operator is wired; this repo does not wire it today, so creating the Secret out of band is the supported path.
 
 ### 5. Smoke test is local and refuses to run without credentials
 
@@ -74,11 +74,11 @@ A script in `apps/hacienda-sidecar` performs the sandbox ROPC call and prints on
 
 ## Risks / Trade-offs
 
-- [Sandbox taxpayer is not in the repo or in Linear] → Manifests and the process can land without it. The live handshake stays blocked until someone supplies `idType`, `idNumber`, and the `rut-stag` password out of band. Record the result when they do; do not invent credentials.
+- [Sandbox taxpayer is not in the repo or in Linear] → Manifests and the process can land without it. The live sidecar handshake stays pending until someone supplies the full issued username and `rut-stag` password out of band. The existing direct-HTTP CSV only proves the IDP diagnostic script, not the gRPC/SDK path. Record the result when they do; do not invent credentials.
 - [Access token lifetime is about five minutes] → Callers must use the sidecar (or `getAccessToken()`) per operation rather than cache a token themselves. The sidecar is the only cache.
 - [Refresh token lasts about ten hours, then ROPC runs again with the stored password] → The password stays in the Secret for the life of the process. That is the IDP model. Restrict the Secret to this Deployment's service account.
 - [Single sidecar is the auth path for later B2G calls] → One replica is enough for HAB-45. Readiness must fail when authentication is down so a later caller does not get a pod that cannot mint a token.
-- [SDK 0.3.0 is a direct dependency] → Renovate or a manual bump picks up upstream OIDC and signing fixes. A fork would freeze those fixes here.
+- [SDK 0.4.1 is a direct dependency] → Renovate or a manual bump picks up upstream OIDC and signing fixes. A fork would freeze those fixes here.
 
 ## Migration Plan
 
@@ -89,4 +89,4 @@ A script in `apps/hacienda-sidecar` performs the sandbox ROPC call and prints on
 
 ## Open Questions
 
-None. The missing sandbox password does not change the spec, the package, or the task breakdown. It only gates the live handshake.
+The upstream username defect is fixed and installed SDK integration is covered with an intercepted HTTP transport. Live gRPC authentication and ArgoCD deployment evidence remain pending; see `docs/qa/rounds/hacienda-sdk-041-2026-10-14/round.md`.

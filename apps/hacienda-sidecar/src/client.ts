@@ -11,16 +11,30 @@ export type AuthClient = {
   getAccessToken(): Promise<string>;
 };
 
+// ---------------------------------------------------------------------------
+// Client factory — pass issued usernames unchanged to the published SDK
+// ---------------------------------------------------------------------------
+
 export function toClientOptions(config: SidecarConfig): HaciendaClientOptions {
   return {
     environment: toEnvironment(config.environment),
-    credentials: {
-      idType: toIdType(config.idType),
-      idNumber: config.idNumber,
-      password: config.password,
-    },
+    credentials: config.username !== undefined
+      ? { username: config.username, password: config.password }
+      : {
+          idType: toIdType(config.idType),
+          idNumber: config.idNumber,
+          password: config.password,
+        },
   };
 }
+
+export function createHaciendaClient(config: SidecarConfig): HaciendaClient {
+  return new HaciendaClient(toClientOptions(config));
+}
+
+// ---------------------------------------------------------------------------
+// Enum mapping — keep runtime configuration independent of SDK enum values
+// ---------------------------------------------------------------------------
 
 function toEnvironment(environment: HaciendaEnvironment): Environment {
   switch (environment) {
@@ -50,8 +64,4 @@ function toIdType(idType: HaciendaIdType): IdType {
       return unexpected;
     }
   }
-}
-
-export function createHaciendaClient(config: SidecarConfig): HaciendaClient {
-  return new HaciendaClient(toClientOptions(config));
 }

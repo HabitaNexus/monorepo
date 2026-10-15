@@ -4,6 +4,8 @@ Fecha: 2026-10-01. Rama: `davidachoy/hab-45-auth-oidc-via-hacienda-cr-sidecar-gr
 
 Esta ronda contrasta los Acceptance Criteria de HAB-45. El `.env` de sandbox no está en el repo. El 2026-10-03 se corrió el handshake vivo con credenciales suministradas fuera de banda y luego se borró el `.env`.
 
+> Scope clarification (2026-10-14): the historical HTTP 200 below is from the direct-IDP diagnostic script, not the sidecar's gRPC/SDK path. SDK 0.4.1 now supports issued usernames; installed-SDK regression results and remaining live checks are documented in `../hacienda-sdk-041-2026-10-14/round.md`.
+
 ## Veredicto por criterio
 
 | Criterio de HAB-45 | Veredicto | Evidencia |

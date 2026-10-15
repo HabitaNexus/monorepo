@@ -25,10 +25,10 @@ describe("HAB-45 acceptance criteria", () => {
       packages?: Record<string, { resolved?: string }>;
     };
     const dependencies = { ...manifest.dependencies, ...manifest.devDependencies };
-    assert.equal(dependencies["@dojocoding/hacienda-sdk"], "0.3.0");
+    assert.equal(dependencies["@dojocoding/hacienda-sdk"], "0.4.1");
     assert.equal(dependencies["@dojocoding/hacienda-cr"], undefined);
     const resolved = lockfile.packages?.["node_modules/@dojocoding/hacienda-sdk"]?.resolved ?? "";
-    assert.match(resolved, /^https:\/\/registry\.npmjs\.org\/@dojocoding\/hacienda-sdk\/-\/hacienda-sdk-0\.3\.0\.tgz$/);
+    assert.match(resolved, /^https:\/\/registry\.npmjs\.org\/@dojocoding\/hacienda-sdk\/-\/hacienda-sdk-0\.4\.1\.tgz$/);
     assert.equal(lockfile.packages?.["node_modules/@dojocoding/hacienda-cr"], undefined);
     assert.equal(resolved.includes("github.com"), false);
   });
@@ -42,7 +42,7 @@ describe("HAB-45 acceptance criteria", () => {
     const devApp = await readFile(path.join(repoRoot, "k8s/argocd/applications/backend-dev.yaml"), "utf8");
     const stagingApp = await readFile(path.join(repoRoot, "k8s/argocd/applications/backend-staging.yaml"), "utf8");
 
-    for (const key of ["HACIENDA_ID_TYPE", "HACIENDA_ID_NUMBER", "HACIENDA_PASSWORD"]) {
+    for (const key of ["HACIENDA_IDP_USERNAME", "HACIENDA_ID_TYPE", "HACIENDA_ID_NUMBER", "HACIENDA_PASSWORD"]) {
       assert.match(sidecar, new RegExp(`- name: ${key}\\n\\s+valueFrom:\\n\\s+secretKeyRef:\\n\\s+name: hacienda-credentials\\n\\s+key: ${key}`));
     }
     assert.match(sidecar, /containerPort: 50051/);

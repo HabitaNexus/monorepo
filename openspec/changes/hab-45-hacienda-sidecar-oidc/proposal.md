@@ -28,5 +28,5 @@ HabitaNexus cannot report rental income to TRIBU-CR until it can obtain and rene
 - New app: `apps/hacienda-sidecar/` (Node.js 22+, gRPC). No Flutter or mobile changes.
 - Dependency: `@dojocoding/hacienda-sdk` (published package; `@dojocoding/hacienda-cr` is the GitHub repo name and is not on npm).
 - Kubernetes: extend `k8s/base/backend/` (today a single `backend` Deployment on port 3000) and overlays `dev` / `staging`. ArgoCD apps `backend-dev` and `backend-staging` already point at those overlays.
-- Secrets: `make dev-fallback-secret` only creates a placeholder. A real sandbox handshake needs a `rut-stag` taxpayer id type, id number, and IDP password supplied outside the repo.
+- Secrets: `make dev-fallback-secret` only creates a placeholder. A real sandbox handshake needs a full issued `rut-stag` IDP username and password supplied outside the repo.
 - Downstream: unblocks HAB-46 and HAB-47. Those issues are not implemented here.

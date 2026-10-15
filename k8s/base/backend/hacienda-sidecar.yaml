@@ -26,16 +26,24 @@ spec:
                 configMapKeyRef:
                   name: hacienda-sidecar-config
                   key: HACIENDA_ENVIRONMENT
+            - name: HACIENDA_IDP_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: hacienda-credentials
+                  key: HACIENDA_IDP_USERNAME
+                  optional: true
             - name: HACIENDA_ID_TYPE
               valueFrom:
                 secretKeyRef:
                   name: hacienda-credentials
                   key: HACIENDA_ID_TYPE
+                  optional: true
             - name: HACIENDA_ID_NUMBER
               valueFrom:
                 secretKeyRef:
                   name: hacienda-credentials
                   key: HACIENDA_ID_NUMBER
+                  optional: true
             - name: HACIENDA_PASSWORD
               valueFrom:
                 secretKeyRef:

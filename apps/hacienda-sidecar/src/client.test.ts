@@ -6,12 +6,26 @@ import type { SidecarConfig } from "./config.js";
 
 const base: SidecarConfig = {
   environment: "sandbox",
-  idType: "02",
-  idNumber: "3101234567",
+  username: "cpf-01-1234-5678@stag.comprobanteselectronicos.go.cr",
   password: "fixture-password",
 };
 
 describe("createHaciendaClient", () => {
+  it("uses the full issued username without taxpayer ID validation", () => {
+    const options = toClientOptions(base);
+    assert.deepEqual(options.credentials, { username: base.username, password: base.password });
+    assert.doesNotThrow(() => createHaciendaClient(base));
+  });
+
+  it("retains identification-based credentials when no username is configured", () => {
+    const options = toClientOptions({
+      environment: "sandbox", idType: "02", idNumber: "3101234567", password: base.password,
+    });
+    assert.deepEqual(options.credentials, {
+      idType: "02", idNumber: "3101234567", password: base.password,
+    });
+  });
+
   it("sends sandbox authentication to the rut-stag identity provider", () => {
     const options = toClientOptions(base);
     const config = getEnvironmentConfig(options.environment);

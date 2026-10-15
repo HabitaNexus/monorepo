@@ -12,6 +12,13 @@ The hacienda sidecar SHALL obtain an access token from the Ministerio de Haciend
 - **THEN** it obtains an access token from the sandbox identity provider
 - **AND** an authentication status check reports success
 
+#### Scenario: Issued IDP username
+
+- **WHEN** a full issued IDP username and password are configured
+- **THEN** the sidecar passes that username unchanged to the SDK for authentication and re-authentication
+- **AND** it preserves hyphens and the environment domain without reconstructing or padding an ID number
+- **AND** an explicitly empty or whitespace-bearing username is rejected rather than falling back to an identification-based username
+
 #### Scenario: Rejected credentials
 
 - **WHEN** the identity provider rejects the taxpayer credentials
@@ -30,7 +37,7 @@ The hacienda sidecar SHALL renew the access token before it expires, without ope
 
 ### Requirement: Credential injection
 
-The hacienda sidecar SHALL read the taxpayer id type, id number, and identity-provider password from the runtime secret store. It MUST NOT embed those values in source code or in the container image.
+The hacienda sidecar SHALL read the issued IDP username and identity-provider password from the runtime secret store. When no issued username is configured, it MAY use the legacy taxpayer id type and id number from that store as a compatibility fallback. It MUST NOT embed those values in source code or in the container image.
 
 #### Scenario: Missing password
 
