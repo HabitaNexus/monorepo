@@ -71,3 +71,10 @@ explicit policy update before they can access tokens.
 After deploying, verify ArgoCD sync/health and repeat the gRPC status call through
 a local port-forward. Live authentication and cluster evidence remain separate
 from passing local tests.
+
+## QA handoff
+
+The structured case manifest is `e2e/test-suite.json`, generated from OpenSpec and
+the ready-to-review testing pillar. It maps the existing Node tests and a manual
+stage network-policy check. It is not a test execution report and installs no
+additional BDD runner. Stage execution belongs to QA after promotion.

@@ -58,3 +58,25 @@ the advisory has been fixed or that all dependency findings are zero.
 - Container publication and deployed Secret configuration remain deployment work.
 - Current-head CI and remote Greptile verdict are required before handoff.
 - Codex does not register the bundled Claude Stop hooks. A local marker or receipt alone proves no gate; verify GitHub reviews/checks directly.
+
+## Assurance triage and QA manifest
+
+Pre-builder testing, security and governance: PASS for bfbd328337179e6a02e72d0b97c6cc29722afcb2.
+CI https://github.com/HabitaNexus/monorepo/actions/runs/38688481223 passed typecheck, ESLint, Prettier, all 30 tests, build, runtime audit and Docker image construction. Coverage delta is not measured by this repo. Liveness is SKIP by the default PR profile. The unpatched high advisory is tracked in HAB-95.
+
+The user selected apps/hacienda-sidecar/e2e/test-suite.json with the existing Node runner, screen reporting and this existing Markdown round. The manifest was generated from the testing pillar output and all 10 normative OpenSpec scenarios. Its IDs, references, coverage groups, denormalized fields and counts were validated. The manifest does not execute stage tests. No assurance:e2e-test-runner or preview was run.
+
+| ID | Scenario | Coverage | Runner | Priority |
+| --- | --- | --- | --- | --- |
+| TC-001 | Successful sandbox handshake | HAPPY PATH | node-test | High |
+| TC-002 | Issued IDP username | HAPPY PATH | node-test | High |
+| TC-003 | Rejected credentials | ERROR | node-test | High |
+| TC-004 | Token near expiry | EDGE CASES | node-test | High |
+| TC-005 | Missing password | SECURITY | node-test | High |
+| TC-006 | Sandbox configuration | HAPPY PATH | node-test | High |
+| TC-007 | Production configuration | HAPPY PATH | node-test | High |
+| TC-008 | Unrelated pod requests a token | SECURITY | manual-stage | High |
+| TC-009 | Authentication health changes | EDGE CASES | node-test | High |
+| TC-010 | Invalid successful HTTP response | ERROR | node-test | High |
+
+Counts: 10 cases; 9 node-test / 1 manual-stage; 4 happy path / 2 error / 2 edge cases / 2 security. Use `jq ".test_cases[] | {id,title,runners:.project.runners}" apps/hacienda-sidecar/e2e/test-suite.json` to inspect the matrix. Stage CNI and ArgoCD evidence remain pending. Remote review and current-head CI must be verified after the manifest push.

@@ -3,7 +3,7 @@
 ## 1. Sidecar package
 
 - [x] 1.1 Create `apps/hacienda-sidecar` as a Node.js 22 TypeScript package that depends on `@dojocoding/hacienda-sdk@0.4.1` and does not depend on `@dojocoding/hacienda-cr`. Verify with `npm ls @dojocoding/hacienda-sdk` showing 0.4.1 and `npm ls @dojocoding/hacienda-cr` reporting it is not installed.
-- [ ] 1.2 The Node 22 Dockerfile is implemented; verify an image build with the updated 0.4.1 lockfile. Docker daemon was unavailable in the 2026-10-14 round.
+- [x] 1.2 Verify the Node 22 image build with the SDK 0.4.1 lockfile. The current assurance CI successfully ran Docker build: https://github.com/HabitaNexus/monorepo/actions/runs/38688481223. Publication and deployment are separate checks.
 
 ## 2. Credentials and environment
 
@@ -44,8 +44,9 @@
 - [x] 8.1 Correct diagnostic success detection; HTTP 200 with invalid metadata fails. Verify the three invalid-metadata regressions in `handshake-report.test.ts`.
 - [x] 8.2 Implement health-watch transitions and deterministic stream cleanup on shutdown. Verify `updates health watchers and closes their streams on shutdown`.
 - [x] 8.3 Restrict TCP 50051 ingress to same-namespace backend pods with NetworkPolicy and exclude `.env*` from the Docker context. Manifest assertions and dev/staging render pass; enforcement by a deployed CNI remains pending 7.5.
-- [x] 8.4 Add pinned TypeScript lint/format/typecheck gates, runtime dependency audit and Docker image build to CI. Local gates and 30 tests pass; CI verdict is recorded by the ready-to-review receipt.
+- [x] 8.4 Add pinned TypeScript lint/format/typecheck gates, runtime dependency audit and Docker image build to CI. Local gates and 30 tests pass; the expanded CI including Docker passed at bfbd328337179e6a02e72d0b97c6cc29722afcb2. Final-head status is verified again before remote review.
 - [x] 8.5 Triage the unpatched high node-forge signature-verification advisory as HAB-95, owned by David Achoy; it is outside the current auth-only path. Critical findings in npm runtime audit: 0.
+- [x] 8.7 Generate and validate `apps/hacienda-sidecar/e2e/test-suite.json` from the testing pillar output, covering all 10 OpenSpec scenarios. Keep the existing node:test runner; stage-only manual verification remains a QA handoff. Do not execute the stage E2E runner in this workflow.
 - [ ] 8.6 Obtain the configured remote review verdict and complete the human handoff without merging or marking HAB-45 Done.
 
 ## QA traceability (four layers)
