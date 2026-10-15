@@ -6,6 +6,7 @@ import type { HaciendaEnvironment } from "./config.js";
 import type { TokenGateway } from "./token-gateway.js";
 
 const AUTH_ERROR = "authentication_failed";
+const HEALTH_WATCH_INTERVAL_MS = 1000;
 
 type AuthStatusResponse = {
   authenticated: boolean;
@@ -55,8 +56,9 @@ const healthService = serviceAt(loaded, ["grpc", "health", "v1", "Health"]);
 
 export async function startServer(options: ServerOptions): Promise<StartedServer> {
   const server = new grpc.Server();
+  const health = healthHandlers(options.gateway);
   server.addService(authService.service, authHandlers(options));
-  server.addService(healthService.service, healthHandlers(options.gateway));
+  server.addService(healthService.service, health.handlers);
 
   const boundPort = await new Promise<number>((resolve, reject) => {
     server.bindAsync(
@@ -76,6 +78,7 @@ export async function startServer(options: ServerOptions): Promise<StartedServer
     port: boundPort,
     shutdown: () =>
       new Promise((resolve) => {
+        health.close();
         server.tryShutdown(() => resolve());
       }),
   };
@@ -83,13 +86,19 @@ export async function startServer(options: ServerOptions): Promise<StartedServer
 
 function authHandlers(options: ServerOptions): grpc.UntypedServiceImplementation {
   return {
-    GetAuthStatus: (_call: grpc.ServerUnaryCall<unknown, AuthStatusResponse>, callback: UnaryCallback<AuthStatusResponse>) => {
+    GetAuthStatus: (
+      _call: grpc.ServerUnaryCall<unknown, AuthStatusResponse>,
+      callback: UnaryCallback<AuthStatusResponse>,
+    ) => {
       void options.gateway.getAccessToken().then(
         () => callback(null, { authenticated: true, environment: options.environment }),
         () => callback(null, { authenticated: false, environment: options.environment }),
       );
     },
-    GetAccessToken: (_call: grpc.ServerUnaryCall<unknown, AccessTokenResponse>, callback: UnaryCallback<AccessTokenResponse>) => {
+    GetAccessToken: (
+      _call: grpc.ServerUnaryCall<unknown, AccessTokenResponse>,
+      callback: UnaryCallback<AccessTokenResponse>,
+    ) => {
       void options.gateway.getAccessToken().then(
         (accessToken) => callback(null, { success: true, accessToken, error: "" }),
         () => callback(null, { success: false, accessToken: "", error: AUTH_ERROR }),
@@ -98,19 +107,68 @@ function authHandlers(options: ServerOptions): grpc.UntypedServiceImplementation
   };
 }
 
-function healthHandlers(gateway: TokenGateway): grpc.UntypedServiceImplementation {
-  return {
-    Check: (_call: grpc.ServerUnaryCall<unknown, HealthResponse>, callback: UnaryCallback<HealthResponse>) => {
+// ---------------------------------------------------------------------------
+// Health streams — publish state transitions and release watchers on shutdown
+// ---------------------------------------------------------------------------
+
+function healthHandlers(gateway: TokenGateway): {
+  handlers: grpc.UntypedServiceImplementation;
+  close: () => void;
+} {
+  const watchers = new Set<() => void>();
+  const handlers: grpc.UntypedServiceImplementation = {
+    Check: (
+      _call: grpc.ServerUnaryCall<unknown, HealthResponse>,
+      callback: UnaryCallback<HealthResponse>,
+    ) => {
       void gateway.getAccessToken().then(
         () => callback(null, { status: "SERVING" }),
         () => callback(null, { status: "NOT_SERVING" }),
       );
     },
     Watch: (call: grpc.ServerWritableStream<unknown, HealthResponse>) => {
-      void gateway.getAccessToken().then(
-        () => call.write({ status: "SERVING" }),
-        () => call.write({ status: "NOT_SERVING" }),
-      );
+      let stopped = false;
+      let checking = false;
+      let previous: HealthResponse["status"] | undefined;
+      const check = async () => {
+        if (stopped || checking) return;
+        checking = true;
+        let status: HealthResponse["status"];
+        try {
+          await gateway.getAccessToken();
+          status = "SERVING";
+        } catch {
+          status = "NOT_SERVING";
+        } finally {
+          checking = false;
+        }
+        if (!stopped && status !== previous) {
+          previous = status;
+          call.write({ status });
+        }
+      };
+      const interval = setInterval(() => {
+        void check();
+      }, HEALTH_WATCH_INTERVAL_MS);
+      interval.unref();
+      const stop = () => {
+        if (stopped) return;
+        stopped = true;
+        clearInterval(interval);
+        watchers.delete(stop);
+        call.end();
+      };
+      watchers.add(stop);
+      call.once("cancelled", stop);
+      call.once("error", stop);
+      call.once("close", stop);
+      void check();
+    },
+  };
+  return {
+    handlers,
+    close: () => {
+      for (const stop of watchers) stop();
     },
   };
 }
@@ -121,7 +179,8 @@ function serviceAt(root: grpc.GrpcObject, segments: string[]): grpc.ServiceClien
     if (!isGrpcObject(current)) {
       throw new Error(`Proto path missing segment ${segment}`);
     }
-    const next: grpc.GrpcObject | grpc.ServiceClientConstructor | grpc.ProtobufTypeDefinition | undefined =
+    const next:
+      grpc.GrpcObject | grpc.ServiceClientConstructor | grpc.ProtobufTypeDefinition | undefined =
       current[segment];
     if (!next) {
       throw new Error(`Proto path missing segment ${segment}`);

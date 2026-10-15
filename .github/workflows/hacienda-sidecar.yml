@@ -1,5 +1,8 @@
 name: hacienda-sidecar
 
+permissions:
+  contents: read
+
 on:
   push:
     paths:
@@ -34,9 +37,19 @@ jobs:
           cache: npm
           cache-dependency-path: apps/hacienda-sidecar/package-lock.json
       - run: npm ci
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run format:check
       - run: npm test
+      - run: npm run build
+      - name: Audit runtime dependencies
+        run: npm audit --omit=dev --audit-level=critical --json > reports/security-audit.json
+      - name: Build the sidecar container
+        run: docker build --tag hacienda-sidecar:${{ github.sha }} .
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: hacienda-sidecar-junit
-          path: apps/hacienda-sidecar/reports/junit.xml
+          path: |
+            apps/hacienda-sidecar/reports/junit.xml
+            apps/hacienda-sidecar/reports/security-audit.json

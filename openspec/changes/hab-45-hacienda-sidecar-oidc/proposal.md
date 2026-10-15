@@ -8,9 +8,10 @@ HabitaNexus cannot report rental income to TRIBU-CR until it can obtain and rene
 
 - Add `apps/hacienda-sidecar/`, a Node/TypeScript gRPC sidecar that depends on `@dojocoding/hacienda-sdk` as an npm package. Do not fork [DojoCodingLabs/hacienda-cr](https://github.com/DojoCodingLabs/hacienda-cr).
 - Authenticate with Hacienda OAuth2 ROPC (the SDK's `TokenManager`) and refresh the access token before it expires.
-- Inject taxpayer credentials (`idType`, `idNumber`, password) through Kubernetes secrets. Public IDP client ids (`api-stag`, `api-prod`) stay inside the SDK.
+- Inject the full issued IDP username and password through Kubernetes secrets, with legacy ID-based credentials retained as a fallback. Public IDP client ids (`api-stag`, `api-prod`) stay inside the SDK.
 - Parameterize `sandbox` versus `production` by environment. A smoke test proves a sandbox handshake.
 - Add kustomize manifests under `k8s/base/backend/` and the existing overlays so ArgoCD can deploy the sidecar.
+- Restrict internal token access through a same-namespace backend NetworkPolicy, publish health transitions to watchers, and fail the diagnostic when token metadata checks fail.
 - Leave rental-income declaration, tax calculation, electronic invoicing, XAdES signing, ATENA, and `TribuTaxReporter` out of this change.
 
 ## Capabilities

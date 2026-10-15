@@ -30,6 +30,9 @@ From this directory:
 
 ```sh
 npm ci
+npm run typecheck
+npm run lint
+npm run format:check
 npm test
 npm run build
 # SDK authentication against Hacienda; prints no token or password:
@@ -59,6 +62,11 @@ Populate the `hacienda-credentials` Secret outside git with
 `HACIENDA_IDP_USERNAME` and `HACIENDA_PASSWORD`. Omit the legacy ID keys when using
 the issued username. The example Secret contains blank placeholders only.
 Dev and staging remain in sandbox. The service is internal (`ClusterIP:50051`).
+The ingress NetworkPolicy allows only pods labeled `app=backend` in the same
+namespace to reach TCP 50051. An enforcing CNI is a deployment prerequisite;
+rendering the manifest does not verify live enforcement. Keep the allowed pod
+labels under trusted deployment/RBAC control. Other fiscal callers require an
+explicit policy update before they can access tokens.
 
 After deploying, verify ArgoCD sync/health and repeat the gRPC status call through
 a local port-forward. Live authentication and cluster evidence remain separate

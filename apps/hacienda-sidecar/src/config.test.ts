@@ -22,13 +22,17 @@ describe("loadCredentials", () => {
 
   it("rejects blank or whitespace-bearing explicit usernames instead of using legacy IDs", () => {
     for (const username of ["", " ", " user@stag.comprobanteselectronicos.go.cr", "user\nname"]) {
-      assert.throws(() => loadCredentials({
-        HACIENDA_ENVIRONMENT: "sandbox",
-        HACIENDA_IDP_USERNAME: username,
-        HACIENDA_PASSWORD: "fixture-password",
-        HACIENDA_ID_TYPE: "02",
-        HACIENDA_ID_NUMBER: "3101234567",
-      }), /HACIENDA_IDP_USERNAME/);
+      assert.throws(
+        () =>
+          loadCredentials({
+            HACIENDA_ENVIRONMENT: "sandbox",
+            HACIENDA_IDP_USERNAME: username,
+            HACIENDA_PASSWORD: "fixture-password",
+            HACIENDA_ID_TYPE: "02",
+            HACIENDA_ID_NUMBER: "3101234567",
+          }),
+        /HACIENDA_IDP_USERNAME/,
+      );
     }
   });
 
@@ -37,8 +41,10 @@ describe("loadCredentials", () => {
       HACIENDA_IDP_USERNAME: "cpf-01-1234-5678@stag.comprobanteselectronicos.go.cr",
       HACIENDA_PASSWORD: "fixture-password",
     };
-    assert.equal(sanitizeStartupError(`${env.HACIENDA_IDP_USERNAME} ${env.HACIENDA_PASSWORD}`, env),
-      "[redacted] [redacted]");
+    assert.equal(
+      sanitizeStartupError(`${env.HACIENDA_IDP_USERNAME} ${env.HACIENDA_PASSWORD}`, env),
+      "[redacted] [redacted]",
+    );
   });
 
   it("reads the four Hacienda variables", () => {

@@ -58,3 +58,33 @@ The hacienda sidecar SHALL send authentication requests only to the identity pro
 
 - **WHEN** the environment is production
 - **THEN** authentication requests go to the production identity provider
+
+### Requirement: Internal token access boundary
+
+The deployed sidecar SHALL restrict inbound TCP 50051 to backend pods in the same namespace through a NetworkPolicy. The cluster MUST enforce NetworkPolicy before real credentials are deployed.
+
+#### Scenario: Unrelated pod requests a token
+
+- **WHEN** a pod outside the allowed backend selector attempts to connect to the sidecar
+- **THEN** the ingress policy denies TCP 50051
+- **AND** only same-namespace pods labeled `app=backend` are selected as allowed clients
+
+### Requirement: Health watch lifecycle
+
+The sidecar SHALL publish health state transitions to active watchers and close their streams when shutting down.
+
+#### Scenario: Authentication health changes
+
+- **WHEN** authentication becomes unavailable while a health watch is open
+- **THEN** the watcher receives `NOT_SERVING`
+- **AND** shutdown closes the watch stream without waiting for client cancellation
+
+### Requirement: Diagnostic handshake verdict
+
+The diagnostic script SHALL report success only when all token-response checks pass.
+
+#### Scenario: Invalid successful HTTP response
+
+- **WHEN** the IDP returns HTTP 200 with missing or invalid token metadata
+- **THEN** the script exits non-zero and reports `handshake_failed`
+- **AND** the CSV records the failed checks without credentials or token values

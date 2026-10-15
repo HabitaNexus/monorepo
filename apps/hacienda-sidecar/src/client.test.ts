@@ -19,10 +19,15 @@ describe("createHaciendaClient", () => {
 
   it("retains identification-based credentials when no username is configured", () => {
     const options = toClientOptions({
-      environment: "sandbox", idType: "02", idNumber: "3101234567", password: base.password,
+      environment: "sandbox",
+      idType: "02",
+      idNumber: "3101234567",
+      password: base.password,
     });
     assert.deepEqual(options.credentials, {
-      idType: "02", idNumber: "3101234567", password: base.password,
+      idType: "02",
+      idNumber: "3101234567",
+      password: base.password,
     });
   });
 

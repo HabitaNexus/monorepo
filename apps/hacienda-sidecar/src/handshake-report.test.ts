@@ -16,7 +16,7 @@ const scriptPath = path.resolve(
 // Fixtures — password and token must never appear in the CSV or the logs
 // ---------------------------------------------------------------------------
 
-const password = "p@ss,word\"do-not-leak";
+const password = 'p@ss,word"do-not-leak';
 const username = "cpf-01-0000-0000@stag.comprobanteselectronicos.go.cr";
 const accessToken = "fixture-token-do-not-write";
 
@@ -25,6 +25,38 @@ const accessToken = "fixture-token-do-not-write";
 // ---------------------------------------------------------------------------
 
 describe("handshake report", () => {
+  for (const invalid of [
+    { access_token: accessToken, token_type: "Bearer", expires_in: 0 },
+    { access_token: 123, token_type: "Bearer", expires_in: 300 },
+    { access_token: accessToken, expires_in: 300 },
+  ]) {
+    it(`rejects an HTTP 200 with invalid token metadata ${JSON.stringify(Object.keys(invalid))} ${invalid.expires_in}`, async () => {
+      const directory = await mkdtemp(path.join(tmpdir(), "hacienda-handshake-"));
+      const reportPath = path.join(directory, "idp-handshake.csv");
+      const server = await listen((_request, response) => {
+        response.writeHead(200, { "Content-Type": "application/json" });
+        response.end(JSON.stringify(invalid));
+      });
+      try {
+        const result = await runHandshake({
+          HACIENDA_IDP_USERNAME: username,
+          HACIENDA_PASSWORD: password,
+          HACIENDA_TOKEN_URL: `http://127.0.0.1:${server.port}/token`,
+          HACIENDA_HANDSHAKE_REPORT: reportPath,
+        });
+        assert.equal(result.code, 1);
+        assert.match(result.stderr, /handshake_failed/);
+        assert.doesNotMatch(result.stdout, /handshake_ok/);
+        const csv = await readFile(reportPath, "utf8");
+        assert.match(csv, /expires_in_missing|access_token_missing|token_type_missing/);
+        assert.equal(csv.includes(accessToken), false);
+      } finally {
+        await close(server.handle);
+        await rm(directory, { recursive: true, force: true });
+      }
+    });
+  }
+
   it("records credentials_not_configured and does not call the identity provider", async () => {
     const directory = await mkdtemp(path.join(tmpdir(), "hacienda-handshake-"));
     const reportPath = path.join(directory, "idp-handshake.csv");
@@ -68,11 +100,13 @@ describe("handshake report", () => {
     const reportPath = path.join(directory, "idp-handshake.csv");
     const server = await listen((_request, response) => {
       response.writeHead(200, { "Content-Type": "application/json" });
-      response.end(JSON.stringify({
-        access_token: accessToken,
-        token_type: password,
-        expires_in: 300,
-      }));
+      response.end(
+        JSON.stringify({
+          access_token: accessToken,
+          token_type: password,
+          expires_in: 300,
+        }),
+      );
     });
     try {
       const result = await runHandshake({
@@ -105,11 +139,13 @@ describe("handshake report", () => {
         const form = Buffer.concat(chunks).toString("utf8");
         assert.equal(form.includes(encodeURIComponent(password)), true);
         response.writeHead(200, { "Content-Type": "application/json" });
-        response.end(JSON.stringify({
-          access_token: accessToken,
-          token_type: "Bearer",
-          expires_in: 300,
-        }));
+        response.end(
+          JSON.stringify({
+            access_token: accessToken,
+            token_type: "Bearer",
+            expires_in: 300,
+          }),
+        );
       });
     });
     try {
@@ -143,7 +179,9 @@ describe("handshake report", () => {
 // Helpers — spawn the script and a loopback token endpoint
 // ---------------------------------------------------------------------------
 
-function runHandshake(env: Record<string, string>): Promise<{ code: number; stdout: string; stderr: string }> {
+function runHandshake(
+  env: Record<string, string>,
+): Promise<{ code: number; stdout: string; stderr: string }> {
   return new Promise((resolve, reject) => {
     const child = spawn(process.execPath, [scriptPath], {
       env: {

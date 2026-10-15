@@ -39,6 +39,15 @@
 - [x] 7.6 Verify automatic renewal through the real local gRPC sidecar after waiting for the SDK renewal window. A second token differed and its expiry was extended; health stayed `SERVING`. Evidence: the `renewal` section of `live-grpc-sandbox.json`. Ten-hour re-authentication remains covered by simulation, not a live wait.
 - [ ] 7.5 Capture the deployed sidecar's ArgoCD sync/health status and confirm the new Secret key is configured.
 
+## 8. Ready-to-review assurance
+
+- [x] 8.1 Correct diagnostic success detection; HTTP 200 with invalid metadata fails. Verify the three invalid-metadata regressions in `handshake-report.test.ts`.
+- [x] 8.2 Implement health-watch transitions and deterministic stream cleanup on shutdown. Verify `updates health watchers and closes their streams on shutdown`.
+- [x] 8.3 Restrict TCP 50051 ingress to same-namespace backend pods with NetworkPolicy and exclude `.env*` from the Docker context. Manifest assertions and dev/staging render pass; enforcement by a deployed CNI remains pending 7.5.
+- [x] 8.4 Add pinned TypeScript lint/format/typecheck gates, runtime dependency audit and Docker image build to CI. Local gates and 30 tests pass; CI verdict is recorded by the ready-to-review receipt.
+- [x] 8.5 Triage the unpatched high node-forge signature-verification advisory as HAB-95, owned by David Achoy; it is outside the current auth-only path. Critical findings in npm runtime audit: 0.
+- [ ] 8.6 Obtain the configured remote review verdict and complete the human handoff without merging or marking HAB-45 Done.
+
 ## QA traceability (four layers)
 
 SSOT: `docs/process/qa-traceability.md`
@@ -54,6 +63,9 @@ SSOT: `docs/process/qa-traceability.md`
 
 | Scenario de OpenSpec | Test automatizado | Manual (SOP / Kiwi) | Caso HITL ID | Storybook (solo UI) |
 | --- | --- | --- | --- | --- |
+| Unrelated pod requests a token | `HAB-45 acceptance criteria` → NetworkPolicy selectors and port; dev/staging kustomize rendering | Verify allowed/denied pod connections with an enforcing CNI before deploying real credentials | HACIENDA-08 | — |
+| Authentication health changes | `hacienda auth grpc` → `updates health watchers and closes their streams on shutdown` | — | HACIENDA-09 | — |
+| Invalid successful HTTP response | `handshake report` → three invalid token metadata HTTP 200 cases | — | HACIENDA-10 | — |
 | Issued IDP username | `hacienda auth grpc` → `preserves the issued sandbox username through gRPC login, refresh and re-authentication` and production equivalent (installed SDK, HTTP intercepted); configuration tests reject invalid explicit usernames | Full username in `hacienda-credentials`; live local gRPC sandbox check passed 7.4; deployed verification pending 7.5 | HACIENDA-07 | — |
 | Successful sandbox handshake | `handshake report` → `writes a secret-free CSV when the token endpoint accepts the password` (fixture local). Historical direct-IDP handshake: `idp-handshake-sandbox.csv`; live local sidecar gRPC passed 7.4; deployed verification pending 7.5 | `make dev-hacienda-idp-handshake` | HACIENDA-01 | — |
 | Rejected credentials | `hacienda auth grpc` → `reports failure and omits secrets when credentials are rejected` | — | HACIENDA-02 | — |

@@ -18,13 +18,14 @@ export type AuthClient = {
 export function toClientOptions(config: SidecarConfig): HaciendaClientOptions {
   return {
     environment: toEnvironment(config.environment),
-    credentials: config.username !== undefined
-      ? { username: config.username, password: config.password }
-      : {
-          idType: toIdType(config.idType),
-          idNumber: config.idNumber,
-          password: config.password,
-        },
+    credentials:
+      config.username !== undefined
+        ? { username: config.username, password: config.password }
+        : {
+            idType: toIdType(config.idType),
+            idNumber: config.idNumber,
+            password: config.password,
+          },
   };
 }
 

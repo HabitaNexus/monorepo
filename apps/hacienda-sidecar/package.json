@@ -10,7 +10,11 @@
     "build": "tsc -p tsconfig.json",
     "start": "node dist/index.js",
     "test": "tsc -p tsconfig.test.json && mkdir -p reports && node --test --test-reporter=spec --test-reporter-destination=stdout --test-reporter=junit --test-reporter-destination=reports/junit.xml dist-test/*.test.js",
-    "smoke": "node dist/smoke.js"
+    "smoke": "node dist/smoke.js",
+    "typecheck": "tsc --noEmit -p tsconfig.test.json",
+    "lint": "eslint src",
+    "format:check": "prettier --check \"src/**/*.ts\" \"scripts/**/*.mjs\" eslint.config.mjs package.json tsconfig.json tsconfig.test.json",
+    "format": "prettier --write \"src/**/*.ts\" \"scripts/**/*.mjs\" eslint.config.mjs package.json tsconfig.json tsconfig.test.json"
   },
   "dependencies": {
     "@dojocoding/hacienda-sdk": "0.4.1",
@@ -19,6 +23,9 @@
   },
   "devDependencies": {
     "@types/node": "^22.15.21",
-    "typescript": "^5.8.3"
+    "eslint": "10.12.0",
+    "prettier": "3.9.10",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "8.71.2"
   }
 }

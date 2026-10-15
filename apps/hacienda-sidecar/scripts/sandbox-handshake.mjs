@@ -118,50 +118,64 @@ const accessToken = typeof payload?.access_token === "string" ? payload.access_t
 const secrets = [password, username, accessToken];
 const checks = handshakeChecks(response, payload, secrets);
 
-if (!response.ok || !payload?.access_token) {
-  writeReport({
-    url: tokenUrl,
-    status: safeStatus(response.statusText, secrets),
-    code: String(response.status),
-    responseTime: String(responseTime),
-    responseSize: String(Buffer.byteLength(text)),
-    executed: checks.executed,
-    failed: checks.failed.length > 0 ? checks.failed : ["handshake_rejected"],
-  }, secrets);
+if (checks.failed.length > 0) {
+  writeReport(
+    {
+      url: tokenUrl,
+      status: safeStatus(response.statusText, secrets),
+      code: String(response.status),
+      responseTime: String(responseTime),
+      responseSize: String(Buffer.byteLength(text)),
+      executed: checks.executed,
+      failed: checks.failed.length > 0 ? checks.failed : ["handshake_rejected"],
+    },
+    secrets,
+  );
   console.error("handshake_failed");
   console.error(publicFailureReason(payload, response.status, secrets));
   console.error(`report=${reportPath}`);
   process.exit(1);
 }
 
-writeReport({
-  url: tokenUrl,
-  status: safeStatus(response.statusText, secrets),
-  code: String(response.status),
-  responseTime: String(responseTime),
-  responseSize: String(Buffer.byteLength(text)),
-  executed: checks.executed,
-  failed: checks.failed,
-}, secrets);
+writeReport(
+  {
+    url: tokenUrl,
+    status: safeStatus(response.statusText, secrets),
+    code: String(response.status),
+    responseTime: String(responseTime),
+    responseSize: String(Buffer.byteLength(text)),
+    executed: checks.executed,
+    failed: checks.failed,
+  },
+  secrets,
+);
 
-const printedTokenType = safeLabel(typeof payload.token_type === "string" ? payload.token_type : "", secrets);
+const printedTokenType = safeLabel(
+  typeof payload.token_type === "string" ? payload.token_type : "",
+  secrets,
+);
 console.log("handshake_ok");
 console.log(`environment=${environment}`);
 console.log(`token_type=${printedTokenType || "unknown"}`);
-console.log(`expires_in=${typeof payload.expires_in === "number" ? payload.expires_in : "unknown"}`);
+console.log(
+  `expires_in=${typeof payload.expires_in === "number" ? payload.expires_in : "unknown"}`,
+);
 console.log(`access_token_length=${accessToken.length}`);
 console.log(`report=${reportPath}`);
 
 function finishFailure({ url = "", failed, reason }) {
-  writeReport({
-    url,
-    status: "",
-    code: "",
-    responseTime: "",
-    responseSize: "",
-    executed: [],
-    failed,
-  }, [password, username]);
+  writeReport(
+    {
+      url,
+      status: "",
+      code: "",
+      responseTime: "",
+      responseSize: "",
+      executed: [],
+      failed,
+    },
+    [password, username],
+  );
   console.error("handshake_failed");
   console.error(reason);
   console.error(`report=${reportPath}`);
@@ -195,11 +209,20 @@ function handshakeChecks(response, payload, secrets) {
   const checks = [];
   checks.push({ name: response.ok ? "status_2xx" : `http_${response.status}`, ok: response.ok });
   if (payload && typeof payload === "object") {
-    const tokenType = safeLabel(typeof payload.token_type === "string" ? payload.token_type : "", secrets);
+    const tokenType = safeLabel(
+      typeof payload.token_type === "string" ? payload.token_type : "",
+      secrets,
+    );
     const expiresIn = typeof payload.expires_in === "number" ? payload.expires_in : 0;
     const accessToken = typeof payload.access_token === "string" ? payload.access_token : "";
-    checks.push({ name: tokenType ? `token_type_${tokenType}` : "token_type_missing", ok: tokenType.length > 0 });
-    checks.push({ name: expiresIn > 0 ? `expires_in_${expiresIn}` : "expires_in_missing", ok: expiresIn > 0 });
+    checks.push({
+      name: tokenType ? `token_type_${tokenType}` : "token_type_missing",
+      ok: tokenType.length > 0,
+    });
+    checks.push({
+      name: expiresIn > 0 ? `expires_in_${expiresIn}` : "expires_in_missing",
+      ok: expiresIn > 0,
+    });
     checks.push({
       name: accessToken ? `access_token_length_${accessToken.length}` : "access_token_missing",
       ok: accessToken.length > 0,
@@ -214,8 +237,12 @@ function handshakeChecks(response, payload, secrets) {
 }
 
 function publicFailureReason(payload, status, secrets) {
-  const code = typeof payload?.error === "string" && /^[A-Za-z0-9_]+$/.test(payload.error) ? payload.error : "";
-  const description = typeof payload?.error_description === "string" ? payload.error_description : "";
+  const code =
+    typeof payload?.error === "string" && /^[A-Za-z0-9_]+$/.test(payload.error)
+      ? payload.error
+      : "";
+  const description =
+    typeof payload?.error_description === "string" ? payload.error_description : "";
   const candidate = description || code || `HTTP ${status}`;
   if (secrets.some((secret) => secret && candidate.includes(secret))) {
     return code || `HTTP ${status}`;

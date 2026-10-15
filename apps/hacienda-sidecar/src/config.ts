@@ -2,13 +2,8 @@
 // Configuration — distinguish issued IDP usernames from legacy taxpayer IDs
 // ---------------------------------------------------------------------------
 
-export const DEFAULT_GRPC_PORT = 50051;
-
-const ENVIRONMENTS = ["sandbox", "production"] as const;
-const ID_TYPES = ["01", "02", "03", "04"] as const;
-
-export type HaciendaEnvironment = (typeof ENVIRONMENTS)[number];
-export type HaciendaIdType = (typeof ID_TYPES)[number];
+export type HaciendaEnvironment = "sandbox" | "production";
+export type HaciendaIdType = "01" | "02" | "03" | "04";
 
 export type SidecarConfig = {
   environment: HaciendaEnvironment;
@@ -17,6 +12,8 @@ export type SidecarConfig = {
   | { username: string; idType?: never; idNumber?: never }
   | { username?: undefined; idType: HaciendaIdType; idNumber: string }
 );
+
+export const DEFAULT_GRPC_PORT = 50051;
 
 // ---------------------------------------------------------------------------
 // Public API — fail before listening and keep credential values out of errors
