@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<testsuites>
+	<testsuite name="HAB-45 acceptance criteria" time="0.008197" disabled="0" errors="0" tests="2" failures="0" skipped="0" hostname="Davids-MacBook-Pro.local">
+		<testcase name="depends on the published SDK and does not fork hacienda-cr" time="0.004100" classname="test"/>
+		<testcase name="injects taxpayer secrets from the Kubernetes secret and selects sandbox on dev and staging" time="0.003643" classname="test"/>
+	</testsuite>
+	<testsuite name="boot" time="0.001361" disabled="0" errors="0" tests="2" failures="0" skipped="0" hostname="Davids-MacBook-Pro.local">
+		<testcase name="does not listen when the password is missing" time="0.000574" classname="test"/>
+		<testcase name="listens on port 50051 after credentials load" time="0.000394" classname="test"/>
+	</testsuite>
+	<testsuite name="createHaciendaClient" time="0.003144" disabled="0" errors="0" tests="4" failures="0" skipped="0" hostname="Davids-MacBook-Pro.local">
+		<testcase name="uses the full issued username without taxpayer ID validation" time="0.002130" classname="test"/>
+		<testcase name="retains identification-based credentials when no username is configured" time="0.000077" classname="test"/>
+		<testcase name="sends sandbox authentication to the rut-stag identity provider" time="0.000177" classname="test"/>
+		<testcase name="sends production authentication to the rut identity provider" time="0.000283" classname="test"/>
+	</testsuite>
+	<testsuite name="loadCredentials" time="0.002192" disabled="0" errors="0" tests="6" failures="0" skipped="0" hostname="Davids-MacBook-Pro.local">
+		<testcase name="preserves the issued username without requiring or reconstructing a taxpayer ID" time="0.000683" classname="test"/>
+		<testcase name="rejects blank or whitespace-bearing explicit usernames instead of using legacy IDs" time="0.000233" classname="test"/>
+		<testcase name="redacts the full username and password in startup errors" time="0.000077" classname="test"/>
+		<testcase name="reads the four Hacienda variables" time="0.000151" classname="test"/>
+		<testcase name="fails closed when the password is missing" time="0.000329" classname="test"/>
+		<testcase name="rejects an environment other than sandbox or production" time="0.000141" classname="test"/>
+	</testsuite>
+	<testsuite name="package source" time="0.006085" disabled="0" errors="0" tests="1" failures="0" skipped="0" hostname="Davids-MacBook-Pro.local">
+		<testcase name="does not embed a credential literal" time="0.005905" classname="test"/>
+	</testsuite>
+	<testsuite name="handshake report" time="0.195756" disabled="0" errors="0" tests="4" failures="0" skipped="0" hostname="Davids-MacBook-Pro.local">
+		<testcase name="records credentials_not_configured and does not call the identity provider" time="0.044458" classname="test"/>
+		<testcase name="rejects a token URL that is not loopback" time="0.030704" classname="test"/>
+		<testcase name="redacts a token type that repeats the password" time="0.067305" classname="test"/>
+		<testcase name="writes a secret-free CSV when the token endpoint accepts the password" time="0.052529" classname="test"/>
+	</testsuite>
+	<testsuite name="hacienda auth grpc" time="0.042357" disabled="0" errors="0" tests="5" failures="0" skipped="0" hostname="Davids-MacBook-Pro.local">
+		<testcase name="preserves the issued sandbox username through gRPC login, refresh and re-authentication" time="0.029556" classname="test"/>
+		<testcase name="preserves the issued production username through gRPC login, refresh and re-authentication" time="0.004636" classname="test"/>
+		<testcase name="reports a real SDK authentication rejection without exposing IDP details" time="0.002526" classname="test"/>
+		<testcase name="reports failure and omits secrets when credentials are rejected" time="0.003530" classname="test"/>
+		<testcase name="returns a non-empty access token when the SDK authenticates" time="0.001592" classname="test"/>
+	</testsuite>
+	<testsuite name="TokenGateway" time="0.002490" disabled="0" errors="0" tests="2" failures="0" skipped="0" hostname="Davids-MacBook-Pro.local">
+		<testcase name="returns the SDK token on a later fetch without a caller-supplied token" time="0.000533" classname="test"/>
+		<testcase name="authenticates once when refresh fails and still takes no caller token" time="0.001081" classname="test"/>
+	</testsuite>
+	<!-- tests 26 -->
+	<!-- suites 8 -->
+	<!-- pass 26 -->
+	<!-- fail 0 -->
+	<!-- cancelled 0 -->
+	<!-- skipped 0 -->
+	<!-- todo 0 -->
+	<!-- duration_ms 322.740917 -->
+</testsuites>

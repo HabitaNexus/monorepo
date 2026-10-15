@@ -1,0 +1,702 @@
+{
+  "meta": {
+    "project": "@habitanexus/hacienda-sidecar",
+    "version": "1.0.0",
+    "generated": "2026-10-15T05:47:37.658102+00:00",
+    "total_cases": 10,
+    "source": "openspec/changes/hab-45-hacienda-sidecar-oidc/specs/tribu-cr-adapter/spec.md",
+    "testing_pillar": {
+      "record": "typescript@0.1.0",
+      "verdict": "PASS",
+      "commit_sha": "bfbd328337179e6a02e72d0b97c6cc29722afcb2",
+      "ci_run": "https://github.com/HabitaNexus/monorepo/actions/runs/38688481223",
+      "gates": [
+        "typecheck",
+        "lint",
+        "format:check",
+        "npm test",
+        "build",
+        "docker build"
+      ],
+      "scenario_gaps": [
+        "deployed CNI allow/deny evidence pending",
+        "deployed Secret and ArgoCD health evidence pending"
+      ]
+    },
+    "runners": {
+      "node-test": {
+        "name": "Existing Node.js product tests",
+        "type": "automated",
+        "extract_cmd": null,
+        "run_cmd": "cd apps/hacienda-sidecar && npm test",
+        "description": "Installed SDK and in-process gRPC regressions; IDP HTTP is intercepted. Does not claim deployed-stage execution."
+      },
+      "manual-stage": {
+        "name": "Authorized stage operator",
+        "type": "interactive",
+        "extract_cmd": null,
+        "run_cmd": null,
+        "description": "After stage promotion only: verify allowed/denied pod connections, Secret injection and ArgoCD health. No deployment is performed by RTR."
+      }
+    }
+  },
+  "use_cases": {
+    "hacienda-auth": {
+      "name": "Hacienda authentication",
+      "description": "Acquire, renew and expose Hacienda tokens through the restricted internal gRPC service",
+      "user_persona": {
+        "name": "Fiscal platform operator",
+        "role": "Authorized backend or stage QA operator"
+      },
+      "default_agent_persona": {
+        "id": "hacienda-sidecar",
+        "name": "Hacienda authentication service",
+        "model": "not-applicable"
+      }
+    }
+  },
+  "features": {
+    "hacienda-auth-successful-sandbox-handshake": {
+      "use_case_id": "hacienda-auth",
+      "name": "Successful sandbox handshake",
+      "workflow_step": 1,
+      "workflow_name": "Successful sandbox handshake",
+      "tags": [
+        "@hacienda-auth",
+        "@happy_path",
+        "@workflow-step-1"
+      ],
+      "background": null,
+      "scenario_count": 1
+    },
+    "hacienda-auth-issued-idp-username": {
+      "use_case_id": "hacienda-auth",
+      "name": "Issued IDP username",
+      "workflow_step": 2,
+      "workflow_name": "Issued IDP username",
+      "tags": [
+        "@hacienda-auth",
+        "@happy_path",
+        "@workflow-step-2"
+      ],
+      "background": null,
+      "scenario_count": 1
+    },
+    "hacienda-auth-rejected-credentials": {
+      "use_case_id": "hacienda-auth",
+      "name": "Rejected credentials",
+      "workflow_step": 3,
+      "workflow_name": "Rejected credentials",
+      "tags": [
+        "@hacienda-auth",
+        "@error",
+        "@workflow-step-3"
+      ],
+      "background": null,
+      "scenario_count": 1
+    },
+    "hacienda-auth-token-near-expiry": {
+      "use_case_id": "hacienda-auth",
+      "name": "Token near expiry",
+      "workflow_step": 4,
+      "workflow_name": "Token near expiry",
+      "tags": [
+        "@hacienda-auth",
+        "@edge_case",
+        "@workflow-step-4"
+      ],
+      "background": null,
+      "scenario_count": 1
+    },
+    "hacienda-auth-missing-password": {
+      "use_case_id": "hacienda-auth",
+      "name": "Missing password",
+      "workflow_step": 5,
+      "workflow_name": "Missing password",
+      "tags": [
+        "@hacienda-auth",
+        "@security",
+        "@workflow-step-5"
+      ],
+      "background": null,
+      "scenario_count": 1
+    },
+    "hacienda-auth-sandbox-configuration": {
+      "use_case_id": "hacienda-auth",
+      "name": "Sandbox configuration",
+      "workflow_step": 6,
+      "workflow_name": "Sandbox configuration",
+      "tags": [
+        "@hacienda-auth",
+        "@happy_path",
+        "@workflow-step-6"
+      ],
+      "background": null,
+      "scenario_count": 1
+    },
+    "hacienda-auth-production-configuration": {
+      "use_case_id": "hacienda-auth",
+      "name": "Production configuration",
+      "workflow_step": 7,
+      "workflow_name": "Production configuration",
+      "tags": [
+        "@hacienda-auth",
+        "@happy_path",
+        "@workflow-step-7"
+      ],
+      "background": null,
+      "scenario_count": 1
+    },
+    "hacienda-auth-unrelated-pod-requests-a-token": {
+      "use_case_id": "hacienda-auth",
+      "name": "Unrelated pod requests a token",
+      "workflow_step": 8,
+      "workflow_name": "Unrelated pod requests a token",
+      "tags": [
+        "@hacienda-auth",
+        "@security",
+        "@workflow-step-8"
+      ],
+      "background": null,
+      "scenario_count": 1
+    },
+    "hacienda-auth-authentication-health-changes": {
+      "use_case_id": "hacienda-auth",
+      "name": "Authentication health changes",
+      "workflow_step": 9,
+      "workflow_name": "Authentication health changes",
+      "tags": [
+        "@hacienda-auth",
+        "@edge_case",
+        "@workflow-step-9"
+      ],
+      "background": null,
+      "scenario_count": 1
+    },
+    "hacienda-auth-invalid-successful-http-response": {
+      "use_case_id": "hacienda-auth",
+      "name": "Invalid successful HTTP response",
+      "workflow_step": 10,
+      "workflow_name": "Invalid successful HTTP response",
+      "tags": [
+        "@hacienda-auth",
+        "@error",
+        "@workflow-step-10"
+      ],
+      "background": null,
+      "scenario_count": 1
+    }
+  },
+  "test_cases": [
+    {
+      "id": "TC-001",
+      "title": "Successful sandbox handshake",
+      "description": "OpenSpec scenario Successful sandbox handshake; QA case HACIENDA-01",
+      "category": "functional",
+      "priority": "High",
+      "steps": [
+        {
+          "type": "action",
+          "description": "Boot the sandbox sidecar with test credentials"
+        },
+        {
+          "type": "assertion",
+          "description": "GetAuthStatus reports authenticated and GetAccessToken is non-empty"
+        }
+      ],
+      "project": {
+        "feature_id": "hacienda-auth-successful-sandbox-handshake",
+        "coverage_group": "HAPPY PATH",
+        "coverage_type": "happy_path",
+        "runners": [
+          "node-test"
+        ],
+        "gherkin": "Scenario: Successful sandbox handshake\nWhen Boot the sandbox sidecar with test credentials\nThen GetAuthStatus reports authenticated and GetAccessToken is non-empty"
+      },
+      "denorm": {
+        "use_case": "hacienda-auth",
+        "workflow_step": 1,
+        "workflow_name": "Successful sandbox handshake",
+        "tags": [
+          "@hacienda-auth",
+          "@happy_path",
+          "@workflow-step-1"
+        ],
+        "agent_persona_id": "hacienda-sidecar",
+        "agent_persona_name": "Hacienda authentication service",
+        "model": "not-applicable",
+        "user_persona_name": "Fiscal platform operator"
+      },
+      "metadata": {
+        "hitl_required": false,
+        "test_questions": {
+          "es": "¿Se cumple el escenario Successful sandbox handshake con la evidencia indicada?",
+          "en": "Does Successful sandbox handshake satisfy the stated verification?"
+        },
+        "openspec_scenario": "Successful sandbox handshake",
+        "hitl_case_id": "HACIENDA-01",
+        "execution_state": "covered_by_existing_product_tests",
+        "qa_note": "Manifest for handoff only; not an execution result. Gherkin is descriptive and is not wired to a BDD runner."
+      }
+    },
+    {
+      "id": "TC-002",
+      "title": "Issued IDP username",
+      "description": "OpenSpec scenario Issued IDP username; QA case HACIENDA-07",
+      "category": "functional",
+      "priority": "High",
+      "steps": [
+        {
+          "type": "action",
+          "description": "Configure the full issued username with its hyphens and environment domain"
+        },
+        {
+          "type": "assertion",
+          "description": "The SDK sends the username unchanged on login and re-authentication"
+        }
+      ],
+      "project": {
+        "feature_id": "hacienda-auth-issued-idp-username",
+        "coverage_group": "HAPPY PATH",
+        "coverage_type": "happy_path",
+        "runners": [
+          "node-test"
+        ],
+        "gherkin": "Scenario: Issued IDP username\nWhen Configure the full issued username with its hyphens and environment domain\nThen The SDK sends the username unchanged on login and re-authentication"
+      },
+      "denorm": {
+        "use_case": "hacienda-auth",
+        "workflow_step": 2,
+        "workflow_name": "Issued IDP username",
+        "tags": [
+          "@hacienda-auth",
+          "@happy_path",
+          "@workflow-step-2"
+        ],
+        "agent_persona_id": "hacienda-sidecar",
+        "agent_persona_name": "Hacienda authentication service",
+        "model": "not-applicable",
+        "user_persona_name": "Fiscal platform operator"
+      },
+      "metadata": {
+        "hitl_required": false,
+        "test_questions": {
+          "es": "¿Se cumple el escenario Issued IDP username con la evidencia indicada?",
+          "en": "Does Issued IDP username satisfy the stated verification?"
+        },
+        "openspec_scenario": "Issued IDP username",
+        "hitl_case_id": "HACIENDA-07",
+        "execution_state": "covered_by_existing_product_tests",
+        "qa_note": "Manifest for handoff only; not an execution result. Gherkin is descriptive and is not wired to a BDD runner."
+      }
+    },
+    {
+      "id": "TC-003",
+      "title": "Rejected credentials",
+      "description": "OpenSpec scenario Rejected credentials; QA case HACIENDA-02",
+      "category": "functional",
+      "priority": "High",
+      "steps": [
+        {
+          "type": "action",
+          "description": "Return an IDP credential rejection to the actual installed SDK"
+        },
+        {
+          "type": "assertion",
+          "description": "gRPC reports authentication_failed and exposes no access token or credentials"
+        }
+      ],
+      "project": {
+        "feature_id": "hacienda-auth-rejected-credentials",
+        "coverage_group": "ERROR",
+        "coverage_type": "error",
+        "runners": [
+          "node-test"
+        ],
+        "gherkin": "Scenario: Rejected credentials\nWhen Return an IDP credential rejection to the actual installed SDK\nThen gRPC reports authentication_failed and exposes no access token or credentials"
+      },
+      "denorm": {
+        "use_case": "hacienda-auth",
+        "workflow_step": 3,
+        "workflow_name": "Rejected credentials",
+        "tags": [
+          "@hacienda-auth",
+          "@error",
+          "@workflow-step-3"
+        ],
+        "agent_persona_id": "hacienda-sidecar",
+        "agent_persona_name": "Hacienda authentication service",
+        "model": "not-applicable",
+        "user_persona_name": "Fiscal platform operator"
+      },
+      "metadata": {
+        "hitl_required": false,
+        "test_questions": {
+          "es": "¿Se cumple el escenario Rejected credentials con la evidencia indicada?",
+          "en": "Does Rejected credentials satisfy the stated verification?"
+        },
+        "openspec_scenario": "Rejected credentials",
+        "hitl_case_id": "HACIENDA-02",
+        "execution_state": "covered_by_existing_product_tests",
+        "qa_note": "Manifest for handoff only; not an execution result. Gherkin is descriptive and is not wired to a BDD runner."
+      }
+    },
+    {
+      "id": "TC-004",
+      "title": "Token near expiry",
+      "description": "OpenSpec scenario Token near expiry; QA case HACIENDA-03",
+      "category": "functional",
+      "priority": "High",
+      "steps": [
+        {
+          "type": "action",
+          "description": "Enter the SDK renewal window, then expire the refresh token in the local regression"
+        },
+        {
+          "type": "assertion",
+          "description": "A renewed token is returned and re-authentication preserves the issued username"
+        }
+      ],
+      "project": {
+        "feature_id": "hacienda-auth-token-near-expiry",
+        "coverage_group": "EDGE CASES",
+        "coverage_type": "edge_case",
+        "runners": [
+          "node-test"
+        ],
+        "gherkin": "Scenario: Token near expiry\nWhen Enter the SDK renewal window, then expire the refresh token in the local regression\nThen A renewed token is returned and re-authentication preserves the issued username"
+      },
+      "denorm": {
+        "use_case": "hacienda-auth",
+        "workflow_step": 4,
+        "workflow_name": "Token near expiry",
+        "tags": [
+          "@hacienda-auth",
+          "@edge_case",
+          "@workflow-step-4"
+        ],
+        "agent_persona_id": "hacienda-sidecar",
+        "agent_persona_name": "Hacienda authentication service",
+        "model": "not-applicable",
+        "user_persona_name": "Fiscal platform operator"
+      },
+      "metadata": {
+        "hitl_required": false,
+        "test_questions": {
+          "es": "¿Se cumple el escenario Token near expiry con la evidencia indicada?",
+          "en": "Does Token near expiry satisfy the stated verification?"
+        },
+        "openspec_scenario": "Token near expiry",
+        "hitl_case_id": "HACIENDA-03",
+        "execution_state": "covered_by_existing_product_tests",
+        "qa_note": "Manifest for handoff only; not an execution result. Gherkin is descriptive and is not wired to a BDD runner."
+      }
+    },
+    {
+      "id": "TC-005",
+      "title": "Missing password",
+      "description": "OpenSpec scenario Missing password; QA case HACIENDA-04",
+      "category": "security",
+      "priority": "High",
+      "steps": [
+        {
+          "type": "action",
+          "description": "Boot without the password environment variable"
+        },
+        {
+          "type": "assertion",
+          "description": "The process rejects configuration before listening"
+        }
+      ],
+      "project": {
+        "feature_id": "hacienda-auth-missing-password",
+        "coverage_group": "SECURITY",
+        "coverage_type": "security",
+        "runners": [
+          "node-test"
+        ],
+        "gherkin": "Scenario: Missing password\nWhen Boot without the password environment variable\nThen The process rejects configuration before listening"
+      },
+      "denorm": {
+        "use_case": "hacienda-auth",
+        "workflow_step": 5,
+        "workflow_name": "Missing password",
+        "tags": [
+          "@hacienda-auth",
+          "@security",
+          "@workflow-step-5"
+        ],
+        "agent_persona_id": "hacienda-sidecar",
+        "agent_persona_name": "Hacienda authentication service",
+        "model": "not-applicable",
+        "user_persona_name": "Fiscal platform operator"
+      },
+      "metadata": {
+        "hitl_required": false,
+        "test_questions": {
+          "es": "¿Se cumple el escenario Missing password con la evidencia indicada?",
+          "en": "Does Missing password satisfy the stated verification?"
+        },
+        "openspec_scenario": "Missing password",
+        "hitl_case_id": "HACIENDA-04",
+        "execution_state": "covered_by_existing_product_tests",
+        "qa_note": "Manifest for handoff only; not an execution result. Gherkin is descriptive and is not wired to a BDD runner."
+      }
+    },
+    {
+      "id": "TC-006",
+      "title": "Sandbox configuration",
+      "description": "OpenSpec scenario Sandbox configuration; QA case HACIENDA-05",
+      "category": "functional",
+      "priority": "High",
+      "steps": [
+        {
+          "type": "action",
+          "description": "Select the sandbox environment"
+        },
+        {
+          "type": "assertion",
+          "description": "The SDK sends requests to rut-stag with api-stag"
+        }
+      ],
+      "project": {
+        "feature_id": "hacienda-auth-sandbox-configuration",
+        "coverage_group": "HAPPY PATH",
+        "coverage_type": "happy_path",
+        "runners": [
+          "node-test"
+        ],
+        "gherkin": "Scenario: Sandbox configuration\nWhen Select the sandbox environment\nThen The SDK sends requests to rut-stag with api-stag"
+      },
+      "denorm": {
+        "use_case": "hacienda-auth",
+        "workflow_step": 6,
+        "workflow_name": "Sandbox configuration",
+        "tags": [
+          "@hacienda-auth",
+          "@happy_path",
+          "@workflow-step-6"
+        ],
+        "agent_persona_id": "hacienda-sidecar",
+        "agent_persona_name": "Hacienda authentication service",
+        "model": "not-applicable",
+        "user_persona_name": "Fiscal platform operator"
+      },
+      "metadata": {
+        "hitl_required": false,
+        "test_questions": {
+          "es": "¿Se cumple el escenario Sandbox configuration con la evidencia indicada?",
+          "en": "Does Sandbox configuration satisfy the stated verification?"
+        },
+        "openspec_scenario": "Sandbox configuration",
+        "hitl_case_id": "HACIENDA-05",
+        "execution_state": "covered_by_existing_product_tests",
+        "qa_note": "Manifest for handoff only; not an execution result. Gherkin is descriptive and is not wired to a BDD runner."
+      }
+    },
+    {
+      "id": "TC-007",
+      "title": "Production configuration",
+      "description": "OpenSpec scenario Production configuration; QA case HACIENDA-06",
+      "category": "functional",
+      "priority": "High",
+      "steps": [
+        {
+          "type": "action",
+          "description": "Select production using an intercepted HTTP transport only"
+        },
+        {
+          "type": "assertion",
+          "description": "The SDK selects rut and api-prod; no live production request occurs"
+        }
+      ],
+      "project": {
+        "feature_id": "hacienda-auth-production-configuration",
+        "coverage_group": "HAPPY PATH",
+        "coverage_type": "happy_path",
+        "runners": [
+          "node-test"
+        ],
+        "gherkin": "Scenario: Production configuration\nWhen Select production using an intercepted HTTP transport only\nThen The SDK selects rut and api-prod; no live production request occurs"
+      },
+      "denorm": {
+        "use_case": "hacienda-auth",
+        "workflow_step": 7,
+        "workflow_name": "Production configuration",
+        "tags": [
+          "@hacienda-auth",
+          "@happy_path",
+          "@workflow-step-7"
+        ],
+        "agent_persona_id": "hacienda-sidecar",
+        "agent_persona_name": "Hacienda authentication service",
+        "model": "not-applicable",
+        "user_persona_name": "Fiscal platform operator"
+      },
+      "metadata": {
+        "hitl_required": false,
+        "test_questions": {
+          "es": "¿Se cumple el escenario Production configuration con la evidencia indicada?",
+          "en": "Does Production configuration satisfy the stated verification?"
+        },
+        "openspec_scenario": "Production configuration",
+        "hitl_case_id": "HACIENDA-06",
+        "execution_state": "covered_by_existing_product_tests",
+        "qa_note": "Manifest for handoff only; not an execution result. Gherkin is descriptive and is not wired to a BDD runner."
+      }
+    },
+    {
+      "id": "TC-008",
+      "title": "Unrelated pod requests a token",
+      "description": "OpenSpec scenario Unrelated pod requests a token; QA case HACIENDA-08",
+      "category": "security",
+      "priority": "High",
+      "steps": [
+        {
+          "type": "action",
+          "description": "In an authorized stage cluster with an enforcing CNI, connect from an allowed backend pod and an unrelated pod"
+        },
+        {
+          "type": "assertion",
+          "description": "Only app=backend in the same namespace reaches TCP 50051; the unrelated pod is denied"
+        }
+      ],
+      "project": {
+        "feature_id": "hacienda-auth-unrelated-pod-requests-a-token",
+        "coverage_group": "SECURITY",
+        "coverage_type": "security",
+        "runners": [
+          "manual-stage"
+        ],
+        "gherkin": "Scenario: Unrelated pod requests a token\nWhen In an authorized stage cluster with an enforcing CNI, connect from an allowed backend pod and an unrelated pod\nThen Only app=backend in the same namespace reaches TCP 50051; the unrelated pod is denied"
+      },
+      "denorm": {
+        "use_case": "hacienda-auth",
+        "workflow_step": 8,
+        "workflow_name": "Unrelated pod requests a token",
+        "tags": [
+          "@hacienda-auth",
+          "@security",
+          "@workflow-step-8"
+        ],
+        "agent_persona_id": "hacienda-sidecar",
+        "agent_persona_name": "Hacienda authentication service",
+        "model": "not-applicable",
+        "user_persona_name": "Fiscal platform operator"
+      },
+      "metadata": {
+        "hitl_required": true,
+        "test_questions": {
+          "es": "¿Se cumple el escenario Unrelated pod requests a token con la evidencia indicada?",
+          "en": "Does Unrelated pod requests a token satisfy the stated verification?"
+        },
+        "openspec_scenario": "Unrelated pod requests a token",
+        "hitl_case_id": "HACIENDA-08",
+        "execution_state": "pending_stage",
+        "qa_note": "Manifest for handoff only; not an execution result. Gherkin is descriptive and is not wired to a BDD runner."
+      }
+    },
+    {
+      "id": "TC-009",
+      "title": "Authentication health changes",
+      "description": "OpenSpec scenario Authentication health changes; QA case HACIENDA-09",
+      "category": "functional",
+      "priority": "High",
+      "steps": [
+        {
+          "type": "action",
+          "description": "Open Health.Watch, make the SDK unavailable, then shut down the sidecar"
+        },
+        {
+          "type": "assertion",
+          "description": "The stream observes SERVING then NOT_SERVING and ends without requiring client cancellation"
+        }
+      ],
+      "project": {
+        "feature_id": "hacienda-auth-authentication-health-changes",
+        "coverage_group": "EDGE CASES",
+        "coverage_type": "edge_case",
+        "runners": [
+          "node-test"
+        ],
+        "gherkin": "Scenario: Authentication health changes\nWhen Open Health.Watch, make the SDK unavailable, then shut down the sidecar\nThen The stream observes SERVING then NOT_SERVING and ends without requiring client cancellation"
+      },
+      "denorm": {
+        "use_case": "hacienda-auth",
+        "workflow_step": 9,
+        "workflow_name": "Authentication health changes",
+        "tags": [
+          "@hacienda-auth",
+          "@edge_case",
+          "@workflow-step-9"
+        ],
+        "agent_persona_id": "hacienda-sidecar",
+        "agent_persona_name": "Hacienda authentication service",
+        "model": "not-applicable",
+        "user_persona_name": "Fiscal platform operator"
+      },
+      "metadata": {
+        "hitl_required": false,
+        "test_questions": {
+          "es": "¿Se cumple el escenario Authentication health changes con la evidencia indicada?",
+          "en": "Does Authentication health changes satisfy the stated verification?"
+        },
+        "openspec_scenario": "Authentication health changes",
+        "hitl_case_id": "HACIENDA-09",
+        "execution_state": "covered_by_existing_product_tests",
+        "qa_note": "Manifest for handoff only; not an execution result. Gherkin is descriptive and is not wired to a BDD runner."
+      }
+    },
+    {
+      "id": "TC-010",
+      "title": "Invalid successful HTTP response",
+      "description": "OpenSpec scenario Invalid successful HTTP response; QA case HACIENDA-10",
+      "category": "functional",
+      "priority": "High",
+      "steps": [
+        {
+          "type": "action",
+          "description": "Return HTTP 200 with an expired/missing expiry, non-string token or missing token type"
+        },
+        {
+          "type": "assertion",
+          "description": "The diagnostic exits non-zero, prints handshake_failed and records failed checks without secrets"
+        }
+      ],
+      "project": {
+        "feature_id": "hacienda-auth-invalid-successful-http-response",
+        "coverage_group": "ERROR",
+        "coverage_type": "error",
+        "runners": [
+          "node-test"
+        ],
+        "gherkin": "Scenario: Invalid successful HTTP response\nWhen Return HTTP 200 with an expired/missing expiry, non-string token or missing token type\nThen The diagnostic exits non-zero, prints handshake_failed and records failed checks without secrets"
+      },
+      "denorm": {
+        "use_case": "hacienda-auth",
+        "workflow_step": 10,
+        "workflow_name": "Invalid successful HTTP response",
+        "tags": [
+          "@hacienda-auth",
+          "@error",
+          "@workflow-step-10"
+        ],
+        "agent_persona_id": "hacienda-sidecar",
+        "agent_persona_name": "Hacienda authentication service",
+        "model": "not-applicable",
+        "user_persona_name": "Fiscal platform operator"
+      },
+      "metadata": {
+        "hitl_required": false,
+        "test_questions": {
+          "es": "¿Se cumple el escenario Invalid successful HTTP response con la evidencia indicada?",
+          "en": "Does Invalid successful HTTP response satisfy the stated verification?"
+        },
+        "openspec_scenario": "Invalid successful HTTP response",
+        "hitl_case_id": "HACIENDA-10",
+        "execution_state": "covered_by_existing_product_tests",
+        "qa_note": "Manifest for handoff only; not an execution result. Gherkin is descriptive and is not wired to a BDD runner."
+      }
+    }
+  ]
+}

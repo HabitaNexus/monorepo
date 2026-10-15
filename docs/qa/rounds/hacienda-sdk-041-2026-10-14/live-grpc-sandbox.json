@@ -1,0 +1,24 @@
+{
+  "started_at": "2026-10-15T05:30:06.299Z",
+  "environment": "sandbox",
+  "sdk_version": "0.4.1",
+  "transport": "real_grpc_to_installed_sdk_to_hacienda_idp",
+  "mocked_http": false,
+  "initial": {
+    "checked_at": "2026-10-15T05:30:06.686Z",
+    "authenticated": true,
+    "access_token_nonempty": true,
+    "access_token_length": 1510,
+    "health": "SERVING",
+    "grpc_port": 50051
+  },
+  "renewal": {
+    "checked_at": "2026-10-15T05:34:41.320Z",
+    "success": true,
+    "token_changed": true,
+    "expiry_extended": true,
+    "access_token_length": 1510,
+    "health": "SERVING"
+  },
+  "completed_at": "2026-10-15T05:34:41.322Z"
+}
