@@ -74,7 +74,7 @@ A script in `apps/hacienda-sidecar` performs the sandbox ROPC call and prints on
 
 ## Risks / Trade-offs
 
-- [Sandbox taxpayer is not in the repo or in Linear] → Manifests and the process can land without it. The live sidecar handshake stays pending until someone supplies the full issued username and `rut-stag` password out of band. The existing direct-HTTP CSV only proves the IDP diagnostic script, not the gRPC/SDK path. Record the result when they do; do not invent credentials.
+- [Sandbox taxpayer is not in the repo or in Linear] → Manifests and the process can land without it. The full issued username and `rut-stag` password must be supplied outside git. The 2026-10-14 live local gRPC check succeeded with SDK 0.4.1; credentials were loaded from an ignored local `.env` and were absent from that file at the final check. The historical direct-HTTP CSV is separate evidence for the IDP diagnostic script. Deployed Secret and ArgoCD validation remain pending.
 - [Access token lifetime is about five minutes] → Callers must use the sidecar (or `getAccessToken()`) per operation rather than cache a token themselves. The sidecar is the only cache.
 - [Refresh token lasts about ten hours, then ROPC runs again with the stored password] → The password stays in the Secret for the life of the process. That is the IDP model. Restrict the Secret to this Deployment's service account.
 - [Single sidecar is the auth path for later B2G calls] → One replica is enough for HAB-45. Readiness must fail when authentication is down so a later caller does not get a pod that cannot mint a token.
@@ -89,4 +89,4 @@ A script in `apps/hacienda-sidecar` performs the sandbox ROPC call and prints on
 
 ## Open Questions
 
-The upstream username defect is fixed and installed SDK integration is covered with an intercepted HTTP transport. Live gRPC authentication and ArgoCD deployment evidence remain pending; see `docs/qa/rounds/hacienda-sdk-041-2026-10-14/round.md`.
+The upstream username defect is fixed and installed SDK integration is covered with an intercepted HTTP transport. Live local gRPC authentication passed with SDK 0.4.1; image and ArgoCD deployment evidence remain pending; see `docs/qa/rounds/hacienda-sdk-041-2026-10-14/round.md`.

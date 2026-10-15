@@ -35,7 +35,8 @@
 - [x] 7.1 Upgrade the published SDK and lockfile to 0.4.1 (upstream fix #39).
 - [x] 7.2 Pass `HACIENDA_IDP_USERNAME` unchanged to `HaciendaClient`, without requiring a padded or reconstructed ID; preserve the legacy ID fallback only when the username is absent. Inject the username from `hacienda-credentials` and redact it from startup errors.
 - [x] 7.3 Verify real installed SDK login, refresh, and re-authentication through in-process gRPC in sandbox and production, with intercepted IDP HTTP responses. Verify rejected credentials expose no token. Evidence: `docs/qa/rounds/hacienda-sdk-041-2026-10-14/round.md`.
-- [ ] 7.4 Run the sidecar gRPC path against the real sandbox with credentials supplied out of band. The historical direct-IDP CSV does not complete this check.
+- [x] 7.4 Run the sidecar gRPC path against the real sandbox using the installed SDK 0.4.1. `GetAuthStatus` returned authenticated/sandbox, `GetAccessToken` returned a non-empty token, and `Health.Check` returned `SERVING`. Evidence: `docs/qa/rounds/hacienda-sdk-041-2026-10-14/live-grpc-sandbox.json`. The historical direct-IDP CSV remains separate.
+- [x] 7.6 Verify automatic renewal through the real local gRPC sidecar after waiting for the SDK renewal window. A second token differed and its expiry was extended; health stayed `SERVING`. Evidence: the `renewal` section of `live-grpc-sandbox.json`. Ten-hour re-authentication remains covered by simulation, not a live wait.
 - [ ] 7.5 Capture the deployed sidecar's ArgoCD sync/health status and confirm the new Secret key is configured.
 
 ## QA traceability (four layers)
@@ -45,7 +46,7 @@ SSOT: `docs/process/qa-traceability.md`
 | Capa | Artifacto |
 | --- | --- |
 | 1 — AC normativos | `specs/tribu-cr-adapter/spec.md` (este cambio) y Acceptance Criteria de HAB-45 |
-| 2 — QA manual de stage | No hay SOP de dominio. El chequeo manual del sidecar es `GetAuthStatus` por gRPC contra sandbox (pending 7.4); `make dev-hacienda-idp-handshake` es un diagnóstico HTTP independiente. Secret fuera de git. Stage sigue en sandbox hasta que exista overlay de producción. |
+| 2 — QA manual de stage | No hay SOP de dominio. El chequeo manual del sidecar es `GetAuthStatus` por gRPC contra sandbox (local 7.4 passed; deployed 7.5 pending); `make dev-hacienda-idp-handshake` es un diagnóstico HTTP independiente. Secret fuera de git. Stage sigue en sandbox hasta que exista overlay de producción. |
 | 3 — Automatizada | `apps/hacienda-sidecar` `npm test` (JUnit en `reports/junit.xml`). CI: `.github/workflows/hacienda-sidecar.yml` |
 | 4 — Ronda HITL | Historical direct-IDP evidence: `docs/qa/rounds/hacienda-oidc-2026-10-01/round.md`; SDK upgrade: `docs/qa/rounds/hacienda-sdk-041-2026-10-14/round.md` |
 
@@ -53,10 +54,10 @@ SSOT: `docs/process/qa-traceability.md`
 
 | Scenario de OpenSpec | Test automatizado | Manual (SOP / Kiwi) | Caso HITL ID | Storybook (solo UI) |
 | --- | --- | --- | --- | --- |
-| Issued IDP username | `hacienda auth grpc` → `preserves the issued sandbox username through gRPC login, refresh and re-authentication` and production equivalent (installed SDK, HTTP intercepted); configuration tests reject invalid explicit usernames | Full username in `hacienda-credentials`; live gRPC sandbox check pending 7.4 | HACIENDA-07 | — |
-| Successful sandbox handshake | `handshake report` → `writes a secret-free CSV when the token endpoint accepts the password` (fixture local). Historical direct-IDP handshake: `idp-handshake-sandbox.csv`; live sidecar gRPC pending 7.4 | `make dev-hacienda-idp-handshake` | HACIENDA-01 | — |
+| Issued IDP username | `hacienda auth grpc` → `preserves the issued sandbox username through gRPC login, refresh and re-authentication` and production equivalent (installed SDK, HTTP intercepted); configuration tests reject invalid explicit usernames | Full username in `hacienda-credentials`; live local gRPC sandbox check passed 7.4; deployed verification pending 7.5 | HACIENDA-07 | — |
+| Successful sandbox handshake | `handshake report` → `writes a secret-free CSV when the token endpoint accepts the password` (fixture local). Historical direct-IDP handshake: `idp-handshake-sandbox.csv`; live local sidecar gRPC passed 7.4; deployed verification pending 7.5 | `make dev-hacienda-idp-handshake` | HACIENDA-01 | — |
 | Rejected credentials | `hacienda auth grpc` → `reports failure and omits secrets when credentials are rejected` | — | HACIENDA-02 | — |
-| Token near expiry | `TokenGateway` → `returns the SDK token on a later fetch without a caller-supplied token` y `authenticates once when refresh fails and still takes no caller token`, plus the installed-SDK gRPC login/refresh/re-authentication regressions. La ventana de 30 s vive en `TokenManager` de `@dojocoding/hacienda-sdk` | — | HACIENDA-03 | — |
+| Token near expiry | `TokenGateway` → `returns the SDK token on a later fetch without a caller-supplied token` y `authenticates once when refresh fails and still takes no caller token`, plus the installed-SDK gRPC login/refresh/re-authentication regressions and live automatic renewal evidence in `live-grpc-sandbox.json`. La ventana de 30 s vive en `TokenManager` de `@dojocoding/hacienda-sdk` | — | HACIENDA-03 | — |
 | Missing password | `boot` → `does not listen when the password is missing`; `loadCredentials` → `fails closed when the password is missing`; `handshake report` → `records credentials_not_configured and does not call the identity provider` | script sin `.env` | HACIENDA-04 | — |
 | Sandbox configuration | `createHaciendaClient` → `sends sandbox authentication to the rut-stag identity provider`; `HAB-45 acceptance criteria` → overlay sandbox | `kubectl kustomize k8s/overlays/dev` | HACIENDA-05 | — |
 | Production configuration | `createHaciendaClient` → `sends production authentication to the rut identity provider` | No hay overlay de producción en este PR | HACIENDA-06 | — |
@@ -66,8 +67,8 @@ SSOT: `docs/process/qa-traceability.md`
 | Criterio | Verificación en `npm test` | Resultado que falta fuera de CI |
 | --- | --- | --- |
 | `apps/hacienda-sidecar/` consume el paquete publicado, sin fork | `depends on the published SDK and does not fork hacienda-cr` (`@dojocoding/hacienda-sdk@0.4.1`; `@dojocoding/hacienda-cr` no existe en npm) | — |
-| OIDC contra Hacienda, sandbox parametrizable a producción | tests de `createHaciendaClient` and installed-SDK gRPC regressions | Live sidecar gRPC pending 7.4; historical CSV only verifies the direct HTTP script |
-| El token se renueva al expirar | tests de `TokenGateway`; la ventana de 30 s es del SDK | — |
+| OIDC contra Hacienda, sandbox parametrizable a producción | tests de `createHaciendaClient` and installed-SDK gRPC regressions | Live local sidecar gRPC passed 7.4; deployed verification pending 7.5; historical CSV only verifies the direct HTTP script |
+| El token se renueva al expirar | tests de `TokenGateway` and installed-SDK gRPC regressions; real local automatic renewal passed 7.6 | `live-grpc-sandbox.json` renewal evidence; deployed verification pending 7.5 |
 | Secretos por Secret de k8s, no hardcodeados | `injects taxpayer secrets from the Kubernetes secret...` y `package source` → `does not embed a credential literal` | Secret real creado fuera de banda |
 | Manifiestos kustomize desplegables por ArgoCD | el mismo test de secretos (base, overlays dev/staging, Applications `backend-dev` y `backend-staging`) | `kubectl kustomize` en la ronda |
 | Smoke de handshake sandbox exitoso | el CSV del fixture prueba el reporte | `idp-handshake-sandbox.csv`: HTTP 200, `access_token_length_1510` |
