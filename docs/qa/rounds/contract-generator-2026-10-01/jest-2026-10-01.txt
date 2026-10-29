@@ -1,0 +1,79 @@
+
+> @habitanexus/backend@0.1.0 test
+> jest --verbose --no-coverage
+
+PASS src/contract/infrastructure/generate-contract.spec.ts
+  generateContract (HAB-31)
+    ✓ guarda el hash de los bytes y una segunda generación coincide (90 ms)
+    ✓ no genera desde ACUERDO_ALCANZADO y no llama al renderer (1 ms)
+    ✓ deja la negociación en PENDIENTE_FIRMA (10 ms)
+
+PASS src/contract/infrastructure/pdf/pdf-lib-determinism.spec.ts
+  pdf-lib determinism (HAB-31)
+    ✓ dos renders en el mismo proceso producen el mismo hash (20 ms)
+
+PASS src/negotiation/infrastructure/persistence/use-cases.spec.ts
+  negotiation use cases (HAB-26)
+    ✓ recorre el ciclo completo hasta PENDIENTE_FIRMA con audit bilateral (3 ms)
+    ✓ el reintento con el mismo attemptId no duplica rondas ni audit
+    ✓ el barrido expira con clock fijo tras 72h sin respuesta (1 ms)
+    ✓ el rechazo exige motivo y cierra con audit (6 ms)
+
+PASS src/negotiation/domain/machine.spec.ts
+  negotiation machine (HAB-26)
+    ✓ acepta directo la propuesta inicial y genera acuerdo sin confirmaciones (1 ms)
+    ✓ la contrapropuesta incrementa la ronda y reinicia el deadline a 72h
+    ✓ itera contrapropuestas hasta el tope y cierra la quinta como EXPIRADA
+    ✓ expira la ronda por silencio de 72h (1 ms)
+    ✓ el rechazo explícito conserva el motivo
+    ✓ una sola confirmación mantiene ACUERDO_ALCANZADO; la bilateral firma
+    ✓ la confirmación duplicada de la misma parte es idempotente
+    ✓ el estado terminal PENDIENTE_FIRMA no tiene salidas (5 ms)
+    ✓ el estado terminal RECHAZADA no tiene salidas
+    ✓ el estado terminal EXPIRADA no tiene salidas (3 ms)
+    ✓ aceptar desde RECHAZADA retorna error estructurado sin mutar (1 ms)
+    ✓ ROUND_EXPIRED no aplica sobre ACUERDO_ALCANZADO (sin turno pendiente)
+
+PASS src/contract/domain/policy.spec.ts
+  política del contrato (HAB-31)
+    ✓ rechaza un depósito inferior a un mes y no arma cláusulas (7 ms)
+    ✓ escribe un depósito de un mes y uno mayor
+    ✓ incluye el aviso del SOP solo si el plazo es menor a 36 meses (1 ms)
+    ✓ mantiene la prórroga tácita aunque la renovación automática sea falsa
+    ✓ no escribe como eficaz un preaviso menor a 90 días
+    ✓ escribe un preaviso de 90 días o más junto al mínimo legal
+    ✓ sin preaviso pactado enuncia tres meses (1 ms)
+    ✓ rechaza un incremento mayor al tope
+    ✓ escribe un incremento dentro del tope
+    ✓ sin porcentaje pactado enuncia la fórmula y no una tasa
+    ✓ en moneda extranjera no aplica el incremento
+    ✓ rechaza un dato mínimo ausente (3 ms)
+    ✓ rechaza una fecha fin que no cuadra con el plazo
+    ✓ suma meses de calendario en UTC
+
+PASS src/negotiation/domain/terms.spec.ts
+  terms document (HAB-26)
+    ✓ el catálogo expone 34 términos (1 ms)
+    ✓ acepta un documento versionado con términos conocidos
+    ✓ rechaza versión, catálogo, vacío y valores no JSON (3 ms)
+  clock (HAB-26)
+    ✓ FixedClock es determinista y avanza por horas
+    ✓ SystemClock devuelve la hora real (1 ms)
+
+PASS src/contract/infrastructure/hexagonal.spec.ts
+  corte hexagonal (HAB-31)
+    ✓ domain y application no importan pdf-lib ni Nest ni Prisma (2 ms)
+
+PASS src/contract/domain/clauses.spec.ts
+  plantilla de 21 cláusulas (HAB-31)
+    ✓ el acuerdo de ejemplo produce las 21 cláusulas en orden (1 ms)
+
+PASS src/contract/domain/reference.spec.ts
+  referencia del contrato (HAB-31)
+    ✓ la misma entrada repite la referencia y otra negociación la cambia (2 ms)
+
+Test Suites: 9 passed, 9 total
+Tests:       42 passed, 42 total
+Snapshots:   0 total
+Time:        0.561 s, estimated 1 s
+Ran all test suites.
