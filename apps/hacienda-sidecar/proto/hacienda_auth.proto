@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package habitanexus.hacienda.auth.v1;
+
+service HaciendaAuth {
+  rpc GetAuthStatus(GetAuthStatusRequest) returns (GetAuthStatusResponse);
+  rpc GetAccessToken(GetAccessTokenRequest) returns (GetAccessTokenResponse);
+}
+
+message GetAuthStatusRequest {}
+
+message GetAuthStatusResponse {
+  bool authenticated = 1;
+  string environment = 2;
+}
+
+message GetAccessTokenRequest {}
+
+message GetAccessTokenResponse {
+  bool success = 1;
+  string access_token = 2;
+  string error = 3;
+}

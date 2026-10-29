@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<testsuites>
+	<testsuite name="HAB-45 acceptance criteria" time="0.006750" disabled="0" errors="0" tests="2" failures="0" skipped="0" hostname="cursor">
+		<testcase name="depends on the published SDK and does not fork hacienda-cr" time="0.003622" classname="test"/>
+		<testcase name="injects taxpayer secrets from the Kubernetes secret and selects sandbox on dev and staging" time="0.002464" classname="test"/>
+	</testsuite>
+	<testsuite name="boot" time="0.003567" disabled="0" errors="0" tests="2" failures="0" skipped="0" hostname="cursor">
+		<testcase name="does not listen when the password is missing" time="0.002480" classname="test"/>
+		<testcase name="listens on port 50051 after credentials load" time="0.000523" classname="test"/>
+	</testsuite>
+	<testsuite name="createHaciendaClient" time="0.003363" disabled="0" errors="0" tests="2" failures="0" skipped="0" hostname="cursor">
+		<testcase name="sends sandbox authentication to the rut-stag identity provider" time="0.002599" classname="test"/>
+		<testcase name="sends production authentication to the rut identity provider" time="0.000208" classname="test"/>
+	</testsuite>
+	<testsuite name="loadCredentials" time="0.003052" disabled="0" errors="0" tests="3" failures="0" skipped="0" hostname="cursor">
+		<testcase name="reads the four Hacienda variables" time="0.000453" classname="test"/>
+		<testcase name="fails closed when the password is missing" time="0.001397" classname="test"/>
+		<testcase name="rejects an environment other than sandbox or production" time="0.000539" classname="test"/>
+	</testsuite>
+	<testsuite name="package source" time="0.006469" disabled="0" errors="0" tests="1" failures="0" skipped="0" hostname="cursor">
+		<testcase name="does not embed a credential literal" time="0.006230" classname="test"/>
+	</testsuite>
+	<testsuite name="handshake report" time="0.213844" disabled="0" errors="0" tests="4" failures="0" skipped="0" hostname="cursor">
+		<testcase name="records credentials_not_configured and does not call the identity provider" time="0.058282" classname="test"/>
+		<testcase name="rejects a token URL that is not loopback" time="0.030803" classname="test"/>
+		<testcase name="redacts a token type that repeats the password" time="0.059780" classname="test"/>
+		<testcase name="writes a secret-free CSV when the token endpoint accepts the password" time="0.064170" classname="test"/>
+	</testsuite>
+	<testsuite name="hacienda auth grpc" time="0.033145" disabled="0" errors="0" tests="2" failures="0" skipped="0" hostname="cursor">
+		<testcase name="reports failure and omits secrets when credentials are rejected" time="0.029147" classname="test"/>
+		<testcase name="returns a non-empty access token when the SDK authenticates" time="0.003347" classname="test"/>
+	</testsuite>
+	<testsuite name="TokenGateway" time="0.001225" disabled="0" errors="0" tests="2" failures="0" skipped="0" hostname="cursor">
+		<testcase name="returns the SDK token on a later fetch without a caller-supplied token" time="0.000478" classname="test"/>
+		<testcase name="authenticates once when refresh fails and still takes no caller token" time="0.000167" classname="test"/>
+	</testsuite>
+	<!-- tests 18 -->
+	<!-- suites 8 -->
+	<!-- pass 18 -->
+	<!-- fail 0 -->
+	<!-- cancelled 0 -->
+	<!-- skipped 0 -->
+	<!-- todo 0 -->
+	<!-- duration_ms 445.664044 -->
+</testsuites>

@@ -1,0 +1,55 @@
+name: hacienda-sidecar
+
+permissions:
+  contents: read
+
+on:
+  push:
+    paths:
+      - "apps/hacienda-sidecar/**"
+      - "k8s/base/backend/**"
+      - "k8s/overlays/dev/**"
+      - "k8s/overlays/staging/**"
+      - "k8s/argocd/applications/backend-dev.yaml"
+      - "k8s/argocd/applications/backend-staging.yaml"
+      - ".github/workflows/hacienda-sidecar.yml"
+  pull_request:
+    paths:
+      - "apps/hacienda-sidecar/**"
+      - "k8s/base/backend/**"
+      - "k8s/overlays/dev/**"
+      - "k8s/overlays/staging/**"
+      - "k8s/argocd/applications/backend-dev.yaml"
+      - "k8s/argocd/applications/backend-staging.yaml"
+      - ".github/workflows/hacienda-sidecar.yml"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/hacienda-sidecar
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: apps/hacienda-sidecar/package-lock.json
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run format:check
+      - run: npm test
+      - run: npm run build
+      - name: Audit runtime dependencies
+        run: npm audit --omit=dev --audit-level=critical --json > reports/security-audit.json
+      - name: Build the sidecar container
+        run: docker build --tag hacienda-sidecar:${{ github.sha }} .
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: hacienda-sidecar-junit
+          path: |
+            apps/hacienda-sidecar/reports/junit.xml
+            apps/hacienda-sidecar/reports/security-audit.json
