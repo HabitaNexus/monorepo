@@ -1,0 +1,39 @@
+# HabitaNexus — entorno reproducible multi-plataforma (Pixi).
+# macOS / Windows / Linux comparten versiones pineadas de Node, JDK,
+# kubectl y Flutter SDK (vía task, pues conda-forge no lo distribuye).
+# Uso: pixi install && pixi run setup-flutter && pixi task list
+[workspace]
+name = "habitanexus-monorepo"
+version = "0.1.0"
+description = "Marketplace de alquiler — entorno dev reproducible"
+channels = ["conda-forge"]
+platforms = ["linux-64", "osx-arm64", "osx-64", "win-64"]
+
+[dependencies]
+nodejs = ">=22,<23"
+openjdk = "17.*"
+
+# Nivel-host (fuera de Pixi, por plataforma): kubectl (brew/choco/apt),
+# minikube, podman y Android SDK. Pixi fija el toolchain de build;
+# el acceso al cluster es responsabilidad de la máquina.
+
+# Versión pineada del Flutter SDK: 3.47.5 (conda-forge no lo distribuye;
+# se clona por task). Actualizar en setup-flutter (unix) + win-64 a la par.
+
+# minikube/podman son nivel-host (en macOS exigen VM) y quedan fuera de Pixi;
+# ver docs/internal/reference/android-build-requirements.md para RAM.
+
+[tasks]
+setup-flutter = { cmd = "test -d .flutter-sdk || git clone --depth 1 --branch 3.47.5 https://github.com/flutter/flutter.git .flutter-sdk", description = "Clona el Flutter SDK pineado (unix)" }
+mobile-pub-get = { cmd = "export PATH=\"$PIXI_PROJECT_ROOT/.flutter-sdk/bin:$PATH\" && cd apps/mobile && flutter pub get", description = "Dependencias Flutter", depends-on = ["setup-flutter"] }
+mobile-analyze = { cmd = "export PATH=\"$PIXI_PROJECT_ROOT/.flutter-sdk/bin:$PATH\" && cd apps/mobile && flutter analyze", description = "Analyzer app completa" }
+mobile-test = { cmd = "export PATH=\"$PIXI_PROJECT_ROOT/.flutter-sdk/bin:$PATH\" && cd apps/mobile && flutter test", description = "Tests Flutter" }
+backend-install = { cmd = "cd apps/backend && npm ci --no-audit --no-fund", description = "npm ci backend" }
+backend-typecheck = { cmd = "cd apps/backend && npm run typecheck", description = "tsc --noEmit" }
+backend-test = { cmd = "cd apps/backend && npm test", description = "jest backend" }
+
+[target.win-64.tasks]
+setup-flutter = { cmd = "if not exist .flutter-sdk git clone --depth 1 --branch 3.47.5 https://github.com/flutter/flutter.git .flutter-sdk", description = "Clona el Flutter SDK pineado (windows)" }
+mobile-pub-get = { cmd = "set PATH=%PIXI_PROJECT_ROOT%\\.flutter-sdk\\bin;%PATH% && cd apps/mobile && flutter pub get", description = "Dependencias Flutter" }
+mobile-analyze = { cmd = "set PATH=%PIXI_PROJECT_ROOT%\\.flutter-sdk\\bin;%PATH% && cd apps/mobile && flutter analyze", description = "Analyzer app completa" }
+mobile-test = { cmd = "set PATH=%PIXI_PROJECT_ROOT%\\.flutter-sdk\\bin;%PATH% && cd apps/mobile && flutter test", description = "Tests Flutter" }
