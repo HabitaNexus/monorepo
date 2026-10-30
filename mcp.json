@@ -5,7 +5,7 @@
       "type": "http",
       "headers": {
         "Accept": "application/json",
-        "X-Goog-Api-Key": "YOUR-API-KEY"
+        "X-Goog-Api-Key": "${STITCH_API_KEY}"
       }
     }
   }

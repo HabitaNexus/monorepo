@@ -38,9 +38,18 @@ final negotiationRepositoryProvider =
     Provider<NegotiationRepository>((ref) => NegotiationRepositoryImpl(
         ref.read(negotiationApiClientProvider)));
 
-/// Rol demo conmutable para probar ambas caras (TENANT/OWNER).
+/// Rol demo conmutable para probar ambas caras (TENANT/OWNER) — solo debug.
 final demoRoleProvider =
     StateProvider<NegotiationParty>((ref) => NegotiationParty.tenant);
+
+/// Rol derivado del login — en prod viene del auth (JWT / SharedPreferences).
+/// Si no hay sesión, default TENANT y UI muestra prompt para iniciar sesión.
+final authRoleProvider = Provider<NegotiationParty>((ref) {
+  // En debug, respeta el toggle demo para probar ambas caras.
+  // En release, vendrá de authProvider; por ahora fallback a tenant.
+  // TODO: cablear a authProvider cuando exista (ej. ref.watch(authProvider).role)
+  return ref.watch(demoRoleProvider);
+});
 
 /// Filtro del comparador (Todos / Solo Diff / Acuerdo).
 final termFilterProvider =
@@ -66,7 +75,7 @@ class NegotiationController
       : super(const AsyncLoading());
 
   String _actor() {
-    final role = _ref.read(demoRoleProvider);
+    final role = _ref.read(authRoleProvider);
     return role == NegotiationParty.tenant
         ? 'demo-tenant-app'
         : 'demo-owner-app';
@@ -104,7 +113,7 @@ class NegotiationController
         }
         byKey[mapping.apiKey] = entry.value;
       }
-      final role = _ref.read(demoRoleProvider);
+      final role = _ref.read(authRoleProvider);
       final id = _negotiationId;
       if (id == null || id.isEmpty || !current.fromBackend) {
         return _demoCounter(current, byKey, role);
@@ -204,7 +213,7 @@ class NegotiationController
     if (current == null) return;
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
-      final role = _ref.read(demoRoleProvider);
+      final role = _ref.read(authRoleProvider);
       final id = _negotiationId;
       if (id == null || id.isEmpty || !current.fromBackend) {
         final tenantOk =
