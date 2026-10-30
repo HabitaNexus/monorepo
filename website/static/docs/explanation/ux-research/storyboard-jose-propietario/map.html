@@ -1,0 +1,1305 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Storyboard: Jose Penaranda — Propietario que adopta HabitaNexus</title>
+  <style>
+    /* ── Reset & Base ──────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #1a1a2e;
+      color: #e0e0e0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      min-height: 100vh;
+      padding: 32px 24px 120px;
+    }
+
+    /* ── Wrapper ───────────────────────────────────────────────── */
+    .uxrt-map {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    /* ── Header ────────────────────────────────────────────────── */
+    .uxrt-header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+    .uxrt-header__eyebrow {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: #888;
+      margin-bottom: 8px;
+    }
+    .uxrt-header__title {
+      font-size: 28px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+    .uxrt-header__subtitle {
+      color: #999;
+      font-size: 14px;
+    }
+
+    /* ── Persona Card ──────────────────────────────────────────── */
+    .uxrt-persona-card {
+      background: #222244;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 28px;
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+    .uxrt-persona-card__avatar {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      flex-shrink: 0;
+    }
+    .uxrt-persona-card__body { flex: 1; }
+    .uxrt-persona-card__name {
+      font-weight: 700;
+      font-size: 16px;
+      color: #fff;
+    }
+    .uxrt-persona-card__meta {
+      font-size: 13px;
+      color: #aaa;
+      margin-top: 4px;
+    }
+    .uxrt-persona-card__pain {
+      font-size: 13px;
+      color: #ccc;
+      margin-top: 8px;
+      line-height: 1.5;
+    }
+    .uxrt-persona-card__pain strong {
+      color: #667eea;
+    }
+
+    /* ── Grid ──────────────────────────────────────────────────── */
+    .uxrt-grid {
+      display: grid;
+      grid-template-columns: 140px repeat(var(--phase-count, 5), 1fr);
+      gap: 0;
+      margin-bottom: 0;
+    }
+
+    /* Responsive: horizontal scroll on narrow viewports */
+    @media (max-width: 768px) {
+      .uxrt-grid {
+        overflow-x: auto;
+        display: block;
+        white-space: nowrap;
+      }
+      .uxrt-grid > * {
+        display: inline-block;
+        vertical-align: top;
+      }
+    }
+
+    /* ── Grid — Row Label (first column) ───────────────────────── */
+    .uxrt-row-label {
+      padding: 16px 12px;
+      font-size: 12px;
+      color: #aaa;
+      display: flex;
+      align-items: center;
+      line-height: 1.4;
+    }
+    .uxrt-row-label--header {
+      background: #333355;
+      font-weight: 700;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      border-radius: 8px 0 0 0;
+    }
+    .uxrt-row-label--emotion  { background: #2a2a4a; }
+    .uxrt-row-label--actions  { background: #252545; }
+    .uxrt-row-label--thoughts { background: #2a2a4a; }
+    .uxrt-row-label--frustrations { background: #252545; }
+    .uxrt-row-label--touchpoints  { background: #2a2a4a; }
+    .uxrt-row-label--opportunities {
+      background: #1a3a2a;
+      color: #6bcb77;
+      border-radius: 0 0 0 8px;
+    }
+
+    /* ── Grid — Phase Header Cells ─────────────────────────────── */
+    .uxrt-phase-header {
+      padding: 12px;
+      text-align: center;
+      font-weight: 700;
+      font-size: 12px;
+    }
+    .uxrt-phase-header--color-0 { background: #4a3f6b; color: #e8d5ff; }
+    .uxrt-phase-header--color-1 { background: #3f5a6b; color: #d5f0ff; }
+    .uxrt-phase-header--color-2 { background: #3f6b5a; color: #d5ffe8; }
+    .uxrt-phase-header--color-3 { background: #6b5a3f; color: #ffe8d5; }
+    .uxrt-phase-header--color-4 { background: #5a3f6b; color: #e8d5ff; }
+    /* Last phase header gets a rounded top-right corner */
+    .uxrt-phase-header--last { border-radius: 0 8px 0 0; }
+
+    /* ── Grid — Emotion Cells ──────────────────────────────────── */
+    .uxrt-emotion-cell {
+      background: #2a2a4a;
+      padding: 12px;
+      text-align: center;
+    }
+    .uxrt-emotion-cell__emoji { font-size: 32px; }
+    .uxrt-emotion-cell__label {
+      font-size: 11px;
+      margin-top: 4px;
+      display: block;
+    }
+    .uxrt-emotion-cell__bar-track {
+      background: #333;
+      border-radius: 4px;
+      height: 6px;
+      margin-top: 6px;
+    }
+    .uxrt-emotion-cell__bar-fill {
+      height: 6px;
+      border-radius: 4px;
+    }
+
+    /* ── Grid — Action / Text Cells ────────────────────────────── */
+    .uxrt-cell {
+      padding: 12px;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+    .uxrt-cell--actions      { background: #252545; color: #ddd; }
+    .uxrt-cell--thoughts     { background: #2a2a4a; color: #ddd; font-style: italic; }
+    .uxrt-cell--frustrations { background: #252545; color: #ff8a8a; }
+    .uxrt-cell--touchpoints  { background: #2a2a4a; color: #88aaff; }
+    .uxrt-cell--opportunities {
+      background: #1a3a2a;
+      color: #a8e6a1;
+    }
+    /* Last column bottom-right corner rounding */
+    .uxrt-cell--last-col-opportunities { border-radius: 0 0 8px 0; }
+
+    /* ── Analysis Panels ───────────────────────────────────────── */
+    .uxrt-pain-points {
+      margin-top: 28px;
+      background: #3a1a1a;
+      border-radius: 12px;
+      padding: 20px;
+      border-left: 4px solid #ff6b6b;
+    }
+    .uxrt-pain-points__header {
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #ff6b6b;
+      margin-bottom: 12px;
+      font-weight: 700;
+    }
+    .uxrt-pain-points__grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    @media (max-width: 600px) {
+      .uxrt-pain-points__grid { grid-template-columns: 1fr; }
+    }
+    .uxrt-pain-points__item {
+      font-size: 13px;
+      color: #ddd;
+      line-height: 1.5;
+    }
+
+    .uxrt-moments {
+      margin-top: 16px;
+      background: #1a2a3a;
+      border-radius: 12px;
+      padding: 20px;
+      border-left: 4px solid #667eea;
+    }
+    .uxrt-moments__header {
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #667eea;
+      margin-bottom: 12px;
+      font-weight: 700;
+    }
+    .uxrt-moments__item {
+      font-size: 13px;
+      color: #ddd;
+      line-height: 1.8;
+      margin-bottom: 8px;
+    }
+    .uxrt-moments__item:last-child { margin-bottom: 0; }
+    .uxrt-moments__phase-ref {
+      color: #88aaff;
+      font-weight: 700;
+    }
+
+    /* ── Footer ────────────────────────────────────────────────── */
+    .uxrt-footer {
+      margin-top: 24px;
+      text-align: center;
+      font-size: 11px;
+      color: #666;
+      border-top: 1px solid #333;
+      padding-top: 16px;
+    }
+
+    /* ── Editor Controls (sticky bar) ──────────────────────────── */
+    .uxrt-editor-controls {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #111128;
+      border-top: 1px solid #333355;
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      z-index: 1000;
+    }
+    .uxrt-editor-controls__btn {
+      padding: 8px 18px;
+      border-radius: 6px;
+      border: none;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+    .uxrt-editor-controls__btn:hover { opacity: 0.85; }
+    .uxrt-editor-controls__btn--save {
+      background: #667eea;
+      color: #fff;
+    }
+    .uxrt-editor-controls__btn--refresh {
+      background: #2a2a4a;
+      color: #aac4ff;
+      border: 1px solid #445;
+    }
+    .uxrt-editor-controls__status {
+      font-size: 12px;
+      color: #6bcb77;
+      margin-left: 8px;
+      min-width: 180px;
+    }
+
+    /* ── Contenteditable Styling ────────────────────────────────── */
+    [contenteditable="true"] {
+      outline: none;
+      cursor: text;
+      border-radius: 3px;
+      transition: background 0.15s, box-shadow 0.15s;
+    }
+    [contenteditable="true"]:hover {
+      background: rgba(255,255,255,0.04);
+    }
+    [contenteditable="true"]:focus {
+      background: rgba(102, 126, 234, 0.12);
+      box-shadow: inset 0 0 0 1px rgba(102, 126, 234, 0.5);
+    }
+
+    /* ── Comic grid container ───────────────────────────────────── */
+    .uxrt-comic-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      padding: 20px 0;
+    }
+
+    @media (max-width: 900px) {
+      .uxrt-comic-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .uxrt-comic-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* ── Individual frame card ── */
+    .uxrt-comic-frame {
+      background: #222244;
+      border: 2px solid #333366;
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      position: relative;
+    }
+
+    .uxrt-comic-frame:focus-within {
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+    }
+
+    /* ── Frame header ── */
+    .uxrt-comic-frame__header {
+      background: #2a2a55;
+      border-bottom: 2px solid #333366;
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .uxrt-comic-frame__scene-label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #c0c0e0;
+      letter-spacing: 0.02em;
+    }
+
+    .uxrt-comic-frame__scene-icon {
+      font-size: 16px;
+      line-height: 1;
+    }
+
+    /* ── Emotion badge (top-right corner) ── */
+    .uxrt-comic-frame__emotion {
+      font-size: 20px;
+      line-height: 1;
+      cursor: default;
+      flex-shrink: 0;
+    }
+
+    /* ── Frame body: scene description (main illustration area) ── */
+    .uxrt-comic-frame__body {
+      flex: 1;
+      padding: 14px;
+      min-height: 100px;
+      background: #1e1e40;
+      border-bottom: 1px solid #2d2d55;
+      font-size: 14px;
+      line-height: 1.55;
+      color: #d0d0f0;
+    }
+
+    .uxrt-comic-frame__body[contenteditable]:empty::before {
+      content: attr(data-placeholder);
+      color: #555580;
+      pointer-events: none;
+    }
+
+    /* ── Setting row ── */
+    .uxrt-comic-frame__setting-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+      padding: 8px 14px;
+      border-bottom: 1px solid #2d2d55;
+      background: #222244;
+    }
+
+    .uxrt-comic-frame__setting-icon {
+      font-size: 12px;
+      color: #667eea;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .uxrt-comic-frame__setting {
+      font-size: 12px;
+      color: #8888bb;
+      flex: 1;
+      line-height: 1.4;
+    }
+
+    .uxrt-comic-frame__setting[contenteditable]:empty::before {
+      content: attr(data-placeholder);
+      color: #444466;
+      pointer-events: none;
+    }
+
+    /* ── Dialogue bubble ── */
+    .uxrt-comic-frame__dialogue-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+      padding: 8px 14px;
+      border-bottom: 1px solid #2d2d55;
+      background: #252248;
+    }
+
+    .uxrt-comic-frame__dialogue-icon {
+      font-size: 14px;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .uxrt-comic-frame__dialogue {
+      font-size: 13px;
+      font-style: italic;
+      color: #b0b0dd;
+      flex: 1;
+      line-height: 1.4;
+    }
+
+    .uxrt-comic-frame__dialogue[contenteditable]:empty::before {
+      content: attr(data-placeholder);
+      color: #444466;
+      pointer-events: none;
+    }
+
+    /* ── Mood footer ── */
+    .uxrt-comic-frame__mood-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      background: #1c1c3a;
+    }
+
+    .uxrt-comic-frame__mood-label {
+      font-size: 11px;
+      color: #555580;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      flex-shrink: 0;
+    }
+
+    .uxrt-comic-frame__mood {
+      font-size: 12px;
+      font-weight: 600;
+      color: #9090cc;
+      flex: 1;
+    }
+
+    .uxrt-comic-frame__mood[contenteditable]:empty::before {
+      content: attr(data-placeholder);
+      color: #444466;
+      pointer-events: none;
+    }
+
+    /* ── Emotion curve section ──────────────────────────────────── */
+    .uxrt-emotion-section {
+      margin-top: 28px;
+      margin-bottom: 4px;
+    }
+    .uxrt-emotion-section__title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #666;
+      margin-bottom: 10px;
+    }
+    .uxrt-emotion-row {
+      display: grid;
+      grid-template-columns: 140px repeat(6, 1fr);
+      gap: 0;
+    }
+
+    /* ── Analysis central message ───────────────────────────────── */
+    .uxrt-central-message {
+      margin-top: 28px;
+      background: #1a1a3a;
+      border-radius: 12px;
+      padding: 20px 24px;
+      border-left: 4px solid #9b59b6;
+    }
+    .uxrt-central-message__label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #9b59b6;
+      margin-bottom: 8px;
+      font-weight: 700;
+    }
+    .uxrt-central-message__text {
+      font-size: 14px;
+      color: #d0d0f0;
+      line-height: 1.6;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+  <div class="uxrt-map">
+
+    <!-- Header -->
+    <div class="uxrt-header">
+      <div class="uxrt-header__eyebrow">Experience Map · storyboard</div>
+      <h1 class="uxrt-header__title" contenteditable="true" data-field="meta.title">Storyboard: Jose Penaranda — Propietario que adopta HabitaNexus</h1>
+    </div>
+
+    <!-- persona-card component -->
+    <div class="uxrt-persona-card">
+      <div class="uxrt-persona-card__avatar">
+        <span contenteditable="true" data-field="persona.avatar_emoji">👴</span>
+      </div>
+      <div class="uxrt-persona-card__body">
+        <div class="uxrt-persona-card__name"
+             contenteditable="true"
+             data-field="persona.name">Jose Penaranda</div>
+        <div class="uxrt-persona-card__meta">
+          <span contenteditable="true" data-field="persona.age">65</span> años
+          · <span contenteditable="true" data-field="persona.role">Propietario pensionado / Ebanista retirado de la CCSS</span>
+          · <span contenteditable="true" data-field="persona.location">San Rafael de Heredia, Costa Rica</span>
+        </div>
+        <div class="uxrt-persona-card__pain">
+          <strong>Dolor principal:</strong>
+          <span contenteditable="true" data-field="persona.primary_pain">Inquilinos le danan las propiedades (paredes, sanitarios, tuberias, puertas, llavines) y no tiene forma de probar el estado inicial porque nunca documento con fotos fechadas ni acta de entrega. Las fotos que tiene son recicladas de publicaciones viejas en grupos de Facebook.</span>
+        </div>
+        <div class="uxrt-persona-card__context" style="font-size:13px;color:#999;margin-top:6px;line-height:1.5;">
+          <span contenteditable="true" data-field="persona.context">Pensionado de 65 anos con 40 anos de experiencia en la CCSS. Ebanista de oficio. Tiene 2 propiedades en alquiler en San Rafael de Heredia. Casado, sin hijos. Su esposa padece hipertension y diabetes — el ruido de inquilinos le afecta la presion. Usa pickup para ir a las propiedades. Publica con letrero fisico y referidos por WhatsApp, no usa Facebook ni plataformas digitales.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- comic-frames component — one card per scene -->
+    <div class="uxrt-comic-grid">
+
+      <!-- Scene 1 -->
+      <div class="uxrt-comic-frame" data-phase="scene-1">
+        <div class="uxrt-comic-frame__header">
+          <div class="uxrt-comic-frame__scene-label">
+            <span class="uxrt-comic-frame__scene-icon">🎬</span>
+            <span contenteditable="true"
+                  data-field="label"
+                  data-phase="scene-1">Escena 1: Contexto</span>
+          </div>
+          <div class="uxrt-comic-frame__emotion"
+               contenteditable="true"
+               data-field="emotion.emoji"
+               data-phase="scene-1"
+               title="Emoción en esta escena">😤</div>
+        </div>
+        <div class="uxrt-comic-frame__body"
+             contenteditable="true"
+             data-field="scene_description"
+             data-phase="scene-1"
+             data-placeholder="Describe lo que ocurre en esta escena...">Jose esta en una de sus propiedades en San Rafael de Heredia haciendo la ronda del mes. El contrato informal (un papel que le hizo un conocido) se vence en 3 meses. Mientras inspecciona, nota que los inquilinos actuales le taponearon las tuberias del desague y hay una fuga en el bano. El llavin de la puerta principal esta forzado. Su esposa lo acompana y se le sube la presion por el estres. Jose le dice al inquilino que repare, pero el inquilino le responde que 'eso ya estaba asi cuando llegue'. Jose busca las fotos que tiene en el celular pero son fotos recicladas de hace meses que usaba para publicar en los grupos de Facebook de Guarari y Milpa de Heredia — no reflejan el estado real del inmueble cuando se firmo el contrato. No tiene forma de probar nada.</div>
+        <div class="uxrt-comic-frame__setting-row">
+          <span class="uxrt-comic-frame__setting-icon">📍</span>
+          <div class="uxrt-comic-frame__setting"
+               contenteditable="true"
+               data-field="scene_setting"
+               data-phase="scene-1"
+               data-placeholder="¿Dónde y cuándo ocurre?">Sabado a las 5pm, en la propiedad de alquiler en San Rafael de Heredia. Ya no hay ferreterias abiertas para buscar repuestos de fontaneria. Su esposa le insistio en ir a revisar.</div>
+        </div>
+        <div class="uxrt-comic-frame__dialogue-row">
+          <span class="uxrt-comic-frame__dialogue-icon">💬</span>
+          <div class="uxrt-comic-frame__dialogue"
+               contenteditable="true"
+               data-field="scene_dialogue"
+               data-phase="scene-1"
+               data-placeholder="Diálogo o pensamiento (opcional)...">Jose piensa: 'Diay, y ahora de donde saco un fontanero un sabado a esta hora? Ya me gaste lo de las puertas y este mae me dejo todo hecho lena...' Su esposa le dice: 'Jose, tranquilo, no se me vaya a enfermar usted tambien por estos carajillos...'</div>
+        </div>
+        <div class="uxrt-comic-frame__mood-row">
+          <span class="uxrt-comic-frame__mood-label">Mood:</span>
+          <div class="uxrt-comic-frame__mood"
+               contenteditable="true"
+               data-field="scene_mood"
+               data-phase="scene-1"
+               data-placeholder="tenso, esperanzador, frustrado...">Enojado y frustrado</div>
+        </div>
+      </div>
+
+      <!-- Scene 2 -->
+      <div class="uxrt-comic-frame" data-phase="scene-2">
+        <div class="uxrt-comic-frame__header">
+          <div class="uxrt-comic-frame__scene-label">
+            <span class="uxrt-comic-frame__scene-icon">😰</span>
+            <span contenteditable="true"
+                  data-field="label"
+                  data-phase="scene-2">Escena 2: Problema</span>
+          </div>
+          <div class="uxrt-comic-frame__emotion"
+               contenteditable="true"
+               data-field="emotion.emoji"
+               data-phase="scene-2"
+               title="Emoción en esta escena">😰</div>
+        </div>
+        <div class="uxrt-comic-frame__body"
+             contenteditable="true"
+             data-field="scene_description"
+             data-phase="scene-2"
+             data-placeholder="Describe lo que ocurre en esta escena...">Jose esta en su casa. Su esposa tuvo que tomarse la pastilla de la presion despues de la visita a la propiedad. Jose revisa el contrato informal — el papel que le hizo un conocido — y se da cuenta de que no tiene clausula de inspeccion, no tiene acta de entrega, no tiene fotos fechadas, y el deposito que le pidio al inquilino fue en efectivo sin recibo. El hermano de Jose lo llama por telefono y le cuenta que a el le paso lo mismo con un inquilino que le arranco las puertas. Jose le dice: 'Y que hizo usted?' El hermano le responde: 'Nada, mae, que iba a hacer? No tenia como probar nada.' Jose decide que cuando se venza el contrato en 3 meses, no va a renovar — pero esta vez quiere hacer las cosas bien.</div>
+        <div class="uxrt-comic-frame__setting-row">
+          <span class="uxrt-comic-frame__setting-icon">📍</span>
+          <div class="uxrt-comic-frame__setting"
+               contenteditable="true"
+               data-field="scene_setting"
+               data-phase="scene-2"
+               data-placeholder="¿Dónde y cuándo ocurre?">Domingo por la manana, tomando cafe en la cocina con su esposa en su casa de San Rafael.</div>
+        </div>
+        <div class="uxrt-comic-frame__dialogue-row">
+          <span class="uxrt-comic-frame__dialogue-icon">💬</span>
+          <div class="uxrt-comic-frame__dialogue"
+               contenteditable="true"
+               data-field="scene_dialogue"
+               data-phase="scene-2"
+               data-placeholder="Diálogo o pensamiento (opcional)...">El hermano le dice por telefono: 'Mae, a mi un sobrino me dijo que hay una aplicacion nueva para eso de los alquileres, que le hace contrato y todo. Busque en el play store.' Jose piensa: 'Yo ya estoy viejo para esas varas de tecnologia... pero asi como estoy, no puedo seguir.'</div>
+        </div>
+        <div class="uxrt-comic-frame__mood-row">
+          <span class="uxrt-comic-frame__mood-label">Mood:</span>
+          <div class="uxrt-comic-frame__mood"
+               contenteditable="true"
+               data-field="scene_mood"
+               data-phase="scene-2"
+               data-placeholder="tenso, esperanzador, frustrado...">Abrumado</div>
+        </div>
+      </div>
+
+      <!-- Scene 3 -->
+      <div class="uxrt-comic-frame" data-phase="scene-3">
+        <div class="uxrt-comic-frame__header">
+          <div class="uxrt-comic-frame__scene-label">
+            <span class="uxrt-comic-frame__scene-icon">🔎</span>
+            <span contenteditable="true"
+                  data-field="label"
+                  data-phase="scene-3">Escena 3: Busqueda</span>
+          </div>
+          <div class="uxrt-comic-frame__emotion"
+               contenteditable="true"
+               data-field="emotion.emoji"
+               data-phase="scene-3"
+               title="Emoción en esta escena">🤨</div>
+        </div>
+        <div class="uxrt-comic-frame__body"
+             contenteditable="true"
+             data-field="scene_description"
+             data-phase="scene-3"
+             data-placeholder="Describe lo que ocurre en esta escena...">Jose le pide a su esposa que le ayude a buscar en el celular lo que le dijo el hermano. Ella busca 'aplicacion alquileres Costa Rica' en el Play Store. Encuentran varias opciones pero la mayoria son para buscar alquiler como inquilino, no para publicar como propietario. Jose se frustra con el celular — la letra es muy pequena y las apps le piden crear cuenta con correo electronico que casi no usa. Su esposa le dice: 'Espera, aqui hay una que dice que le hace el contrato a uno y le guardan el deposito.'</div>
+        <div class="uxrt-comic-frame__setting-row">
+          <span class="uxrt-comic-frame__setting-icon">📍</span>
+          <div class="uxrt-comic-frame__setting"
+               contenteditable="true"
+               data-field="scene_setting"
+               data-phase="scene-3"
+               data-placeholder="¿Dónde y cuándo ocurre?">Domingo despues de almuerzo, en la sala con el celular de su esposa.</div>
+        </div>
+        <div class="uxrt-comic-frame__dialogue-row">
+          <span class="uxrt-comic-frame__dialogue-icon">💬</span>
+          <div class="uxrt-comic-frame__dialogue"
+               contenteditable="true"
+               data-field="scene_dialogue"
+               data-phase="scene-3"
+               data-placeholder="Diálogo o pensamiento (opcional)...">Su esposa le dice: 'Vea Jose, esta dice HabitaNexus — negociacion digital de contratos, deposito protegido, inspeccion con fotos. Eso es lo que usted necesita.' Jose dice: 'Y eso no sera una estafa? Yo lo que quiero es algo que me proteja, no meterme en mas problemas.' Su esposa: 'Pues peor no puede estar. Descarguela a ver.'</div>
+        </div>
+        <div class="uxrt-comic-frame__mood-row">
+          <span class="uxrt-comic-frame__mood-label">Mood:</span>
+          <div class="uxrt-comic-frame__mood"
+               contenteditable="true"
+               data-field="scene_mood"
+               data-phase="scene-3"
+               data-placeholder="tenso, esperanzador, frustrado...">Esceptico pero curioso</div>
+        </div>
+      </div>
+
+      <!-- Scene 4 -->
+      <div class="uxrt-comic-frame" data-phase="scene-4">
+        <div class="uxrt-comic-frame__header">
+          <div class="uxrt-comic-frame__scene-label">
+            <span class="uxrt-comic-frame__scene-icon">💡</span>
+            <span contenteditable="true"
+                  data-field="label"
+                  data-phase="scene-4">Escena 4: Descubrimiento</span>
+          </div>
+          <div class="uxrt-comic-frame__emotion"
+               contenteditable="true"
+               data-field="emotion.emoji"
+               data-phase="scene-4"
+               title="Emoción en esta escena">😮</div>
+        </div>
+        <div class="uxrt-comic-frame__body"
+             contenteditable="true"
+             data-field="scene_description"
+             data-phase="scene-4"
+             data-placeholder="Describe lo que ocurre en esta escena...">Jose y su esposa abren HabitaNexus. El flujo de registro le pide la cedula y se la valida con SINPE. 'Mira, ya sabe quien soy', le dice a su esposa. Empieza a registrar la propiedad y ve que le pide fotos de cada espacio con dimensiones, el tipo de piso, el sistema de agua caliente, si permite mascotas, bebes, huespedes temporales — todo desglosado. Jose piensa: 'Esto es lo que yo deberia haberle puesto al inquilino desde el principio.' Cuando llega a la parte del video tour, su esposa le graba un recorrido con el celular. Pero lo que mas le llama la atencion es que la app le dice que el deposito lo guarda un tercero, no el — y que al inicio del contrato se levanta un acta de entrega con fotos que ninguna de las dos partes puede modificar despues.</div>
+        <div class="uxrt-comic-frame__setting-row">
+          <span class="uxrt-comic-frame__setting-icon">📍</span>
+          <div class="uxrt-comic-frame__setting"
+               contenteditable="true"
+               data-field="scene_setting"
+               data-phase="scene-4"
+               data-placeholder="¿Dónde y cuándo ocurre?">Lunes por la manana. Jose se levanta temprano, agarra la pickup y va a la propiedad con el celular de su esposa (que tiene mejor camara). Va solo porque ella se queda descansando. Es la primera vez que va a la propiedad con la intencion de documentarla, no de repararla.</div>
+        </div>
+        <div class="uxrt-comic-frame__dialogue-row">
+          <span class="uxrt-comic-frame__dialogue-icon">💬</span>
+          <div class="uxrt-comic-frame__dialogue"
+               contenteditable="true"
+               data-field="scene_dialogue"
+               data-phase="scene-4"
+               data-placeholder="Diálogo o pensamiento (opcional)...">Jose piensa mientras graba el recorrido: 'Si yo hubiera tenido esto hace dos anos, ese mae no me sale con que ya estaba asi. Aqui queda todo grabado.' Le manda un audio de WhatsApp a su hermano: 'Mae, descargue esa vara que se llama HabitaNexus. Aqui le piden a uno foto de todo y hasta le guardan la plata del deposito. Cuando se le venza el contrato a usted, metalo por aqui.'</div>
+        </div>
+        <div class="uxrt-comic-frame__mood-row">
+          <span class="uxrt-comic-frame__mood-label">Mood:</span>
+          <div class="uxrt-comic-frame__mood"
+               contenteditable="true"
+               data-field="scene_mood"
+               data-phase="scene-4"
+               data-placeholder="tenso, esperanzador, frustrado...">Sorprendido positivamente</div>
+        </div>
+      </div>
+
+      <!-- Scene 5 -->
+      <div class="uxrt-comic-frame" data-phase="scene-5">
+        <div class="uxrt-comic-frame__header">
+          <div class="uxrt-comic-frame__scene-label">
+            <span class="uxrt-comic-frame__scene-icon">✨</span>
+            <span contenteditable="true"
+                  data-field="label"
+                  data-phase="scene-5">Escena 5: Solucion</span>
+          </div>
+          <div class="uxrt-comic-frame__emotion"
+               contenteditable="true"
+               data-field="emotion.emoji"
+               data-phase="scene-5"
+               title="Emoción en esta escena">😌</div>
+        </div>
+        <div class="uxrt-comic-frame__body"
+             contenteditable="true"
+             data-field="scene_description"
+             data-phase="scene-5"
+             data-placeholder="Describe lo que ocurre en esta escena...">Pasaron los 3 meses. El inquilino problematico se fue. Jose contrato un fontanero para arreglar las tuberias y el mismo reparo las puertas y llavines. La propiedad ya esta publicada en HabitaNexus con todas las fotos, el video tour, las dimensiones de cada cuarto, y las condiciones claras: no se permiten modificaciones sin autorizacion, inspeccion mensual, y restricciones de ruido por la salud de su esposa que vive al lado. Le llega una propuesta de una inquilina joven — Mery, analista de ciberseguridad. Ella propone C280,000 al mes, 3 anos de contrato, tiene un gato. Jose revisa la propuesta en la app: ve el perfil verificado de Mery, sus calificaciones de contratos anteriores, y puede contraproponer. Acepta todo menos el gato — contrapropone 'gato solo interior'. Mery acepta. Antes de firmar, la app agenda la inspeccion inicial: ambos van a la propiedad, la app genera el acta de entrega con fotos de cada espacio, estado de pisos, paredes, llavines, sanitario, tuberias — todo con fecha, hora y firma digital de ambos.</div>
+        <div class="uxrt-comic-frame__setting-row">
+          <span class="uxrt-comic-frame__setting-icon">📍</span>
+          <div class="uxrt-comic-frame__setting"
+               contenteditable="true"
+               data-field="scene_setting"
+               data-phase="scene-5"
+               data-placeholder="¿Dónde y cuándo ocurre?">Entre semana por la tarde, Jose revisa la propuesta desde su casa. La inspeccion inicial es el sabado siguiente en la propiedad.</div>
+        </div>
+        <div class="uxrt-comic-frame__dialogue-row">
+          <span class="uxrt-comic-frame__dialogue-icon">💬</span>
+          <div class="uxrt-comic-frame__dialogue"
+               contenteditable="true"
+               data-field="scene_dialogue"
+               data-phase="scene-5"
+               data-placeholder="Diálogo o pensamiento (opcional)...">Jose le muestra la app a su esposa en la cocina: 'Vea, esta muchacha tiene buenas calificaciones y trabaja en computacion. Dice que tiene un gato pero yo le puse que solo adentro. Ella acepto.' Su esposa: 'Y el deposito?' Jose: 'No lo toco yo ni lo toca ella. Lo guarda la aplicacion y solo se suelta al final con las fotos del acta. Si me dana algo, queda documentado desde hoy.' Su esposa: 'Diay, hasta que por fin!' El sabado en la inspeccion, Mery le dice: 'Don Jose, que bueno que todo queda con fotos. Asi los dos estamos tranquilos.'</div>
+        </div>
+        <div class="uxrt-comic-frame__mood-row">
+          <span class="uxrt-comic-frame__mood-label">Mood:</span>
+          <div class="uxrt-comic-frame__mood"
+               contenteditable="true"
+               data-field="scene_mood"
+               data-phase="scene-5"
+               data-placeholder="tenso, esperanzador, frustrado...">Tranquilo</div>
+        </div>
+      </div>
+
+      <!-- Scene 6 -->
+      <div class="uxrt-comic-frame" data-phase="scene-6">
+        <div class="uxrt-comic-frame__header">
+          <div class="uxrt-comic-frame__scene-label">
+            <span class="uxrt-comic-frame__scene-icon">🎉</span>
+            <span contenteditable="true"
+                  data-field="label"
+                  data-phase="scene-6">Escena 6: Resultado</span>
+          </div>
+          <div class="uxrt-comic-frame__emotion"
+               contenteditable="true"
+               data-field="emotion.emoji"
+               data-phase="scene-6"
+               title="Emoción en esta escena">😊</div>
+        </div>
+        <div class="uxrt-comic-frame__body"
+             contenteditable="true"
+             data-field="scene_description"
+             data-phase="scene-6"
+             data-placeholder="Describe lo que ocurre en esta escena...">Un mes despues de que Mery se mudo. Jose hace su primera inspeccion mensual a traves de la app — agenda la visita, Mery confirma, y cuando llega todo esta en orden. El gato esta adentro como se pacto. Jose registra en la app 'sin hallazgos' con fotos. De regreso a su casa, su esposa le pregunta como esta la propiedad. Jose le dice que todo bien, la muchacha es ordenada. Y si algun dia hay un problema, ahora si queda todo registrado. Su esposa le dice que llame al hermano para que deje de sufrir con el otro inquilino. Esa noche Jose le manda al hermano el link de HabitaNexus por WhatsApp — el mismo canal por donde siempre ha manejado sus alquileres, pero esta vez para referirlo a algo que si lo protege.</div>
+        <div class="uxrt-comic-frame__setting-row">
+          <span class="uxrt-comic-frame__setting-icon">📍</span>
+          <div class="uxrt-comic-frame__setting"
+               contenteditable="true"
+               data-field="scene_setting"
+               data-phase="scene-6"
+               data-placeholder="¿Dónde y cuándo ocurre?">Sabado por la manana — inspeccion en la propiedad, luego de regreso en su casa por la tarde.</div>
+        </div>
+        <div class="uxrt-comic-frame__dialogue-row">
+          <span class="uxrt-comic-frame__dialogue-icon">💬</span>
+          <div class="uxrt-comic-frame__dialogue"
+               contenteditable="true"
+               data-field="scene_dialogue"
+               data-phase="scene-6"
+               data-placeholder="Diálogo o pensamiento (opcional)...">Jose piensa mientras maneja la pickup de regreso: 'Cuarenta anos trabajando en la CCSS y nunca pense que un telefono me iba a resolver lo de los alquileres.' Su esposa al verlo llegar tranquilo: 'Y? Como esta la propiedad?' Jose: 'Todo en orden. La muchacha hasta me ofrecio cafe.'</div>
+        </div>
+        <div class="uxrt-comic-frame__mood-row">
+          <span class="uxrt-comic-frame__mood-label">Mood:</span>
+          <div class="uxrt-comic-frame__mood"
+               contenteditable="true"
+               data-field="scene_mood"
+               data-phase="scene-6"
+               data-placeholder="tenso, esperanzador, frustrado...">Satisfecho</div>
+        </div>
+      </div>
+
+    </div><!-- end .uxrt-comic-grid -->
+
+    <!-- emotion-curve component — emotion row per scene -->
+    <div class="uxrt-emotion-section">
+      <div class="uxrt-emotion-section__title">Curva emocional</div>
+      <div class="uxrt-emotion-row">
+
+        <!-- Row label (emitted once) -->
+        <div class="uxrt-row-label uxrt-row-label--emotion">😊 Emociones</div>
+
+        <!-- Scene 1 — level 2 → #ffa07a → 40% -->
+        <div class="uxrt-emotion-cell" data-phase="scene-1">
+          <div class="uxrt-emotion-cell__emoji"
+               contenteditable="true"
+               data-field="emotion.emoji"
+               data-phase="scene-1">😤</div>
+          <span class="uxrt-emotion-cell__label"
+                style="color: #ffa07a;"
+                contenteditable="true"
+                data-field="emotion.label"
+                data-phase="scene-1">Frustrado</span>
+          <div class="uxrt-emotion-cell__bar-track">
+            <div class="uxrt-emotion-cell__bar-fill"
+                 style="background: #ffa07a; width: 40%;"
+                 data-field="emotion.level"
+                 data-phase="scene-1"
+                 data-level="2"></div>
+          </div>
+        </div>
+
+        <!-- Scene 2 — level 1 → #ff6b6b → 20% -->
+        <div class="uxrt-emotion-cell" data-phase="scene-2">
+          <div class="uxrt-emotion-cell__emoji"
+               contenteditable="true"
+               data-field="emotion.emoji"
+               data-phase="scene-2">😰</div>
+          <span class="uxrt-emotion-cell__label"
+                style="color: #ff6b6b;"
+                contenteditable="true"
+                data-field="emotion.label"
+                data-phase="scene-2">Abrumado</span>
+          <div class="uxrt-emotion-cell__bar-track">
+            <div class="uxrt-emotion-cell__bar-fill"
+                 style="background: #ff6b6b; width: 20%;"
+                 data-field="emotion.level"
+                 data-phase="scene-2"
+                 data-level="1"></div>
+          </div>
+        </div>
+
+        <!-- Scene 3 — level 2 → #ffa07a → 40% -->
+        <div class="uxrt-emotion-cell" data-phase="scene-3">
+          <div class="uxrt-emotion-cell__emoji"
+               contenteditable="true"
+               data-field="emotion.emoji"
+               data-phase="scene-3">🤨</div>
+          <span class="uxrt-emotion-cell__label"
+                style="color: #ffa07a;"
+                contenteditable="true"
+                data-field="emotion.label"
+                data-phase="scene-3">Esceptico</span>
+          <div class="uxrt-emotion-cell__bar-track">
+            <div class="uxrt-emotion-cell__bar-fill"
+                 style="background: #ffa07a; width: 40%;"
+                 data-field="emotion.level"
+                 data-phase="scene-3"
+                 data-level="2"></div>
+          </div>
+        </div>
+
+        <!-- Scene 4 — level 3 → #ffd93d → 60% -->
+        <div class="uxrt-emotion-cell" data-phase="scene-4">
+          <div class="uxrt-emotion-cell__emoji"
+               contenteditable="true"
+               data-field="emotion.emoji"
+               data-phase="scene-4">😮</div>
+          <span class="uxrt-emotion-cell__label"
+                style="color: #ffd93d;"
+                contenteditable="true"
+                data-field="emotion.label"
+                data-phase="scene-4">Sorprendido</span>
+          <div class="uxrt-emotion-cell__bar-track">
+            <div class="uxrt-emotion-cell__bar-fill"
+                 style="background: #ffd93d; width: 60%;"
+                 data-field="emotion.level"
+                 data-phase="scene-4"
+                 data-level="3"></div>
+          </div>
+        </div>
+
+        <!-- Scene 5 — level 4 → #90ee90 → 80% -->
+        <div class="uxrt-emotion-cell" data-phase="scene-5">
+          <div class="uxrt-emotion-cell__emoji"
+               contenteditable="true"
+               data-field="emotion.emoji"
+               data-phase="scene-5">😌</div>
+          <span class="uxrt-emotion-cell__label"
+                style="color: #90ee90;"
+                contenteditable="true"
+                data-field="emotion.label"
+                data-phase="scene-5">Tranquilo</span>
+          <div class="uxrt-emotion-cell__bar-track">
+            <div class="uxrt-emotion-cell__bar-fill"
+                 style="background: #90ee90; width: 80%;"
+                 data-field="emotion.level"
+                 data-phase="scene-5"
+                 data-level="4"></div>
+          </div>
+        </div>
+
+        <!-- Scene 6 — level 5 → #6bcb77 → 100% -->
+        <div class="uxrt-emotion-cell" data-phase="scene-6">
+          <div class="uxrt-emotion-cell__emoji"
+               contenteditable="true"
+               data-field="emotion.emoji"
+               data-phase="scene-6">😊</div>
+          <span class="uxrt-emotion-cell__label"
+                style="color: #6bcb77;"
+                contenteditable="true"
+                data-field="emotion.label"
+                data-phase="scene-6">Satisfecho</span>
+          <div class="uxrt-emotion-cell__bar-track">
+            <div class="uxrt-emotion-cell__bar-fill"
+                 style="background: #6bcb77; width: 100%;"
+                 data-field="emotion.level"
+                 data-phase="scene-6"
+                 data-level="5"></div>
+          </div>
+        </div>
+
+      </div><!-- end .uxrt-emotion-row -->
+    </div><!-- end .uxrt-emotion-section -->
+
+    <!-- Pain points analysis panel -->
+    <div class="uxrt-pain-points">
+      <div class="uxrt-pain-points__header">Puntos de dolor</div>
+      <div class="uxrt-pain-points__grid">
+        <div class="uxrt-pain-points__item"
+             contenteditable="true"
+             data-field="analysis.pain_points[0]">Sin acta de entrega ni fotos fechadas, es palabra contra palabra cuando hay danos</div>
+        <div class="uxrt-pain-points__item"
+             contenteditable="true"
+             data-field="analysis.pain_points[1]">Fotos recicladas de publicaciones viejas no sirven como evidencia del estado real al inicio del contrato</div>
+        <div class="uxrt-pain-points__item"
+             contenteditable="true"
+             data-field="analysis.pain_points[2]">Contratos informales (papel de un conocido) no incluyen clausulas de inspeccion ni deposito documentado</div>
+        <div class="uxrt-pain-points__item"
+             contenteditable="true"
+             data-field="analysis.pain_points[3]">Deposito en efectivo sin recibo — imposible probar que se pago o reclamar al final</div>
+        <div class="uxrt-pain-points__item"
+             contenteditable="true"
+             data-field="analysis.pain_points[4]">Propietarios mayores con poca experiencia digital necesitan un flujo simple y guiado</div>
+        <div class="uxrt-pain-points__item"
+             contenteditable="true"
+             data-field="analysis.pain_points[5]">La esposa de Jose padece hipertension — el estres de los inquilinos problematicos le afecta la salud directamente</div>
+      </div>
+    </div>
+
+    <!-- Moments of truth analysis panel -->
+    <div class="uxrt-moments">
+      <div class="uxrt-moments__header">Momentos de verdad</div>
+      <div class="uxrt-moments__item">
+        <span class="uxrt-moments__phase-ref"
+              contenteditable="true"
+              data-field="analysis.moments_of_truth[0].phase">scene-2</span>
+        —
+        <span contenteditable="true"
+              data-field="analysis.moments_of_truth[0].description">Jose se da cuenta de que su hermano tampoco pudo probar nada. El problema es sistemico, no personal. Decide que la proxima vez va a hacer las cosas bien.</span>
+      </div>
+      <div class="uxrt-moments__item">
+        <span class="uxrt-moments__phase-ref"
+              contenteditable="true"
+              data-field="analysis.moments_of_truth[1].phase">scene-4</span>
+        —
+        <span contenteditable="true"
+              data-field="analysis.moments_of_truth[1].description">Jose descubre que la app genera un acta de entrega con fotos inmutables. Entiende que esto es exactamente lo que le falto. Envia audio al hermano recomendando la app.</span>
+      </div>
+      <div class="uxrt-moments__item">
+        <span class="uxrt-moments__phase-ref"
+              contenteditable="true"
+              data-field="analysis.moments_of_truth[2].phase">scene-5</span>
+        —
+        <span contenteditable="true"
+              data-field="analysis.moments_of_truth[2].description">La inspeccion inicial con Mery genera evidencia fotografica con fecha, hora y firma digital. Por primera vez, Jose tiene un contrato que lo protege desde el dia uno.</span>
+      </div>
+    </div>
+
+    <!-- Central message -->
+    <div class="uxrt-central-message">
+      <div class="uxrt-central-message__label">Mensaje central</div>
+      <div class="uxrt-central-message__text">Con un contrato claro y evidencia desde el dia uno, la tecnologia no reemplaza la experiencia de Don Jose — le da las herramientas que siempre le faltaron.</div>
+    </div>
+
+    <!-- Footer -->
+    <div class="uxrt-footer">
+      Generado por <strong>ux-research-toolkit</strong> · Experience Map (storyboard) · Basado en metodología NN/g · <span contenteditable="true" data-field="meta.created">2026-04-12</span>
+    </div>
+
+  </div>
+
+  <!-- Editor Controls -->
+  <div class="uxrt-editor-controls" id="uxrt-editor-controls">
+    <button class="uxrt-editor-controls__btn uxrt-editor-controls__btn--save"
+            onclick="uxrtSaveJson()">💾 Save JSON</button>
+    <button class="uxrt-editor-controls__btn uxrt-editor-controls__btn--refresh"
+            onclick="uxrtRefreshJson()">🔄 Refresh from JSON</button>
+    <span class="uxrt-editor-controls__status" id="uxrt-status" aria-live="polite"></span>
+    <input type="file" id="uxrt-file-input" accept=".json,application/json"
+           style="display:none;" onchange="uxrtHandleFileInput(this)">
+  </div>
+
+  <script>
+/* ──────────────────────────────────────────────────────────────────
+   UX Research Toolkit — Editor Controls
+   Implements bidirectional sync between contenteditable DOM and JSON.
+────────────────────────────────────────────────────────────────── */
+
+function uxrtSetDeep(obj, path, value) {
+  const parts = path.replace(/\[(\d+)\]/g, '.$1').split('.');
+  let cur = obj;
+  for (let i = 0; i < parts.length - 1; i++) {
+    const part = parts[i];
+    const nextIsIndex = /^\d+$/.test(parts[i + 1]);
+    if (cur[part] === undefined || cur[part] === null) {
+      cur[part] = nextIsIndex ? [] : {};
+    }
+    cur = cur[part];
+  }
+  const last = parts[parts.length - 1];
+  cur[last] = value;
+}
+
+function uxrtGetDeep(obj, path) {
+  const parts = path.replace(/\[(\d+)\]/g, '.$1').split('.');
+  let cur = obj;
+  for (const part of parts) {
+    if (cur === undefined || cur === null) return undefined;
+    cur = cur[part];
+  }
+  return cur;
+}
+
+function uxrtStatus(msg, isError) {
+  const el = document.getElementById('uxrt-status');
+  if (!el) return;
+  el.textContent = msg;
+  el.style.color = isError ? '#ff8a8a' : '#6bcb77';
+  clearTimeout(uxrtStatus._timer);
+  uxrtStatus._timer = setTimeout(() => { el.textContent = ''; }, 3000);
+}
+
+function uxrtBuildJson() {
+  const meta = Object.assign(
+    { type: '', profile: '', title: '', created: '', updated: '', version: 1 },
+    window.__UXRT_META__ || {}
+  );
+  meta.updated = new Date().toISOString().split('T')[0];
+
+  const persona = {};
+  const phasesMap = {};
+  const analysis = { pain_points: [], moments_of_truth: [] };
+
+  document.querySelectorAll('[contenteditable]').forEach(el => {
+    const field = el.dataset.field;
+    const phase = el.dataset.phase;
+    if (!field) return;
+    const text = el.innerText.trim();
+
+    if (phase) {
+      if (!phasesMap[phase]) phasesMap[phase] = { id: phase };
+      const p = phasesMap[phase];
+      if (field === 'label') { p.label = text; }
+      else if (field === 'emotion.emoji') { if (!p.emotion) p.emotion = {}; p.emotion.emoji = text; }
+      else if (field === 'emotion.label') { if (!p.emotion) p.emotion = {}; p.emotion.label = text; }
+      else if (field === 'emotion.level') { if (!p.emotion) p.emotion = {}; p.emotion.level = parseInt(el.dataset.level, 10) || 3; }
+      else if (field === 'scene_description') { p.scene_description = text; }
+      else if (field === 'scene_setting') { p.scene_setting = text; }
+      else if (field === 'scene_dialogue') { p.scene_dialogue = text; }
+      else if (field === 'scene_mood') { p.scene_mood = text; }
+      else if (field === 'actions') { p.actions = text; }
+      else if (field === 'thoughts') { p.thoughts = text; }
+      else if (field === 'frustrations') { p.frustrations = text; }
+      else if (field === 'opportunities') { p.opportunities = text; }
+      else if (field === 'touchpoints') { p.touchpoints = text.split(',').map(s => s.trim()).filter(Boolean); }
+      else if (field === 'channels') { p.channels = text.split(',').map(s => s.trim()).filter(Boolean); }
+    } else if (field.startsWith('persona.')) {
+      const key = field.slice('persona.'.length);
+      if (key === 'age') { persona[key] = parseInt(text, 10) || 0; }
+      else { persona[key] = text; }
+    } else if (field === 'meta.title') { meta.title = text; }
+    else if (field === 'meta.created') { meta.created = text; }
+    else if (field.startsWith('analysis.pain_points[')) {
+      const idx = parseInt(field.match(/\[(\d+)\]/)[1], 10);
+      analysis.pain_points[idx] = text;
+    } else if (field.startsWith('analysis.moments_of_truth[')) {
+      const match = field.match(/\[(\d+)\]\.(\w+)/);
+      if (match) {
+        const idx = parseInt(match[1], 10);
+        const key = match[2];
+        if (!analysis.moments_of_truth[idx]) analysis.moments_of_truth[idx] = {};
+        analysis.moments_of_truth[idx][key] = text;
+      }
+    }
+  });
+
+  document.querySelectorAll('[data-field="emotion.level"]').forEach(el => {
+    const phase = el.dataset.phase;
+    if (phase && phasesMap[phase]) {
+      if (!phasesMap[phase].emotion) phasesMap[phase].emotion = {};
+      phasesMap[phase].emotion.level = parseInt(el.dataset.level, 10) || 3;
+    }
+  });
+
+  const phaseOrder = [];
+  document.querySelectorAll('[data-phase]').forEach(el => {
+    const pid = el.dataset.phase;
+    if (pid && !phaseOrder.includes(pid)) phaseOrder.push(pid);
+  });
+
+  const phaseIconMap = {};
+  (window.__UXRT_PHASES__ || []).forEach(p => { if (p.id) phaseIconMap[p.id] = p.icon; });
+  const phases = phaseOrder.map(pid => {
+    const p = phasesMap[pid] || { id: pid };
+    if (!p.icon && phaseIconMap[pid]) p.icon = phaseIconMap[pid];
+    return p;
+  });
+
+  analysis.pain_points = analysis.pain_points.filter(Boolean);
+  analysis.moments_of_truth = analysis.moments_of_truth.filter(Boolean);
+
+  return { meta, persona, phases, analysis };
+}
+
+async function uxrtSaveJson() {
+  const json = uxrtBuildJson();
+  const blob = new Blob([JSON.stringify(json, null, 2)], { type: 'application/json' });
+  const suggestedName = (json.meta.title || 'map').replace(/[^\w\s-]/g, '').trim().replace(/\s+/g, '-').toLowerCase() + '.json';
+  if (window.showSaveFilePicker) {
+    try {
+      const handle = await window.showSaveFilePicker({
+        suggestedName,
+        types: [{ description: 'JSON file', accept: { 'application/json': ['.json'] } }]
+      });
+      const writable = await handle.createWritable();
+      await writable.write(blob);
+      await writable.close();
+      uxrtStatus('Saved successfully ✓');
+    } catch (err) {
+      if (err.name !== 'AbortError') uxrtStatus('Save failed: ' + err.message, true);
+    }
+  } else {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = suggestedName;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 10000);
+    uxrtStatus('Downloaded as ' + suggestedName + ' ✓');
+  }
+}
+
+async function uxrtRefreshJson() {
+  if (window.showOpenFilePicker) {
+    try {
+      const [handle] = await window.showOpenFilePicker({
+        types: [{ description: 'JSON file', accept: { 'application/json': ['.json'] } }],
+        multiple: false
+      });
+      const file = await handle.getFile();
+      const text = await file.text();
+      uxrtApplyJson(JSON.parse(text));
+    } catch (err) {
+      if (err.name !== 'AbortError') uxrtStatus('Load failed: ' + err.message, true);
+    }
+  } else {
+    document.getElementById('uxrt-file-input').click();
+  }
+}
+
+function uxrtHandleFileInput(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try { uxrtApplyJson(JSON.parse(e.target.result)); }
+    catch (err) { uxrtStatus('Invalid JSON: ' + err.message, true); }
+  };
+  reader.readAsText(file);
+  input.value = '';
+}
+
+function uxrtApplyJson(data) {
+  if (!data || typeof data !== 'object') { uxrtStatus('Invalid data structure', true); return; }
+  function set(field, phase, value) {
+    if (value === undefined || value === null) return;
+    const selector = phase
+      ? `[contenteditable][data-field="${CSS.escape(field)}"][data-phase="${CSS.escape(phase)}"]`
+      : `[contenteditable][data-field="${CSS.escape(field)}"]`;
+    document.querySelectorAll(selector).forEach(el => { el.innerText = String(value); });
+  }
+  if (data.meta) {
+    set('meta.title', null, data.meta.title);
+    set('meta.created', null, data.meta.created);
+    window.__UXRT_META__ = Object.assign(window.__UXRT_META__ || {}, data.meta);
+  }
+  if (data.persona) {
+    ['name', 'age', 'role', 'location', 'avatar_emoji', 'primary_pain', 'context'].forEach(key => {
+      set('persona.' + key, null, data.persona[key]);
+    });
+  }
+  if (Array.isArray(data.phases)) {
+    data.phases.forEach(phase => {
+      const pid = phase.id; if (!pid) return;
+      set('label', pid, phase.label);
+      if (phase.emotion) {
+        set('emotion.emoji', pid, phase.emotion.emoji);
+        set('emotion.label', pid, phase.emotion.label);
+        if (phase.emotion.level) {
+          const lvl = phase.emotion.level;
+          const colors = { 1: '#ff6b6b', 2: '#ffa07a', 3: '#ffd93d', 4: '#90ee90', 5: '#6bcb77' };
+          const color = colors[lvl] || '#ffd93d';
+          const width = (lvl / 5 * 100) + '%';
+          document.querySelectorAll(`[data-field="emotion.level"][data-phase="${CSS.escape(pid)}"]`).forEach(el => {
+            el.dataset.level = lvl; el.style.width = width; el.style.background = color;
+            const labelEl = el.closest('.uxrt-emotion-cell')?.querySelector('[data-field="emotion.label"]');
+            if (labelEl) labelEl.style.color = color;
+          });
+        }
+      }
+      set('scene_description', pid, phase.scene_description);
+      set('scene_setting', pid, phase.scene_setting);
+      set('scene_dialogue', pid, phase.scene_dialogue);
+      set('scene_mood', pid, phase.scene_mood);
+    });
+  }
+  if (data.analysis) {
+    if (Array.isArray(data.analysis.pain_points)) {
+      data.analysis.pain_points.forEach((pp, i) => set('analysis.pain_points[' + i + ']', null, pp));
+    }
+    if (Array.isArray(data.analysis.moments_of_truth)) {
+      data.analysis.moments_of_truth.forEach((mot, i) => {
+        set('analysis.moments_of_truth[' + i + '].phase', null, mot.phase);
+        set('analysis.moments_of_truth[' + i + '].description', null, mot.description);
+      });
+    }
+  }
+  uxrtStatus('Loaded from file ✓');
+}
+  </script>
+
+  <script>
+    // Runtime data injected by renderer
+    window.__UXRT_META__ = {"type":"storyboard","profile":"storyboard","variant":"narrative","title":"Storyboard: Jose Penaranda — Propietario que adopta HabitaNexus","created":"2026-04-12","updated":"2026-04-12","version":1};
+    window.__UXRT_PHASES__ = [{"id":"scene-1","label":"Escena 1: Contexto","icon":"🎬","scene_description":"Jose esta en una de sus propiedades en San Rafael de Heredia haciendo la ronda del mes. El contrato informal (un papel que le hizo un conocido) se vence en 3 meses. Mientras inspecciona, nota que los inquilinos actuales le taponearon las tuberias del desague y hay una fuga en el bano. El llavin de la puerta principal esta forzado. Su esposa lo acompana y se le sube la presion por el estres. Jose le dice al inquilino que repare, pero el inquilino le responde que 'eso ya estaba asi cuando llegue'. Jose busca las fotos que tiene en el celular pero son fotos recicladas de hace meses que usaba para publicar en los grupos de Facebook de Guarari y Milpa de Heredia — no reflejan el estado real del inmueble cuando se firmo el contrato. No tiene forma de probar nada.","scene_setting":"Sabado a las 5pm, en la propiedad de alquiler en San Rafael de Heredia. Ya no hay ferreterias abiertas para buscar repuestos de fontaneria. Su esposa le insistio en ir a revisar.","scene_dialogue":"Jose piensa: 'Diay, y ahora de donde saco un fontanero un sabado a esta hora? Ya me gaste lo de las puertas y este mae me dejo todo hecho lena...' Su esposa le dice: 'Jose, tranquilo, no se me vaya a enfermar usted tambien por estos carajillos...'","scene_mood":"Enojado y frustrado","emotion":{"level":2,"emoji":"😤","label":"Frustrado"}},{"id":"scene-2","label":"Escena 2: Problema","icon":"😰","scene_description":"Jose esta en su casa. Su esposa tuvo que tomarse la pastilla de la presion despues de la visita a la propiedad. Jose revisa el contrato informal — el papel que le hizo un conocido — y se da cuenta de que no tiene clausula de inspeccion, no tiene acta de entrega, no tiene fotos fechadas, y el deposito que le pidio al inquilino fue en efectivo sin recibo. El hermano de Jose lo llama por telefono y le cuenta que a el le paso lo mismo con un inquilino que le arranco las puertas. Jose le dice: 'Y que hizo usted?' El hermano le responde: 'Nada, mae, que iba a hacer? No tenia como probar nada.' Jose decide que cuando se venza el contrato en 3 meses, no va a renovar — pero esta vez quiere hacer las cosas bien.","scene_setting":"Domingo por la manana, tomando cafe en la cocina con su esposa en su casa de San Rafael.","scene_dialogue":"El hermano le dice por telefono: 'Mae, a mi un sobrino me dijo que hay una aplicacion nueva para eso de los alquileres, que le hace contrato y todo. Busque en el play store.' Jose piensa: 'Yo ya estoy viejo para esas varas de tecnologia... pero asi como estoy, no puedo seguir.'","scene_mood":"Abrumado","emotion":{"level":1,"emoji":"😰","label":"Abrumado"}},{"id":"scene-3","label":"Escena 3: Busqueda","icon":"🔎","scene_description":"Jose le pide a su esposa que le ayude a buscar en el celular lo que le dijo el hermano. Ella busca 'aplicacion alquileres Costa Rica' en el Play Store. Encuentran varias opciones pero la mayoria son para buscar alquiler como inquilino, no para publicar como propietario. Jose se frustra con el celular — la letra es muy pequena y las apps le piden crear cuenta con correo electronico que casi no usa. Su esposa le dice: 'Espera, aqui hay una que dice que le hace el contrato a uno y le guardan el deposito.'","scene_setting":"Domingo despues de almuerzo, en la sala con el celular de su esposa.","scene_dialogue":"Su esposa le dice: 'Vea Jose, esta dice HabitaNexus — negociacion digital de contratos, deposito protegido, inspeccion con fotos. Eso es lo que usted necesita.' Jose dice: 'Y eso no sera una estafa? Yo lo que quiero es algo que me proteja, no meterme en mas problemas.' Su esposa: 'Pues peor no puede estar. Descarguela a ver.'","scene_mood":"Esceptico pero curioso","emotion":{"level":2,"emoji":"🤨","label":"Esceptico"}},{"id":"scene-4","label":"Escena 4: Descubrimiento","icon":"💡","scene_description":"Jose y su esposa abren HabitaNexus. El flujo de registro le pide la cedula y se la valida con SINPE. 'Mira, ya sabe quien soy', le dice a su esposa. Empieza a registrar la propiedad y ve que le pide fotos de cada espacio con dimensiones, el tipo de piso, el sistema de agua caliente, si permite mascotas, bebes, huespedes temporales — todo desglosado. Jose piensa: 'Esto es lo que yo deberia haberle puesto al inquilino desde el principio.' Cuando llega a la parte del video tour, su esposa le graba un recorrido con el celular. Pero lo que mas le llama la atencion es que la app le dice que el deposito lo guarda un tercero, no el — y que al inicio del contrato se levanta un acta de entrega con fotos que ninguna de las dos partes puede modificar despues.","scene_setting":"Lunes por la manana. Jose se levanta temprano, agarra la pickup y va a la propiedad con el celular de su esposa (que tiene mejor camara). Va solo porque ella se queda descansando. Es la primera vez que va a la propiedad con la intencion de documentarla, no de repararla.","scene_dialogue":"Jose piensa mientras graba el recorrido: 'Si yo hubiera tenido esto hace dos anos, ese mae no me sale con que ya estaba asi. Aqui queda todo grabado.' Le manda un audio de WhatsApp a su hermano: 'Mae, descargue esa vara que se llama HabitaNexus. Aqui le piden a uno foto de todo y hasta le guardan la plata del deposito. Cuando se le venza el contrato a usted, metalo por aqui.'","scene_mood":"Sorprendido positivamente","emotion":{"level":3,"emoji":"😮","label":"Sorprendido"}},{"id":"scene-5","label":"Escena 5: Solucion","icon":"✨","scene_description":"Pasaron los 3 meses. El inquilino problematico se fue. Jose contrato un fontanero para arreglar las tuberias y el mismo reparo las puertas y llavines. La propiedad ya esta publicada en HabitaNexus con todas las fotos, el video tour, las dimensiones de cada cuarto, y las condiciones claras: no se permiten modificaciones sin autorizacion, inspeccion mensual, y restricciones de ruido por la salud de su esposa que vive al lado. Le llega una propuesta de una inquilina joven — Mery, analista de ciberseguridad. Ella propone C280,000 al mes, 3 anos de contrato, tiene un gato. Jose revisa la propuesta en la app: ve el perfil verificado de Mery, sus calificaciones de contratos anteriores, y puede contraproponer. Acepta todo menos el gato — contrapropone 'gato solo interior'. Mery acepta. Antes de firmar, la app agenda la inspeccion inicial: ambos van a la propiedad, la app genera el acta de entrega con fotos de cada espacio, estado de pisos, paredes, llavines, sanitario, tuberias — todo con fecha, hora y firma digital de ambos.","scene_setting":"Entre semana por la tarde, Jose revisa la propuesta desde su casa. La inspeccion inicial es el sabado siguiente en la propiedad.","scene_dialogue":"Jose le muestra la app a su esposa en la cocina: 'Vea, esta muchacha tiene buenas calificaciones y trabaja en computacion. Dice que tiene un gato pero yo le puse que solo adentro. Ella acepto.' Su esposa: 'Y el deposito?' Jose: 'No lo toco yo ni lo toca ella. Lo guarda la aplicacion y solo se suelta al final con las fotos del acta. Si me dana algo, queda documentado desde hoy.' Su esposa: 'Diay, hasta que por fin!' El sabado en la inspeccion, Mery le dice: 'Don Jose, que bueno que todo queda con fotos. Asi los dos estamos tranquilos.'","scene_mood":"Tranquilo","emotion":{"level":4,"emoji":"😌","label":"Tranquilo"}},{"id":"scene-6","label":"Escena 6: Resultado","icon":"🎉","scene_description":"Un mes despues de que Mery se mudo. Jose hace su primera inspeccion mensual a traves de la app — agenda la visita, Mery confirma, y cuando llega todo esta en orden. El gato esta adentro como se pacto. Jose registra en la app 'sin hallazgos' con fotos. De regreso a su casa, su esposa le pregunta como esta la propiedad. Jose le dice que todo bien, la muchacha es ordenada. Y si algun dia hay un problema, ahora si queda todo registrado. Su esposa le dice que llame al hermano para que deje de sufrir con el otro inquilino. Esa noche Jose le manda al hermano el link de HabitaNexus por WhatsApp — el mismo canal por donde siempre ha manejado sus alquileres, pero esta vez para referirlo a algo que si lo protege.","scene_setting":"Sabado por la manana — inspeccion en la propiedad, luego de regreso en su casa por la tarde.","scene_dialogue":"Jose piensa mientras maneja la pickup de regreso: 'Cuarenta anos trabajando en la CCSS y nunca pense que un telefono me iba a resolver lo de los alquileres.' Su esposa al verlo llegar tranquilo: 'Y? Como esta la propiedad?' Jose: 'Todo en orden. La muchacha hasta me ofrecio cafe.'","scene_mood":"Satisfecho","emotion":{"level":5,"emoji":"😊","label":"Satisfecho"}}];
+  </script>
+
+</body>
+</html>
