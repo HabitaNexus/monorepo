@@ -1,11 +1,14 @@
-/// Shared HabitaNexus UI package — Atomic Design widgets y tema M3.
+/// HabitaNexus brand package: tokens + typed accessors over shared_ui_core.
 ///
-/// Presentación pura: nunca debe depender de DTOs de API ni de providers
-/// de Riverpod. Los widgets se organizan en `src/{atoms,molecules,organisms}`
-/// y cada uno nace con su story en `apps/widgetbook`.
-library;
+/// Parsing logic lives in core once; this brand only ships tokens.json +
+/// [HabitanexusTokens] plus the M3 [AppTheme] built from the same seed.
+library habitanexus_ui;
 
-// Theme
+// Brand tokens (interface de flutter_shared_ui)
+export 'src/habitanexus_tokens.dart';
+export 'package:shared_ui_core/shared_ui_core.dart';
+
+// Theme M3 (seed #1A5276)
 export 'src/theme/app_theme.dart';
 
 // Atoms — (vacío: ver README.md)
