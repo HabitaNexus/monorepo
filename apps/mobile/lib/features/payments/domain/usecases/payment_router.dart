@@ -1,9 +1,9 @@
-import '../../domain/entities/payment/payment_request.dart';
-import '../../domain/entities/payment/payment_result.dart';
-import '../datasources/payment/payment_provider.dart';
-import '../datasources/payment/kindo_payment_provider.dart';
-import '../datasources/payment/onvo_payment_provider.dart';
-import '../config/payment_config.dart';
+import '../entities/payment_request.dart';
+import '../entities/payment_result.dart';
+import '../../data/datasources/payment_provider.dart';
+import '../../data/datasources/kindo_payment_provider.dart';
+import '../../data/datasources/onvo_payment_provider.dart';
+import '../../../../config/payment_config.dart';
 
 /// Router inteligente que decide qué proveedor usar según el tipo de pago
 /// - Kindo: Para pagos de alquiler (inquilino → propietario) via SINPE

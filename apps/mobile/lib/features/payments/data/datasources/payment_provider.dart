@@ -1,5 +1,5 @@
-import '../../../domain/entities/payment/payment_request.dart';
-import '../../../domain/entities/payment/payment_result.dart';
+import '../../domain/entities/payment_request.dart';
+import '../../domain/entities/payment_result.dart';
 
 /// Abstracción para proveedores de pago
 /// Permite integrar Kindo, Stripe, PayPal, etc. sin cambiar la lógica de negocio

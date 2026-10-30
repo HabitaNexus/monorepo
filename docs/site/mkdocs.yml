@@ -144,6 +144,7 @@ nav:
     - "Referidos · Fixii": docs/how-to/referidos-fixii.md
   - Referencia:
     - docs/reference/index.md
+    - "Mapa de rutas · App": docs/reference/mapa-rutas-app.md
     - "Ley 7527": docs/reference/ley-7527.md
     - "Contratos de arrendamiento": docs/reference/contratos-arrendamiento/index.md
   - Explicación:

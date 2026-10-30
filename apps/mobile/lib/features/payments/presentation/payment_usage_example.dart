@@ -1,7 +1,7 @@
-import '../domain/entities/payment/payment_request.dart';
-import '../domain/entities/payment/payment_result.dart';
+import '../domain/entities/payment_request.dart';
+import '../domain/entities/payment_result.dart';
 import '../data/repositories/payment_repository_impl.dart';
-import '../core/services/payment_router.dart';
+import '../domain/usecases/payment_router.dart';
 
 /// Ejemplo de uso del sistema de pagos dual
 /// Muestra cómo se procesan diferentes tipos de pagos automáticamente

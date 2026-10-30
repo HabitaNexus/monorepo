@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:habitanexus_mobile/config/app_router.dart';
-import 'package:habitanexus_mobile/config/demo_data.dart';
 import 'package:habitanexus_mobile/core/theme/app_theme.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  // Sin overrides demo (demo_data.dart nunca existió en el repo): los
+  // providers reales hablan con el backend (ver overlay e2e-local).
   runApp(
-    // demoOverrides: repositorio local sin backend (temporal).
-    ProviderScope(
-      overrides: demoOverrides,
-      child: const HabitaNexusApp(),
+    const ProviderScope(
+      child: HabitaNexusApp(),
     ),
   );
 }

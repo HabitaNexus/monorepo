@@ -1,5 +1,5 @@
-import '../entities/payment/payment_request.dart';
-import '../entities/payment/payment_result.dart';
+import '../entities/payment_request.dart';
+import '../entities/payment_result.dart';
 
 abstract class PaymentRepository {
   /// Procesa un pago usando el proveedor configurado
