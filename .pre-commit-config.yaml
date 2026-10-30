@@ -1,4 +1,43 @@
+# Pre-commit hooks (canonical) — see PCH doctrine.
+# Install with a HEALTHY python: pre-commit install
+
+exclude: |
+  (?x)^(
+    dist/|
+    build/|
+    node_modules/|
+    .dart_tool/|
+    .venv/|
+    .*\.log$|
+    logs/|
+    apps/.*/dist/|
+    apps/.*/build/|
+    apps/.*/.dart_tool/|
+    apps/.*/.venv/
+  )
+
 repos:
+  # Validate Mermaid diagrams (shared script)
+  - repo: local
+    hooks:
+      - id: mermaid-syntax
+        name: Validate Mermaid diagrams
+        entry: /usr/bin/bash
+        args: ["scripts/validate-mermaid.sh"]
+        language: system
+        types: [markdown]
+        pass_filenames: false
+
+  # Standard pre-commit hooks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: check-json
+      - id: check-merge-conflict
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+
+  # Conventional Commits (CvC)
   - repo: https://github.com/compilerla/conventional-pre-commit
     rev: v4.0.0
     hooks:
