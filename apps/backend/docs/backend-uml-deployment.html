@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HabitaNexus Backend — Diagrama de despliegue UML</title>
+<style>
+  body { margin: 0; background: #fff; font-family: Arial, Helvetica, sans-serif; }
+  .wrap { max-width: 1640px; margin: 0 auto; padding: 12px; }
+  svg { width: 100%; height: auto; display: block; }
+  .face  { fill: #fafafa; stroke: #222; stroke-width: 1.6; }
+  .top   { fill: #e3e3e3; stroke: #222; stroke-width: 1.6; }
+  .side  { fill: #c9c9c9; stroke: #222; stroke-width: 1.6; }
+  .box   { fill: #ffffff; stroke: #222; stroke-width: 1.6; }
+  .stereo { font-size: 12.5px; fill: #333; text-anchor: middle; }
+  .name   { font-size: 15px; fill: #111; text-anchor: middle; }
+  .comp   { font-size: 13px; fill: #111; text-anchor: middle; }
+  .proto  { font-size: 13px; fill: #111; text-anchor: middle; }
+  .proto-st { font-size: 12px; fill: #333; text-anchor: middle; }
+  .wire { fill: none; stroke: #444; stroke-width: 1.6; }
+  .wire-dash { fill: none; stroke: #444; stroke-width: 1.4; stroke-dasharray: 6 4; }
+  .note { font-size: 12.5px; fill: #333; }
+  h1 { font-size: 20px; margin: 6px 0 2px; color: #111; }
+  p.sub { font-size: 13px; color: #444; margin: 0 0 8px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>HabitaNexus Backend — Diagrama de despliegue UML</H1>
+<p class="sub">HAB-13 · apps/backend (NestJS 11) · cada nodo físico y cada capa van separados; nada combinado.</p>
+<svg viewBox="0 0 1600 920" role="img" aria-label="Diagrama de despliegue UML del backend HabitaNexus">
+  <defs>
+    <marker id="arr" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+      <path d="M0,0 L8,4.5 L0,9 z" fill="#444"></path>
+    </marker>
+  </defs>
+
+  <!-- ============ NODE 1 : CLIENT DEVICE ============ -->
+  <g>
+    <polygon class="top" points="30,90 56,64 396,64 370,90"></polygon>
+    <polygon class="side" points="370,90 396,64 396,664 370,690"></polygon>
+    <rect class="face" x="30" y="90" width="340" height="600"></rect>
+    <text class="stereo" x="200" y="122">«device»</text>
+    <text class="name" x="200" y="143">Mobile Device</text>
+    <polygon class="top" points="56,170 74,152 362,152 344,170"></polygon>
+    <polygon class="side" points="344,170 362,152 362,672 344,690"></polygon>
+    <rect class="face" x="56" y="170" width="288" height="520"></rect>
+    <text class="stereo" x="200" y="198">«OS»</text>
+    <text class="name" x="200" y="219">Android / iOS</text>
+    <polygon class="top" points="80,250 94,236 332,236 318,250"></polygon>
+    <polygon class="side" points="318,250 332,236 332,676 318,690"></polygon>
+    <rect class="face" x="80" y="250" width="238" height="440"></rect>
+    <text class="stereo" x="199" y="276">«execution environment»</text>
+    <text class="name" x="199" y="297">Flutter Runtime</text>
+    <rect class="box" x="114" y="330" width="170" height="56"></rect>
+    <text class="stereo" x="199" y="352">«artifact»</text>
+    <text class="comp" x="199" y="371">habitanexus-mobile</text>
+    <line class="wire-dash" x1="199" y1="392" x2="199" y2="438" marker-end="url(#arr)"></line>
+    <text class="stereo" x="252" y="420">«manifests»</text>
+    <rect class="box" x="114" y="444" width="170" height="62"></rect>
+    <rect class="box" x="106" y="452" width="14" height="9"></rect>
+    <rect class="box" x="106" y="465" width="14" height="9"></rect>
+    <text class="stereo" x="199" y="470">«component»</text>
+    <text class="comp" x="199" y="489">Property Feature</text>
+  </g>
+
+  <!-- ============ NODE 2 : APPLICATION SERVER ============ -->
+  <g>
+    <polygon class="top" points="415,90 441,64 781,64 755,90"></polygon>
+    <polygon class="side" points="755,90 781,64 781,664 755,690"></polygon>
+    <rect class="face" x="415" y="90" width="340" height="600"></rect>
+    <text class="stereo" x="585" y="122">«device»</text>
+    <text class="name" x="585" y="143">Application Server</text>
+    <polygon class="top" points="441,170 459,152 747,152 729,170"></polygon>
+    <polygon class="side" points="729,170 747,152 747,672 729,690"></polygon>
+    <rect class="face" x="441" y="170" width="288" height="520"></rect>
+    <text class="stereo" x="585" y="198">«OS»</text>
+    <text class="name" x="585" y="219">Linux Container</text>
+    <polygon class="top" points="465,250 479,236 717,236 703,250"></polygon>
+    <polygon class="side" points="703,250 717,236 717,676 703,690"></polygon>
+    <rect class="face" x="465" y="250" width="238" height="440"></rect>
+    <text class="stereo" x="584" y="276">«execution environment»</text>
+    <text class="name" x="584" y="297">Node.js 22</text>
+    <g>
+      <rect class="box" x="477" y="330" width="107" height="70"></rect>
+      <rect class="box" x="469" y="340" width="14" height="9"></rect>
+      <rect class="box" x="469" y="353" width="14" height="9"></rect>
+      <text class="stereo" x="530" y="360">«component»</text>
+      <text class="comp" x="530" y="379">HTTP Adapter</text>
+      <rect class="box" x="596" y="330" width="107" height="70"></rect>
+      <rect class="box" x="588" y="340" width="14" height="9"></rect>
+      <rect class="box" x="588" y="353" width="14" height="9"></rect>
+      <text class="stereo" x="649" y="360">«component»</text>
+      <text class="comp" x="649" y="379">PropertyModule</text>
+      <rect class="box" x="477" y="424" width="107" height="70"></rect>
+      <rect class="box" x="469" y="434" width="14" height="9"></rect>
+      <rect class="box" x="469" y="447" width="14" height="9"></rect>
+      <text class="stereo" x="530" y="454">«component»</text>
+      <text class="comp" x="530" y="473">Domain Entities</text>
+      <rect class="box" x="596" y="424" width="107" height="70"></rect>
+      <rect class="box" x="588" y="434" width="14" height="9"></rect>
+      <rect class="box" x="588" y="447" width="14" height="9"></rect>
+      <text class="stereo" x="649" y="454">«component»</text>
+      <text class="comp" x="649" y="473">Repository Ports</text>
+    </g>
+    <text class="note" x="477" y="530">main.ts · :3000 · contrato JSON snake_case</text>
+    <text class="note" x="477" y="550">dominio puro: sin imports @nestjs</text>
+  </g>
+
+  <!-- ============ NODE 3 : DATABASE SERVER (INFRA) ============ -->
+  <g>
+    <polygon class="top" points="800,90 826,64 1166,64 1140,90"></polygon>
+    <polygon class="side" points="1140,90 1166,64 1166,664 1140,690"></polygon>
+    <rect class="face" x="800" y="90" width="340" height="600"></rect>
+    <text class="stereo" x="970" y="122">«device»</text>
+    <text class="name" x="970" y="143">Database Server</text>
+    <polygon class="top" points="826,170 844,152 1132,152 1114,170"></polygon>
+    <polygon class="side" points="1114,170 1132,152 1132,672 1114,690"></polygon>
+    <rect class="face" x="826" y="170" width="288" height="520"></rect>
+    <text class="stereo" x="970" y="198">«OS»</text>
+    <text class="name" x="970" y="219">Linux</text>
+    <polygon class="top" points="850,250 864,236 1102,236 1088,250"></polygon>
+    <polygon class="side" points="1088,250 1102,236 1102,676 1088,690"></polygon>
+    <rect class="face" x="850" y="250" width="238" height="440"></rect>
+    <text class="stereo" x="969" y="276">«execution environment»</text>
+    <text class="name" x="969" y="297">PostgreSQL</text>
+    <rect class="box" x="884" y="340" width="170" height="66"></rect>
+    <rect class="box" x="876" y="350" width="14" height="9"></rect>
+    <rect class="box" x="876" y="363" width="14" height="9"></rect>
+    <text class="stereo" x="969" y="370">«collection»</text>
+    <text class="comp" x="969" y="389">properties</text>
+    <rect class="box" x="884" y="430" width="170" height="66"></rect>
+    <rect class="box" x="876" y="440" width="14" height="9"></rect>
+    <rect class="box" x="876" y="453" width="14" height="9"></rect>
+    <text class="stereo" x="969" y="460">«collection»</text>
+    <text class="comp" x="969" y="479">listings</text>
+    <text class="note" x="884" y="530">implementa los puertos (planeado)</text>
+  </g>
+
+  <!-- ============ NODE 4 : EXTERNAL PROVIDERS (INFRA) ============ -->
+  <g>
+    <polygon class="top" points="1185,90 1211,64 1551,64 1525,90"></polygon>
+    <polygon class="side" points="1525,90 1551,64 1551,664 1525,690"></polygon>
+    <rect class="face" x="1185" y="90" width="340" height="600"></rect>
+    <text class="stereo" x="1355" y="122">«device»</text>
+    <text class="name" x="1355" y="143">External Providers</text>
+    <polygon class="top" points="1211,170 1229,152 1517,152 1499,170"></polygon>
+    <polygon class="side" points="1499,170 1517,152 1517,672 1499,690"></polygon>
+    <rect class="face" x="1211" y="170" width="288" height="520"></rect>
+    <text class="stereo" x="1355" y="198">«OS»</text>
+    <text class="name" x="1355" y="219">Vendor-managed</text>
+    <polygon class="top" points="1235,250 1249,236 1487,236 1473,250"></polygon>
+    <polygon class="side" points="1473,250 1487,236 1487,676 1473,690"></polygon>
+    <rect class="face" x="1235" y="250" width="238" height="440"></rect>
+    <text class="stereo" x="1354" y="276">«execution environment»</text>
+    <text class="name" x="1354" y="297">SaaS APIs</text>
+    <rect class="box" x="1259" y="330" width="190" height="68"></rect>
+    <text class="stereo" x="1354" y="356">«external system»</text>
+    <text class="comp" x="1354" y="375">Trustless Worker · escrow</text>
+    <rect class="box" x="1259" y="422" width="190" height="68"></rect>
+    <text class="stereo" x="1354" y="448">«external system»</text>
+    <text class="comp" x="1354" y="467">Kindo SINPE · pagos</text>
+    <rect class="box" x="1259" y="514" width="190" height="68"></rect>
+    <text class="stereo" x="1354" y="540">«external system»</text>
+    <text class="comp" x="1354" y="559">RNP Digital · cert. manual</text>
+  </g>
+
+  <!-- ============ PROTOCOLS ============ -->
+  <g>
+    <path class="wire" d="M200,690 C200,740 585,740 585,762"></path>
+    <path class="wire" d="M585,690 C585,730 585,730 585,762"></path>
+    <text class="proto-st" x="392" y="748">«protocol»</text>
+    <text class="proto" x="392" y="766">HTTPS · JSON snake_case</text>
+    <path class="wire" d="M700,762 L855,762"></path>
+    <text class="proto-st" x="778" y="748">«protocol»</text>
+    <text class="proto" x="778" y="766">TCP/IP · pg driver</text>
+    <path class="wire" d="M755,690 C755,730 1355,700 1355,690"></path>
+    <text class="proto-st" x="1055" y="712">«protocol»</text>
+    <text class="proto" x="1055" y="730">HTTPS REST</text>
+  </g>
+
+  <text class="note" x="30" y="830">Lectura: cliente (nodo 1) → servidor de aplicación (nodo 2) → persistencia (nodo 3, infra) y proveedores externos (nodo 4, infra).</text>
+  <text class="note" x="30" y="852">La infra (nodos 3 y 4) vive en nodos separados del servidor de aplicación; el dominio nunca cruza la frontera hacia afuera.</text>
+  <text class="note" x="30" y="874">Fuente: apps/backend/src · HAB-13 · 27 filas de catálogo reconciliadas (ver catalog-types.ts).</text>
+</svg>
+</div>
+</body>
+</html>

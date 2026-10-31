@@ -1,7 +1,8 @@
 # @habitanexus/backend
 
 Backend HabitaNexus (Nest + Prisma + PostgreSQL + TypeScript 7).
-Primer módulo de dominio: **HAB-26 motor de estados de negociación**.
+Módulos de dominio: **HAB-26 motor de estados de negociación** y
+**HAB-13 Property + Listing** (rental-flow, fase 1: Listado).
 
 ## Requisitos
 
@@ -42,9 +43,18 @@ docs/
   EXPIRY.md           # trigger pg-cron → POST /negotiations/expire-rounds
   postgres-dev.yaml   # manifiesto Podman (supabase/postgres)
 ```
+modules/
+  property/              # feature rental-flow (fase 1: Listado, HAB-13)
+    property.module.ts   # registro NestJS del feature
+    domain/
+      entities/          # Property, Listing, RoomSpace, catalog-types (sin deps NestJS)
+      repositories/      # puertos (interfaces)
+    index.ts             # barrel
+```
 
 ## Reglas
 
 - `domain/`: cero imports de `@nestjs/*`, prisma o HTTP (verificar con grep).
 - IDs e idempotencia: UUID v7 vía WebCrypto (`crypto.randomUUID`).
 - Sin `baseUrl`/paths en tsconfig: imports relativos.
+- Contrato Property↔mobile en snake_case (`toJSON`/`fromJSON`), ver `modules/property/`.
