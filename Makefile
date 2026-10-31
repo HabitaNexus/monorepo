@@ -22,8 +22,10 @@ TIMEOUT ?= 900000
         dev-harbor-deploy dev-harbor-destroy \
         dev-gateway-deploy dev-gateway-start dev-gateway-stop \
         dev-images-build dev-fallback-secret \
+        dev-backend-install dev-backend-typecheck dev-backend-test dev-backend-build dev-backend-image \
         dev-mobile-launch dev-mobile-analyze dev-mobile-test dev-mobile-lint \
         dev-mobile-build-runner dev-mobile-clean \
+        e2e-local-up e2e-local-migrate e2e-local-smoke e2e-local-apk e2e-local-install e2e-local-down \
         dev-b2g-start dev-b2g-stop \
         dev-admin-start dev-admin-stop \
         ci-mobile-build ci-mobile-test
@@ -37,6 +39,10 @@ TF_DIR = infrastructure/terraform/environments/$(ENV)
 SCRIPTS_DIR = infrastructure/scripts
 APPS_DIR = apps
 MOBILE_DIR = $(APPS_DIR)/mobile
+BACKEND_DIR = $(APPS_DIR)/backend
+E2E_NS = e2e
+E2E_IMAGE = habitanexus-backend:e2e
+E2E_DB_URL = postgresql://postgres:habitanexus@localhost:5433/postgres?schema=public
 B2G_DIR = $(APPS_DIR)/web/b2g
 ADMIN_DIR = $(APPS_DIR)/web/admin
 REPO_URL ?= https://github.com/HabitaNexus/monorepo.git
@@ -99,6 +105,13 @@ help: ## Show this help
 	@echo "  $(YELLOW)dev-gateway-deploy$(NC)          Deploy Gateway API"
 	@echo "  $(YELLOW)dev-gateway-start$(NC)           Start port-forward"
 	@echo "  $(YELLOW)dev-gateway-stop$(NC)            Stop port-forward"
+	@echo ""
+	@echo "$(GREEN)DEV - Backend (Nest):$(NC)"
+	@echo "  $(YELLOW)dev-backend-install$(NC)        npm ci backend"
+	@echo "  $(YELLOW)dev-backend-typecheck$(NC)      tsc --noEmit"
+	@echo "  $(YELLOW)dev-backend-test$(NC)           jest"
+	@echo "  $(YELLOW)dev-backend-build$(NC)          SWC build"
+	@echo "  $(YELLOW)dev-backend-image$(NC)          podman build + load en minikube"
 	@echo ""
 	@echo "$(GREEN)DEV - Mobile:$(NC)"
 	@echo "  $(YELLOW)dev-mobile-launch$(NC)           Launch Flutter app (Android/Desktop)"
@@ -280,6 +293,59 @@ dev-fallback-secret: ## Create fallback secret (when Infisical unavailable)
 	@echo "$(BLUE)Creating fallback secret...$(NC)"
 	@kubectl create namespace habitanexus-$(ENV) --dry-run=client -o yaml | kubectl apply -f - 2>/dev/null || true
 	@kubectl create secret generic habitanexus-secrets -n habitanexus-$(ENV) --from-literal=placeholder=true --dry-run=client -o yaml | kubectl apply -f - 2>/dev/null || true
+
+# ==========================================
+# DEV - Backend (Nest + Prisma)
+# ==========================================
+
+dev-backend-install: ## npm ci del backend
+	@cd $(BACKEND_DIR) && npm ci --no-audit --no-fund
+
+dev-backend-typecheck: ## tsc --noEmit del backend
+	@cd $(BACKEND_DIR) && npm run typecheck
+
+dev-backend-test: ## jest del backend
+	@cd $(BACKEND_DIR) && npm test
+
+dev-backend-build: ## SWC build → dist/
+	@cd $(BACKEND_DIR) && npm run build
+
+dev-backend-image: ## podman build + load en minikube (driver podman: vía tarball)
+	@cd $(BACKEND_DIR) && podman build -t $(E2E_IMAGE) .
+	@podman tag $(E2E_IMAGE) docker.io/library/$(E2E_IMAGE)
+	@podman save docker.io/library/$(E2E_IMAGE) -o /tmp/opencode/hbb.tar
+	@minikube image load /tmp/opencode/hbb.tar && rm /tmp/opencode/hbb.tar
+
+# ==========================================
+# E2E-LOCAL (minikube QA gate, ver k8s/overlays/e2e-local)
+# ==========================================
+
+e2e-local-up: ## Aplica overlay e2e-local en minikube
+	kubectl apply -k k8s/overlays/e2e-local
+
+e2e-local-migrate: ## prisma migrate deploy contra postgres de minikube (via port-forward)
+	kubectl -n $(E2E_NS) port-forward svc/postgres 5433:5432 & sleep 6; \
+	cd $(BACKEND_DIR) && DATABASE_URL="$(E2E_DB_URL)" npx prisma migrate deploy; \
+	pkill -f "port-forward svc/postgres" || true
+
+e2e-local-smoke: ## health + ready + propose/counter con shape completo
+	@kubectl -n $(E2E_NS) port-forward svc/backend 3001:80 & sleep 6; \
+	curl -sf localhost:3001/health && echo " health-ok"; \
+	curl -sf localhost:3001/ready && echo " ready-ok"; \
+	LID="11111111-1111-4111-8111-111111111111"; \
+	R=$$(curl -s -X POST localhost:3001/negotiations -H 'Content-Type: application/json' \
+	  -d "{\"listingId\":\"$$LID\",\"tenantId\":\"tenant-e2e\",\"ownerId\":\"owner-e2e\",\"actor\":\"tenant-e2e\",\"terms\":{\"version\":1,\"terms\":{\"renta_mensual\":500000,\"deposito_garantia\":500000}}}"); \
+	echo "$$R" | python3 -c "import json,sys; d=json.load(sys.stdin); assert d['terms']['terms']['renta_mensual']==500000, d; print(' propose-shape-ok')"; \
+	pkill -f "port-forward svc/backend" || true
+
+e2e-local-apk: ## flutter build apk --debug (BACKEND_URL al túnel adb)
+	@cd $(MOBILE_DIR) && flutter build apk --debug --dart-define BACKEND_URL=http://localhost:3000
+
+e2e-local-install: ## adb install del APK debug en el dispositivo conectado
+	@adb install -r $(MOBILE_DIR)/build/app/outputs/flutter-apk/app-debug.apk
+
+e2e-local-down: ## Borra namespace e2e de minikube
+	kubectl delete namespace $(E2E_NS) --ignore-not-found=true --wait=false
 
 # ==========================================
 # DEV - Mobile

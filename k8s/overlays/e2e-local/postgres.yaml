@@ -1,0 +1,56 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: e2e
+  labels:
+    environment: e2e
+---
+# Postgres E2E para apps/backend (HAB-26): imagen supabase/postgres con
+# pg_cron + pg_net, requeridos por la migración 0001_negotiation_engine.
+# Derivado de apps/backend/docs/postgres-dev.yaml (sin hostPort).
+apiVersion: v1
+kind: Pod
+metadata:
+  name: postgres
+  labels:
+    app: postgres
+spec:
+  # Evita que k8s inyecte POSTGRES_* (POSTGRES_PORT=tcp://...) que rompe
+  # el migrate.sh de la imagen supabase/postgres.
+  enableServiceLinks: false
+  containers:
+    - name: postgres
+      image: supabase/postgres:15.8.1.060
+      ports:
+        - containerPort: 5432
+      env:
+        # Nota: supabase/postgres solo mapea los OS users postgres/root/ubuntu
+        # en pg_ident (supabase_map); POSTGRES_USER distinto rompe su init
+        # (peer auth). El rol se llama postgres; la DB de la app es habitanexus.
+        - name: POSTGRES_USER
+          value: postgres
+        - name: POSTGRES_PASSWORD
+          value: habitanexus
+        - name: POSTGRES_DB
+          # pg_cron solo permite CREATE EXTENSION en la DB `postgres`
+          # (cron.database_name); la migración 0001 lo anticipa.
+          value: postgres
+      volumeMounts:
+        - name: pg-init
+          mountPath: /docker-entrypoint-initdb.d/00roles.sql
+          subPath: 00roles.sql
+  volumes:
+    - name: pg-init
+      configMap:
+        name: pg-init-roles
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres
+spec:
+  selector:
+    app: postgres
+  ports:
+    - port: 5432
+      targetPort: 5432

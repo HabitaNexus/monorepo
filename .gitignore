@@ -48,3 +48,13 @@ app.*.map.json
 
 # MkDocs build output
 docs/site/site/
+
+# Local secrets — never commit
+.env.local
+.env.*.local
+
+# Agent / git worktrees (transient, never committed)
+.agents/
+.agents/worktrees/
+.worktrees/
+.claude/worktrees/

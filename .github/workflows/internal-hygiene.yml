@@ -1,0 +1,35 @@
+# Higiene interna: impide filtrar datos del cluster/entorno al repo.
+# - IPs privadas literales (10/8, 172.16/12, 192.168/16) en docs/ y k8s/:
+#   los endpoints se resuelven por DNS de Service, nunca por IP.
+# - `docs/internal/` nunca listado en el nav de docs/site/mkdocs.yml
+#   (el sitio público se publica sin autenticación).
+name: internal-hygiene
+
+on:
+  pull_request:
+    paths:
+      - 'docs/**'
+      - 'k8s/**'
+  push:
+    branches: [develop, staging, main]
+    paths:
+      - 'docs/**'
+      - 'k8s/**'
+
+jobs:
+  no-leaks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Sin IPs privadas literales
+        run: |
+          if grep -rnE '(10|172\.16|192\.168)\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' docs/ k8s/; then
+            echo 'IP privada literal en docs/ o k8s/. Usa DNS de Service.'
+            exit 1
+          fi
+      - name: docs/internal fuera del nav público
+        run: |
+          if grep -n 'docs/internal' docs/site/mkdocs.yml; then
+            echo 'docs/internal/ no debe listarse en el nav público.'
+            exit 1
+          fi
