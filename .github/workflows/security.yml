@@ -31,9 +31,8 @@ jobs:
         uses: chimeranext/github-actions-templates/security-scan@main
         with:
           languages: |
-            typescript
             javascript
-          language-category: typescript
+          language-category: javascript
           config-scan-ref: .
           iac-scan-ref: infrastructure/terraform
           dependency-scan-ref: apps/backend
