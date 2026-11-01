@@ -1,0 +1,2 @@
+export const PDF_RENDERER = Symbol('PDF_RENDERER');
+export const CONTRACT_DOCUMENT_STORE = Symbol('CONTRACT_DOCUMENT_STORE');
