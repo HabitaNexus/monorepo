@@ -1,0 +1,39 @@
+name: CODEOWNERS Rot Check
+
+# Gate CI de la convention `codeowners-rotation`
+# (`shared/references/conventions/platform/codeowners-rotation`). Detects CODEOWNERS
+# rules that match ZERO tracked files — silently inert, invisible to GitHub.
+# The PR trigger catches rules written wrong; the schedule catches rules going
+# dead because other files moved (the way rot actually accumulates).
+# Blocking on purpose — no `continue-on-error`.
+
+on:
+  pull_request:
+    branches:
+      - develop
+    paths:
+      - '.github/CODEOWNERS'
+      - 'CODEOWNERS'
+      - 'scripts/check-codeowners-rotation.mjs'
+      - '.github/workflows/codeowners-rotation.yml'
+  schedule:
+    - cron: '30 6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  codeowners-rot:
+    name: Every CODEOWNERS rule owns at least one tracked file
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Audit CODEOWNERS for dead patterns
+        run: node scripts/check-codeowners-rotation.mjs
