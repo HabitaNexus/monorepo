@@ -1,0 +1,85 @@
+name: Security Scanning
+
+# Stardized security workflow (CodeQL + Trivy) — vendored by
+# assurance-toolkit. Apply via `assurance-repo-setup` to every monorepo.
+# CodeQL: SAST (languages via `typescript, javascript`). Trivy: config/fs/secret scan
+# with fail-on severity. Adjust `scan-ref` paths per repo layout.
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+  workflow_dispatch:
+
+jobs:
+  # ==========================================
+  # CodeQL - Static Application Security Testing
+  # ==========================================
+  codeql:
+    name: CodeQL Security Analysis
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: |
+            typescript
+            javascript
+          queries: security-extended
+
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v3
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:typescript"
+
+      # No separate `upload-results` step: `analyze@v3` already uploads SARIF
+      # to the security tab. `upload-results@v3` does not exist and would fail
+      # the job before analysis (see altrupets PR #28 investigation).
+
+  # ==========================================
+  # Trivy - Container / Config / IaC scanning
+  # ==========================================
+  trivy-scan:
+    name: Trivy Container Scan
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run Trivy vulnerability scanner (config)
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'config'
+          scan-ref: '.'
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          severity: 'CRITICAL,HIGH'
+
+      - name: Scan Infrastructure as Code
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: 'infrastructure/terraform'
+          scanners: 'misconfig,secret'
+          format: 'table'
+          exit-code: '1'
+          severity: 'CRITICAL,HIGH'
