@@ -37,3 +37,4 @@ jobs:
           config-scan-ref: .
           iac-scan-ref: infrastructure/terraform
           dependency-scan-ref: apps/backend
+          sbom: "true"
